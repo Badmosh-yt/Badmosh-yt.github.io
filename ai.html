@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Badmosh AI</title>
 
 <style>
@@ -11,11 +10,13 @@
     --bg: #07050d;
     --sidebar: #0d0915;
     --panel: #110c1b;
+    --panel2: #171020;
     --border: #292039;
     --purple: #9b5cff;
     --purple2: #7c3aed;
     --text: #f5f3f7;
     --muted: #a9a1b5;
+    --danger: #ef4444;
 }
 
 * {
@@ -29,16 +30,146 @@ body {
     background: var(--bg);
     color: var(--text);
     height: 100vh;
-    overflow: hidden;
 }
 
-.app {
+button,
+input {
+    font-family: inherit;
+}
+
+/* ================= LOGIN ================= */
+
+.auth-screen {
+    min-height: 100vh;
     display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background:
+        radial-gradient(circle at top, #24103e 0%, transparent 40%),
+        var(--bg);
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 420px;
+    background: rgba(17,12,27,.95);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: 0 20px 80px rgba(0,0,0,.5);
+}
+
+.auth-logo {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.auth-logo span {
+    color: var(--purple);
+}
+
+.auth-subtitle {
+    text-align: center;
+    color: var(--muted);
+    margin-bottom: 28px;
+}
+
+.auth-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 22px;
+}
+
+.auth-tab {
+    flex: 1;
+    padding: 11px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    border-radius: 9px;
+    cursor: pointer;
+}
+
+.auth-tab.active {
+    background: var(--purple2);
+    color: white;
+    border-color: var(--purple2);
+}
+
+.auth-form {
+    display: none;
+}
+
+.auth-form.active {
+    display: block;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 7px;
+    color: var(--muted);
+}
+
+.form-group input {
+    width: 100%;
+    padding: 13px;
+    border-radius: 9px;
+    border: 1px solid var(--border);
+    background: var(--panel2);
+    color: white;
+    outline: none;
+}
+
+.form-group input:focus {
+    border-color: var(--purple);
+}
+
+.auth-submit {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 9px;
+    background: var(--purple2);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.auth-submit:hover {
+    background: var(--purple);
+}
+
+.demo-note {
+    margin-top: 18px;
+    color: #71697c;
+    text-align: center;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+/* ================= APP ================= */
+
+.app {
+    display: none;
     height: 100vh;
 }
 
+.app.logged-in {
+    display: flex;
+}
+
+/* ================= SIDEBAR ================= */
+
 .sidebar {
-    width: 260px;
+    width: 270px;
     background: var(--sidebar);
     border-right: 1px solid var(--border);
     padding: 18px;
@@ -61,10 +192,9 @@ body {
     padding: 13px;
     border: 1px solid var(--border);
     border-radius: 10px;
-    background: #171020;
+    background: var(--panel2);
     color: white;
     cursor: pointer;
-    font-size: 14px;
 }
 
 .new-chat:hover {
@@ -80,16 +210,88 @@ body {
 }
 
 .history {
-    color: #d5cfdd;
-    font-size: 14px;
-    line-height: 2.5;
+    overflow-y: auto;
+    flex: 1;
 }
 
-.sidebar-bottom {
-    margin-top: auto;
+.history-item {
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
 }
+
+.history-item:hover {
+    background: var(--panel2);
+}
+
+.no-history {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.clear-history {
+    margin-top: 10px;
+    width: 100%;
+    padding: 9px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+}
+
+.clear-history:hover {
+    border-color: var(--danger);
+    color: white;
+}
+
+/* USER */
+
+.user-panel {
+    margin-top: 15px;
+    padding: 13px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: #120d1d;
+}
+
+.user-name {
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.user-email {
+    color: var(--muted);
+    font-size: 11px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.logout {
+    margin-top: 10px;
+    width: 100%;
+    padding: 9px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+}
+
+.logout:hover {
+    color: white;
+    border-color: var(--purple);
+}
+
+/* PLAN */
 
 .plan {
+    margin-top: 15px;
     padding: 15px;
     border: 1px solid var(--border);
     border-radius: 12px;
@@ -118,10 +320,13 @@ body {
     cursor: pointer;
 }
 
+/* ================= MAIN ================= */
+
 .main {
     flex: 1;
     display: flex;
     flex-direction: column;
+    min-width: 0;
 }
 
 .topbar {
@@ -142,6 +347,12 @@ body {
     font-size: 13px;
 }
 
+.status.online {
+    color: #8b5cf6;
+}
+
+/* ================= CHAT ================= */
+
 .chat {
     flex: 1;
     overflow-y: auto;
@@ -150,7 +361,7 @@ body {
 
 .welcome {
     max-width: 750px;
-    margin: 80px auto;
+    margin: 70px auto;
     text-align: center;
 }
 
@@ -162,7 +373,7 @@ body {
     align-items: center;
     justify-content: center;
     border-radius: 20px;
-    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    background: linear-gradient(135deg,#7c3aed,#a855f7);
     font-size: 32px;
 }
 
@@ -182,9 +393,8 @@ body {
 
 .suggestions {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2,1fr);
     gap: 12px;
-    max-width: 700px;
     margin: 35px auto;
 }
 
@@ -202,6 +412,8 @@ body {
     border-color: var(--purple);
 }
 
+/* ================= MESSAGES ================= */
+
 .message {
     max-width: 800px;
     margin: 20px auto;
@@ -211,11 +423,11 @@ body {
     word-wrap: break-word;
 }
 
-.user {
-    background: #171020;
+.user-message {
+    background: var(--panel2);
 }
 
-.ai {
+.ai-message {
     background: #0e0a15;
     border: 1px solid var(--border);
 }
@@ -224,21 +436,23 @@ body {
     color: var(--purple);
 }
 
+/* ================= INPUT ================= */
+
 .input-area {
     position: fixed;
     bottom: 0;
-    left: 260px;
+    left: 270px;
     right: 0;
     padding: 20px;
-    background: linear-gradient(transparent, var(--bg) 35%);
+    background: linear-gradient(transparent,var(--bg) 35%);
 }
 
 .input-box {
     max-width: 800px;
     margin: auto;
     display: flex;
-    align-items: center;
     gap: 10px;
+    align-items: center;
     background: #120d1b;
     border: 1px solid var(--border);
     padding: 8px;
@@ -274,6 +488,10 @@ body {
     background: var(--purple);
 }
 
+.send:disabled {
+    opacity: .5;
+}
+
 .disclaimer {
     max-width: 800px;
     margin: 8px auto 0;
@@ -282,7 +500,60 @@ body {
     font-size: 11px;
 }
 
-@media (max-width: 700px) {
+/* ================= SETTINGS MODAL ================= */
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.7);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 20;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-card {
+    width: 100%;
+    max-width: 450px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 25px;
+}
+
+.modal-card h2 {
+    margin-bottom: 20px;
+}
+
+.setting-row {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.setting-row span {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.close-modal {
+    margin-top: 20px;
+    width: 100%;
+    padding: 11px;
+    border: none;
+    border-radius: 8px;
+    background: var(--purple2);
+    color: white;
+    cursor: pointer;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:700px) {
 
     .sidebar {
         display: none;
@@ -293,7 +564,7 @@ body {
     }
 
     .welcome {
-        margin: 50px auto;
+        margin: 45px auto;
     }
 
     .welcome h1 {
@@ -307,139 +578,388 @@ body {
     .topbar {
         padding: 0 15px;
     }
+
+    .message {
+        margin: 15px 0;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<div class="app">
+<!-- ================= AUTH SCREEN ================= -->
 
-<aside class="sidebar">
+<div class="auth-screen" id="authScreen">
 
-    <div class="logo">
-        🤖 BADMOSH <span>AI</span>
-    </div>
+    <div class="auth-card">
 
-    <button class="new-chat" onclick="newChat()">
-        ＋ New Chat
-    </button>
-
-    <div class="sidebar-title">
-        Recent Chats
-    </div>
-
-    <div class="history" id="history">
-        No chats yet
-    </div>
-
-    <div class="sidebar-bottom">
-
-        <div class="plan">
-            <strong>🆓 Free Plan</strong>
-            <p>Limited AI usage</p>
-
-            <button class="pro-button" onclick="showPro()">
-                ⭐ Upgrade to Pro
-            </button>
+        <div class="auth-logo">
+            🤖 BADMOSH <span>AI</span>
         </div>
 
-    </div>
-
-</aside>
-
-<main class="main">
-
-    <header class="topbar">
-
-        <div class="model">
-            Badmosh AI
+        <div class="auth-subtitle">
+            Your personal AI assistant
         </div>
 
-        <div class="status">
-            ● Online
-        </div>
-
-    </header>
-
-    <section class="chat" id="chat">
-
-        <div class="welcome" id="welcome">
-
-            <div class="ai-icon">
-                🤖
-            </div>
-
-            <h1>
-                Meet <span>Badmosh AI</span>
-            </h1>
-
-            <p>
-                Your AI assistant for technology, coding,
-                Minecraft and everyday questions.
-            </p>
-
-            <div class="suggestions">
-
-                <div class="suggestion"
-                     onclick="useSuggestion('How do I make a Minecraft server?')">
-                    🎮 How do I make a Minecraft server?
-                </div>
-
-                <div class="suggestion"
-                     onclick="useSuggestion('Teach me HTML')">
-                    💻 Teach me HTML
-                </div>
-
-                <div class="suggestion"
-                     onclick="useSuggestion('Give me a coding project idea')">
-                    🚀 Give me a coding project idea
-                </div>
-
-                <div class="suggestion"
-                     onclick="useSuggestion('Explain artificial intelligence simply')">
-                    🧠 Explain artificial intelligence simply
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-    <div class="input-area">
-
-        <div class="input-box">
-
-            <input
-                id="question"
-                type="text"
-                placeholder="Message Badmosh AI..."
-            >
+        <div class="auth-tabs">
 
             <button
-                id="sendButton"
-                class="send"
-                type="button">
-                ➤
+                id="loginTab"
+                class="auth-tab active"
+                onclick="showLogin()">
+                Login
+            </button>
+
+            <button
+                id="signupTab"
+                class="auth-tab"
+                onclick="showSignup()">
+                Sign Up
             </button>
 
         </div>
 
-        <div class="disclaimer">
-            Badmosh AI can make mistakes. Check important information.
+
+        <!-- LOGIN -->
+
+        <form
+            id="loginForm"
+            class="auth-form active"
+            onsubmit="login(event)">
+
+            <div class="form-group">
+                <label>Email</label>
+
+                <input
+                    id="loginEmail"
+                    type="email"
+                    placeholder="you@example.com"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+
+                <input
+                    id="loginPassword"
+                    type="password"
+                    placeholder="Password"
+                    required>
+            </div>
+
+            <button
+                class="auth-submit"
+                type="submit">
+                Login
+            </button>
+
+        </form>
+
+
+        <!-- SIGNUP -->
+
+        <form
+            id="signupForm"
+            class="auth-form"
+            onsubmit="signup(event)">
+
+            <div class="form-group">
+                <label>Name</label>
+
+                <input
+                    id="signupName"
+                    type="text"
+                    placeholder="Your name"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label>Email</label>
+
+                <input
+                    id="signupEmail"
+                    type="email"
+                    placeholder="you@example.com"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+
+                <input
+                    id="signupPassword"
+                    type="password"
+                    placeholder="Create a password"
+                    minlength="6"
+                    required>
+            </div>
+
+            <button
+                class="auth-submit"
+                type="submit">
+                Create Account
+            </button>
+
+        </form>
+
+        <div class="demo-note">
+            Demo authentication only. Do not use a real password here.
+            Real secure accounts will require a proper authentication backend.
         </div>
 
     </div>
+</div>
 
-</main>
+
+<!-- ================= MAIN APP ================= -->
+
+<div class="app" id="app">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            🤖 BADMOSH <span>AI</span>
+        </div>
+
+        <button
+            class="new-chat"
+            onclick="newChat()">
+            ＋ New Chat
+        </button>
+
+
+        <div class="sidebar-title">
+            Recent Chats
+        </div>
+
+        <div
+            class="history"
+            id="history">
+        </div>
+
+        <button
+            class="clear-history"
+            onclick="clearHistory()">
+            🗑 Clear History
+        </button>
+
+
+        <div class="user-panel">
+
+            <div
+                class="user-name"
+                id="userName">
+                User
+            </div>
+
+            <div
+                class="user-email"
+                id="userEmail">
+                user@example.com
+            </div>
+
+            <button
+                class="logout"
+                onclick="logout()">
+                Logout
+            </button>
+
+        </div>
+
+
+        <div class="plan">
+
+            <strong>
+                🆓 Free Plan
+            </strong>
+
+            <p>
+                AI access enabled
+            </p>
+
+            <button
+                class="pro-button"
+                onclick="showPro()">
+                ⭐ Upgrade to Pro
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div class="model">
+                Badmosh AI
+            </div>
+
+            <div
+                class="status online">
+                ● Online
+            </div>
+
+        </header>
+
+
+        <!-- CHAT -->
+
+        <section
+            class="chat"
+            id="chat">
+
+            <div
+                class="welcome"
+                id="welcome">
+
+                <div class="ai-icon">
+                    🤖
+                </div>
+
+                <h1>
+                    Meet <span>Badmosh AI</span>
+                </h1>
+
+                <p>
+                    Your AI assistant for technology,
+                    coding, Minecraft and everyday questions.
+                </p>
+
+
+                <div class="suggestions">
+
+                    <div
+                        class="suggestion"
+                        onclick="useSuggestion('How do I make a Minecraft server?')">
+                        🎮 How do I make a Minecraft server?
+                    </div>
+
+                    <div
+                        class="suggestion"
+                        onclick="useSuggestion('Teach me HTML')">
+                        💻 Teach me HTML
+                    </div>
+
+                    <div
+                        class="suggestion"
+                        onclick="useSuggestion('Give me a coding project idea')">
+                        🚀 Give me a coding project idea
+                    </div>
+
+                    <div
+                        class="suggestion"
+                        onclick="useSuggestion('Explain artificial intelligence simply')">
+                        🧠 Explain AI simply
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- INPUT -->
+
+        <div class="input-area">
+
+            <div class="input-box">
+
+                <input
+                    id="question"
+                    type="text"
+                    placeholder="Message Badmosh AI..."
+                    autocomplete="off">
+
+                <button
+                    id="sendButton"
+                    class="send"
+                    type="button">
+                    ➤
+                </button>
+
+            </div>
+
+            <div class="disclaimer">
+                Badmosh AI can make mistakes. Check important information.
+            </div>
+
+        </div>
+
+    </main>
 
 </div>
 
+
+<!-- ================= SETTINGS MODAL ================= -->
+
+<div
+    class="modal"
+    id="settingsModal">
+
+    <div class="modal-card">
+
+        <h2>
+            ⚙️ Settings
+        </h2>
+
+        <div class="setting-row">
+            <strong>Account</strong><br>
+            <span id="settingsEmail">
+                Not logged in
+            </span>
+        </div>
+
+        <div class="setting-row">
+            <strong>Plan</strong><br>
+            <span>
+                Free Plan
+            </span>
+        </div>
+
+        <div class="setting-row">
+            <strong>AI Model</strong><br>
+            <span>
+                Cloudflare Workers AI
+            </span>
+        </div>
+
+        <button
+            class="close-modal"
+            onclick="closeSettings()">
+            Close
+        </button>
+
+    </div>
+</div>
+
+
 <script>
+
+/* ==================================================
+   CLOUDFLARE WORKER
+================================================== */
 
 const WORKER_URL =
     "https://badmosh-ai.cchandasaini.workers.dev/";
+
+
+/* ==================================================
+   ELEMENTS
+================================================== */
+
+const authScreen =
+    document.getElementById("authScreen");
+
+const app =
+    document.getElementById("app");
 
 const input =
     document.getElementById("question");
@@ -450,10 +970,404 @@ const sendButton =
 const chat =
     document.getElementById("chat");
 
+const historyBox =
+    document.getElementById("history");
+
+
+/* ==================================================
+   LOCAL ACCOUNT
+================================================== */
+
+function getAccount() {
+
+    try {
+
+        return JSON.parse(
+            localStorage.getItem("badmoshAccount") || "null"
+        );
+
+    } catch {
+
+        return null;
+
+    }
+}
+
+
+/* ==================================================
+   SIGNUP
+================================================== */
+
+function signup(event) {
+
+    event.preventDefault();
+
+    const name =
+        document.getElementById("signupName").value.trim();
+
+    const email =
+        document.getElementById("signupEmail").value.trim();
+
+    const password =
+        document.getElementById("signupPassword").value;
+
+    if (!name || !email || !password) {
+        return;
+    }
+
+    /*
+      Demo only.
+      Password is stored locally only.
+      Do NOT use this for real production accounts.
+    */
+
+    localStorage.setItem(
+        "badmoshAccount",
+        JSON.stringify({
+            name: name,
+            email: email,
+            password: password
+        })
+    );
+
+    localStorage.setItem(
+        "badmoshLoggedIn",
+        "true"
+    );
+
+    startApp();
+
+}
+
+
+/* ==================================================
+   LOGIN
+================================================== */
+
+function login(event) {
+
+    event.preventDefault();
+
+    const email =
+        document.getElementById("loginEmail").value.trim();
+
+    const password =
+        document.getElementById("loginPassword").value;
+
+    const account =
+        getAccount();
+
+    if (!account) {
+
+        alert(
+            "No local account found. Please sign up first."
+        );
+
+        return;
+    }
+
+    if (
+        email !== account.email ||
+        password !== account.password
+    ) {
+
+        alert(
+            "Incorrect email or password."
+        );
+
+        return;
+    }
+
+    localStorage.setItem(
+        "badmoshLoggedIn",
+        "true"
+    );
+
+    startApp();
+
+}
+
+
+/* ==================================================
+   LOGIN / SIGNUP TABS
+================================================== */
+
+function showLogin() {
+
+    document
+        .getElementById("loginTab")
+        .classList.add("active");
+
+    document
+        .getElementById("signupTab")
+        .classList.remove("active");
+
+    document
+        .getElementById("loginForm")
+        .classList.add("active");
+
+    document
+        .getElementById("signupForm")
+        .classList.remove("active");
+
+}
+
+
+function showSignup() {
+
+    document
+        .getElementById("signupTab")
+        .classList.add("active");
+
+    document
+        .getElementById("loginTab")
+        .classList.remove("active");
+
+    document
+        .getElementById("signupForm")
+        .classList.add("active");
+
+    document
+        .getElementById("loginForm")
+        .classList.remove("active");
+
+}
+
+
+/* ==================================================
+   START APP
+================================================== */
+
+function startApp() {
+
+    const account =
+        getAccount();
+
+    if (!account) {
+        return;
+    }
+
+    authScreen.style.display =
+        "none";
+
+    app.classList.add(
+        "logged-in"
+    );
+
+    document.getElementById("userName")
+        .textContent =
+        account.name;
+
+    document.getElementById("userEmail")
+        .textContent =
+        account.email;
+
+    document.getElementById("settingsEmail")
+        .textContent =
+        account.email;
+
+    displayHistory();
+
+}
+
+
+/* ==================================================
+   LOGOUT
+================================================== */
+
+function logout() {
+
+    localStorage.removeItem(
+        "badmoshLoggedIn"
+    );
+
+    app.classList.remove(
+        "logged-in"
+    );
+
+    authScreen.style.display =
+        "flex";
+
+}
+
+
+/* ==================================================
+   CHAT HISTORY
+================================================== */
+
+function historyKey() {
+
+    const account =
+        getAccount();
+
+    if (!account) {
+        return "badmoshChats_guest";
+    }
+
+    return "badmoshChats_" +
+        account.email;
+
+}
+
+
+function getHistory() {
+
+    try {
+
+        return JSON.parse(
+            localStorage.getItem(historyKey()) || "[]"
+        );
+
+    } catch {
+
+        return [];
+
+    }
+
+}
+
+
+function saveChat(question, answer) {
+
+    const chats =
+        getHistory();
+
+    chats.push({
+
+        question: question,
+
+        answer: answer,
+
+        date: new Date().toISOString()
+
+    });
+
+    localStorage.setItem(
+        historyKey(),
+        JSON.stringify(chats)
+    );
+
+    displayHistory();
+
+}
+
+
+function displayHistory() {
+
+    const chats =
+        getHistory();
+
+    historyBox.innerHTML = "";
+
+    if (chats.length === 0) {
+
+        historyBox.innerHTML =
+            '<div class="no-history">No chats yet</div>';
+
+        return;
+
+    }
+
+    chats
+        .slice(-30)
+        .reverse()
+        .forEach(
+            (item, reverseIndex) => {
+
+                const realIndex =
+                    chats.length - 1 - reverseIndex;
+
+                const div =
+                    document.createElement("div");
+
+                div.className =
+                    "history-item";
+
+                div.textContent =
+                    item.question;
+
+                div.title =
+                    item.question;
+
+                div.onclick =
+                    function() {
+
+                        loadChat(realIndex);
+
+                    };
+
+                historyBox.appendChild(div);
+
+            }
+        );
+
+}
+
+
+function loadChat(index) {
+
+    const chats =
+        getHistory();
+
+    const selected =
+        chats[index];
+
+    if (!selected) {
+        return;
+    }
+
+    chat.innerHTML = "";
+
+    addMessage(
+        "user-message",
+        "You",
+        selected.question
+    );
+
+    addMessage(
+        "ai-message",
+        "Badmosh AI",
+        selected.answer
+    );
+
+}
+
+
+/* ==================================================
+   ADD MESSAGE
+================================================== */
+
+function addMessage(
+    className,
+    title,
+    text
+) {
+
+    const message =
+        document.createElement("div");
+
+    message.className =
+        "message " + className;
+
+    message.innerHTML =
+        "<strong>" +
+        escapeHTML(title) +
+        "</strong><br>" +
+        formatAnswer(text);
+
+    chat.appendChild(message);
+
+}
+
+
+/* ==================================================
+   SEND MESSAGE
+================================================== */
 
 async function sendMessage() {
 
-    const question = input.value.trim();
+    const question =
+        input.value.trim();
 
     if (!question) {
         return;
@@ -466,34 +1380,31 @@ async function sendMessage() {
         welcome.remove();
     }
 
-    const userMessage =
-        document.createElement("div");
-
-    userMessage.className =
-        "message user";
-
-    userMessage.innerHTML =
-        "<strong>You</strong><br>" +
-        escapeHTML(question);
-
-    chat.appendChild(userMessage);
+    addMessage(
+        "user-message",
+        "You",
+        question
+    );
 
 
     const aiMessage =
         document.createElement("div");
 
     aiMessage.className =
-        "message ai";
+        "message ai-message";
 
     aiMessage.innerHTML =
         "<strong>Badmosh AI</strong><br>" +
         "Thinking... 🤔";
 
-    chat.appendChild(aiMessage);
+    chat.appendChild(
+        aiMessage
+    );
 
     input.value = "";
 
-    sendButton.disabled = true;
+    sendButton.disabled =
+        true;
 
     chat.scrollTop =
         chat.scrollHeight;
@@ -502,19 +1413,22 @@ async function sendMessage() {
     try {
 
         const response =
-            await fetch(WORKER_URL, {
+            await fetch(
+                WORKER_URL,
+                {
+                    method: "POST",
 
-                method: "POST",
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-                headers: {
-                    "Content-Type": "application/json"
-                },
-
-                body: JSON.stringify({
-                    question: question
-                })
-
-            });
+                    body: JSON.stringify({
+                        question:
+                            question
+                    })
+                }
+            );
 
 
         const data =
@@ -530,6 +1444,20 @@ async function sendMessage() {
 
         }
 
+
+        /*
+          Your Cloudflare Worker currently returns:
+
+          {
+            "choices": [
+              {
+                "message": {
+                  "content": "AI ANSWER"
+                }
+              }
+            ]
+          }
+        */
 
         const answer =
             data.choices &&
@@ -552,6 +1480,14 @@ async function sendMessage() {
             formatAnswer(answer);
 
 
+        /* SAVE */
+
+        saveChat(
+            question,
+            answer
+        );
+
+
     } catch (error) {
 
         console.error(error);
@@ -560,50 +1496,144 @@ async function sendMessage() {
             "<strong>Badmosh AI</strong><br>" +
             "Sorry, something went wrong.<br><br>" +
             "<small>" +
-            escapeHTML(error.message) +
+            escapeHTML(
+                error.message
+            ) +
             "</small>";
 
     }
 
 
-    sendButton.disabled = false;
+    sendButton.disabled =
+        false;
 
     chat.scrollTop =
         chat.scrollHeight;
+
 }
 
 
+/* ==================================================
+   NEW CHAT
+================================================== */
+
+function newChat() {
+
+    chat.innerHTML = `
+
+        <div class="welcome" id="welcome">
+
+            <div class="ai-icon">
+                🤖
+            </div>
+
+            <h1>
+                Meet <span>Badmosh AI</span>
+            </h1>
+
+            <p>
+                Your AI assistant for technology,
+                coding, Minecraft and everyday questions.
+            </p>
+
+            <div class="suggestions">
+
+                <div class="suggestion"
+                     onclick="useSuggestion('How do I make a Minecraft server?')">
+                    🎮 How do I make a Minecraft server?
+                </div>
+
+                <div class="suggestion"
+                     onclick="useSuggestion('Teach me HTML')">
+                    💻 Teach me HTML
+                </div>
+
+                <div class="suggestion"
+                     onclick="useSuggestion('Give me a coding project idea')">
+                    🚀 Give me a coding project idea
+                </div>
+
+                <div class="suggestion"
+                     onclick="useSuggestion('Explain artificial intelligence simply')">
+                    🧠 Explain AI simply
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+    input.focus();
+
+}
+
+
+/* ==================================================
+   SUGGESTION
+================================================== */
+
 function useSuggestion(text) {
 
-    input.value = text;
+    input.value =
+        text;
 
     sendMessage();
 
 }
 
 
-function newChat() {
+/* ==================================================
+   CLEAR HISTORY
+================================================== */
 
-    location.reload();
+function clearHistory() {
+
+    const yes =
+        confirm(
+            "Delete all your saved chats?"
+        );
+
+    if (!yes) {
+        return;
+    }
+
+    localStorage.removeItem(
+        historyKey()
+    );
+
+    displayHistory();
+
+    newChat();
 
 }
 
+
+/* ==================================================
+   PRO
+================================================== */
 
 function showPro() {
 
     alert(
-        "Badmosh AI Pro is coming soon!"
+        "⭐ Badmosh AI Pro\n\n" +
+        "Pro subscriptions are coming soon!"
     );
 
 }
 
+
+/* ==================================================
+   SECURITY HELPERS
+================================================== */
 
 function escapeHTML(text) {
 
     const div =
         document.createElement("div");
 
-    div.textContent = String(text);
+    div.textContent =
+        String(text);
 
     return div.innerHTML;
 
@@ -612,21 +1642,25 @@ function escapeHTML(text) {
 
 function formatAnswer(text) {
 
-    return escapeHTML(text)
-        .replace(/\n/g, "<br>");
+    return escapeHTML(
+        text
+    ).replace(
+        /\n/g,
+        "<br>"
+    );
 
 }
 
 
-/* Send button */
+/* ==================================================
+   BUTTON + ENTER
+================================================== */
 
 sendButton.addEventListener(
     "click",
     sendMessage
 );
 
-
-/* Enter key */
 
 input.addEventListener(
     "keydown",
@@ -643,9 +1677,34 @@ input.addEventListener(
     }
 );
 
+
+/* ==================================================
+   STARTUP
+================================================== */
+
+const loggedIn =
+    localStorage.getItem(
+        "badmoshLoggedIn"
+    );
+
+if (
+    loggedIn === "true" &&
+    getAccount()
+) {
+
+    startApp();
+
+} else {
+
+    authScreen.style.display =
+        "flex";
+
+}
+
 </script>
 
 </body>
 </html>
- 
+   
+
    
