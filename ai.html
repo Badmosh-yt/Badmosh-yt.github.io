@@ -520,9 +520,8 @@ async function sendMessage() {
 
 
         const answer =
-            data.response ||
-            data.answer ||
-            "No response received.";
+    data.choices?.[0]?.message?.content ||
+    "No response received.";
 
 
         aiMessage.innerHTML =
