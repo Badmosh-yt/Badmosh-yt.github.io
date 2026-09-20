@@ -6,434 +6,547 @@
 
 <title>Badmosh AI</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 :root {
-    --bg:#07050d;
-    --sidebar:#0d0915;
-    --panel:#110c1b;
-    --border:#292039;
-    --purple:#9b5cff;
-    --purple2:#7c3aed;
-    --text:#f5f3f7;
-    --muted:#a9a1b5;
+    --bg: #07050d;
+    --sidebar: #0d0915;
+    --panel: #110c1b;
+    --border: #292039;
+    --purple: #9b5cff;
+    --purple2: #7c3aed;
+    --text: #f5f3f7;
+    --muted: #a9a1b5;
+    --danger: #ef4444;
 }
 
 * {
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-    font-family:Arial,sans-serif;
-    background:var(--bg);
-    color:var(--text);
-    min-height:100vh;
+    font-family: Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    overflow: hidden;
 }
 
-/* AUTH */
+/* ================= LOGIN ================= */
 
-.auth-screen {
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-    background:radial-gradient(circle at top,#281044 0%,#07050d 50%);
+#authScreen {
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(circle at top, #251044 0%, #07050d 45%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 9999;
 }
 
-.auth-box {
-    width:100%;
-    max-width:420px;
-    padding:32px;
-    background:#110c1b;
-    border:1px solid var(--border);
-    border-radius:20px;
-    box-shadow:0 20px 70px rgba(0,0,0,.55);
+.auth-card {
+    width: 100%;
+    max-width: 430px;
+    background: rgba(17, 12, 27, .96);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: 0 20px 80px rgba(0,0,0,.45);
 }
 
 .auth-logo {
-    text-align:center;
-    font-size:28px;
-    font-weight:800;
+    text-align: center;
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 8px;
 }
 
 .auth-logo span {
-    color:var(--purple);
+    color: var(--purple);
 }
 
 .auth-subtitle {
-    text-align:center;
-    color:var(--muted);
-    margin:8px 0 28px;
+    text-align: center;
+    color: var(--muted);
+    margin-bottom: 28px;
 }
 
-.auth-box h2 {
-    margin-bottom:18px;
+.auth-card input {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #0c0812;
+    color: white;
+    outline: none;
+    font-size: 15px;
 }
 
-.auth-box input {
-    width:100%;
-    padding:14px;
-    margin-bottom:12px;
-    border:1px solid var(--border);
-    border-radius:10px;
-    outline:none;
-    background:#09070e;
-    color:white;
-}
-
-.auth-box input:focus {
-    border-color:var(--purple);
+.auth-card input:focus {
+    border-color: var(--purple);
 }
 
 .auth-button {
-    width:100%;
-    padding:14px;
-    border:none;
-    border-radius:10px;
-    background:var(--purple2);
-    color:white;
-    font-weight:bold;
-    cursor:pointer;
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 15px;
+    margin-top: 5px;
 }
 
-.auth-button:hover {
-    background:var(--purple);
+.login-button {
+    background: var(--purple2);
+    color: white;
 }
 
-.auth-button:disabled {
-    opacity:.6;
+.login-button:hover {
+    background: var(--purple);
 }
 
-.switch-auth {
-    text-align:center;
-    margin-top:18px;
-    color:var(--muted);
-    font-size:14px;
+.google-button {
+    background: white;
+    color: #111;
+    margin-top: 10px;
 }
 
-.switch-auth button {
-    border:none;
-    background:none;
-    color:var(--purple);
-    cursor:pointer;
-    font-weight:bold;
+.google-button:hover {
+    background: #eeeeee;
+}
+
+.auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #777;
+    margin: 20px 0;
+    font-size: 12px;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    content: "";
+    height: 1px;
+    background: var(--border);
+    flex: 1;
+}
+
+.auth-switch {
+    text-align: center;
+    margin-top: 18px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.auth-switch button {
+    border: none;
+    background: none;
+    color: var(--purple);
+    cursor: pointer;
+    font-weight: bold;
 }
 
 .auth-message {
-    min-height:20px;
-    margin-top:15px;
-    text-align:center;
-    color:var(--muted);
-    font-size:13px;
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    display: none;
+    line-height: 1.5;
 }
 
-/* APP */
+.auth-message.error {
+    display: block;
+    background: rgba(239,68,68,.12);
+    color: #ff8b8b;
+    border: 1px solid rgba(239,68,68,.3);
+}
+
+.auth-message.success {
+    display: block;
+    background: rgba(34,197,94,.12);
+    color: #7bea9b;
+    border: 1px solid rgba(34,197,94,.3);
+}
+
+.verify-box {
+    display: none;
+    text-align: center;
+}
+
+.verify-box h2 {
+    margin-bottom: 10px;
+}
+
+.verify-box p {
+    color: var(--muted);
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+.verify-box button {
+    margin-top: 15px;
+}
+
+/* ================= APP ================= */
+
+#app {
+    display: none;
+    height: 100vh;
+}
 
 .app {
-    display:flex;
-    height:100vh;
+    display: flex;
+    height: 100vh;
 }
 
+/* ================= SIDEBAR ================= */
+
 .sidebar {
-    width:260px;
-    flex-shrink:0;
-    background:var(--sidebar);
-    border-right:1px solid var(--border);
-    padding:18px;
-    display:flex;
-    flex-direction:column;
+    width: 270px;
+    background: var(--sidebar);
+    border-right: 1px solid var(--border);
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
 }
 
 .logo {
-    font-size:22px;
-    font-weight:800;
-    margin-bottom:25px;
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 22px;
 }
 
 .logo span {
-    color:var(--purple);
+    color: var(--purple);
 }
 
 .new-chat {
-    width:100%;
-    padding:13px;
-    border:1px solid var(--border);
-    border-radius:10px;
-    background:#171020;
-    color:white;
-    cursor:pointer;
+    width: 100%;
+    padding: 13px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #171020;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
 }
 
 .new-chat:hover {
-    border-color:var(--purple);
+    border-color: var(--purple);
 }
 
 .sidebar-title {
-    margin-top:28px;
-    margin-bottom:10px;
-    color:var(--muted);
-    font-size:12px;
-    text-transform:uppercase;
+    margin-top: 25px;
+    margin-bottom: 10px;
+    color: var(--muted);
+    font-size: 12px;
+    text-transform: uppercase;
 }
 
 .history {
-    overflow-y:auto;
-    color:#d5cfdd;
-    font-size:14px;
+    overflow-y: auto;
+    max-height: 48vh;
 }
 
 .history-item {
-    padding:10px;
-    border-radius:8px;
-    cursor:pointer;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
+    padding: 10px;
+    border-radius: 8px;
+    color: #d5cfdd;
+    font-size: 13px;
+    cursor: pointer;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .history-item:hover {
-    background:#171020;
-}
-
-.no-history {
-    color:var(--muted);
-    padding:8px;
+    background: #171020;
 }
 
 .sidebar-bottom {
-    margin-top:auto;
+    margin-top: auto;
 }
 
-.user-card {
-    padding:12px;
-    margin-bottom:10px;
-    border:1px solid var(--border);
-    border-radius:12px;
-    background:#120d1d;
+.account {
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: #120d1d;
+    margin-bottom: 10px;
 }
 
-.user-email {
-    margin-top:5px;
-    color:var(--muted);
-    font-size:12px;
-    overflow:hidden;
-    text-overflow:ellipsis;
+.account-name {
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.logout {
-    width:100%;
-    padding:10px;
-    border:1px solid var(--border);
-    border-radius:8px;
-    background:#171020;
-    color:white;
-    cursor:pointer;
+.account-label {
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 4px;
 }
+
+.logout-button {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #3b2630;
+    border-radius: 8px;
+    background: #1a1017;
+    color: #ff8585;
+    cursor: pointer;
+}
+
+.logout-button:hover {
+    background: #27131b;
+}
+
+/* ================= MAIN ================= */
 
 .main {
-    flex:1;
-    min-width:0;
-    display:flex;
-    flex-direction:column;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
 }
 
+/* ================= TOPBAR ================= */
+
 .topbar {
-    height:65px;
-    flex-shrink:0;
-    padding:0 25px;
-    border-bottom:1px solid var(--border);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
+    height: 65px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 25px;
 }
 
 .model {
-    font-weight:700;
+    font-weight: 700;
 }
 
 .status {
-    color:#72e08a;
-    font-size:13px;
+    color: #6ee7a0;
+    font-size: 13px;
 }
 
-/* CHAT */
+/* ================= CHAT ================= */
 
 .chat {
-    flex:1;
-    overflow-y:auto;
-    padding:40px 20px 150px;
+    flex: 1;
+    overflow-y: auto;
+    padding: 40px 20px 150px;
 }
 
 .welcome {
-    max-width:750px;
-    margin:80px auto;
-    text-align:center;
+    max-width: 750px;
+    margin: 70px auto;
+    text-align: center;
 }
 
 .ai-icon {
-    width:70px;
-    height:70px;
-    margin:auto;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:20px;
-    background:linear-gradient(135deg,#7c3aed,#a855f7);
-    font-size:32px;
+    width: 70px;
+    height: 70px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    font-size: 32px;
+    box-shadow: 0 0 35px rgba(139,92,246,.25);
 }
 
 .welcome h1 {
-    margin-top:25px;
-    font-size:42px;
+    margin-top: 25px;
+    font-size: 42px;
 }
 
 .welcome h1 span {
-    color:var(--purple);
+    color: var(--purple);
 }
 
 .welcome p {
-    margin-top:12px;
-    color:var(--muted);
+    margin-top: 12px;
+    color: var(--muted);
 }
 
+/* ================= SUGGESTIONS ================= */
+
 .suggestions {
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:12px;
-    max-width:700px;
-    margin:35px auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    max-width: 700px;
+    margin: 35px auto;
 }
 
 .suggestion {
-    padding:16px;
-    border:1px solid var(--border);
-    border-radius:12px;
-    background:var(--panel);
-    color:#ddd7e4;
-    text-align:left;
-    cursor:pointer;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 16px;
+    border-radius: 12px;
+    text-align: left;
+    color: #ddd7e4;
+    cursor: pointer;
 }
 
 .suggestion:hover {
-    border-color:var(--purple);
+    border-color: var(--purple);
 }
 
+/* ================= MESSAGES ================= */
+
 .message {
-    max-width:800px;
-    margin:20px auto;
-    padding:18px;
-    border-radius:14px;
-    line-height:1.6;
-    white-space:pre-wrap;
-    overflow-wrap:anywhere;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 18px;
+    border-radius: 14px;
+    line-height: 1.6;
+    word-wrap: break-word;
 }
 
 .user {
-    background:#171020;
+    background: #171020;
 }
 
 .ai {
-    background:#0e0a15;
-    border:1px solid var(--border);
+    background: #0e0a15;
+    border: 1px solid var(--border);
 }
 
 .message strong {
-    color:var(--purple);
+    color: var(--purple);
 }
 
-/* INPUT */
+.message-actions {
+    margin-top: 10px;
+    text-align: right;
+}
+
+.delete-chat {
+    border: none;
+    background: transparent;
+    color: #8d8499;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.delete-chat:hover {
+    color: #ff7777;
+}
+
+/* ================= INPUT ================= */
 
 .input-area {
-    position:fixed;
-    left:260px;
-    right:0;
-    bottom:0;
-    padding:20px;
-    background:linear-gradient(transparent,var(--bg) 35%);
+    position: fixed;
+    bottom: 0;
+    left: 270px;
+    right: 0;
+    padding: 20px;
+    background: linear-gradient(transparent, var(--bg) 35%);
 }
 
 .input-box {
-    max-width:800px;
-    margin:auto;
-    padding:8px;
-    display:flex;
-    gap:10px;
-    background:#120d1b;
-    border:1px solid var(--border);
-    border-radius:15px;
+    max-width: 800px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #120d1b;
+    border: 1px solid var(--border);
+    padding: 8px;
+    border-radius: 15px;
 }
 
 .input-box:focus-within {
-    border-color:var(--purple);
+    border-color: var(--purple);
 }
 
 .input-box input {
-    flex:1;
-    min-width:0;
-    padding:13px;
-    border:none;
-    outline:none;
-    background:transparent;
-    color:white;
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    padding: 13px;
+    font-size: 15px;
 }
 
 .send {
-    width:45px;
-    height:45px;
-    flex-shrink:0;
-    border:none;
-    border-radius:11px;
-    background:var(--purple2);
-    color:white;
-    cursor:pointer;
+    width: 45px;
+    height: 45px;
+    border: none;
+    border-radius: 11px;
+    background: var(--purple2);
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
 }
 
 .send:hover {
-    background:var(--purple);
+    background: var(--purple);
 }
 
 .send:disabled {
-    opacity:.6;
+    opacity: .5;
+    cursor: not-allowed;
 }
 
 .disclaimer {
-    max-width:800px;
-    margin:8px auto 0;
-    text-align:center;
-    color:#71697c;
-    font-size:11px;
+    max-width: 800px;
+    margin: 8px auto 0;
+    text-align: center;
+    color: #71697c;
+    font-size: 11px;
 }
 
-/* MOBILE */
+/* ================= MOBILE ================= */
 
-@media(max-width:700px) {
+@media (max-width: 700px) {
 
     .sidebar {
-        display:none;
+        display: none;
     }
 
     .input-area {
-        left:0;
+        left: 0;
+        padding: 12px;
     }
 
     .welcome {
-        margin:50px auto;
+        margin: 45px auto;
     }
 
     .welcome h1 {
-        font-size:32px;
+        font-size: 32px;
     }
 
     .suggestions {
-        grid-template-columns:1fr;
+        grid-template-columns: 1fr;
     }
 
     .topbar {
-        padding:0 15px;
+        padding: 0 15px;
+    }
+
+    .message {
+        margin: 14px auto;
+    }
+
+    .auth-card {
+        padding: 25px;
     }
 }
 </style>
@@ -441,62 +554,75 @@ body {
 
 <body>
 
-<!-- ================================================= -->
-<!-- AUTH SCREEN -->
-<!-- ================================================= -->
+<!-- ========================================================= -->
+<!-- LOGIN / SIGNUP -->
+<!-- ========================================================= -->
 
-<div id="authScreen" class="auth-screen">
+<div id="authScreen">
 
-    <div class="auth-box">
-
-        <div class="auth-logo">
-            🤖 BADMOSH <span>AI</span>
-        </div>
-
-        <div class="auth-subtitle">
-            Your personal AI assistant
-        </div>
-
-        <!-- LOGIN -->
+    <div class="auth-card">
 
         <div id="loginForm">
 
-            <h2>Welcome back</h2>
+            <div class="auth-logo">
+                🤖 BADMOSH <span>AI</span>
+            </div>
+
+            <div class="auth-subtitle">
+                Sign in to continue
+            </div>
 
             <input
-                id="loginEmail"
+                id="email"
                 type="email"
                 placeholder="Email address"
                 autocomplete="email"
             >
 
             <input
-                id="loginPassword"
+                id="password"
                 type="password"
                 placeholder="Password"
                 autocomplete="current-password"
             >
 
             <button
-                id="loginButton"
-                class="auth-button">
-                Login
+                class="auth-button login-button"
+                onclick="signIn()">
+                🔐 Sign In
             </button>
 
-            <div class="switch-auth">
+            <button
+                class="auth-button google-button"
+                onclick="signInWithGoogle()">
+                🔵 Continue with Google
+            </button>
+
+            <div class="auth-divider">
+                OR
+            </div>
+
+            <div class="auth-switch">
                 Don't have an account?
-                <button id="showSignupButton">
-                    Sign up
+                <button onclick="showSignup()">
+                    Create Account
                 </button>
             </div>
 
         </div>
 
+
         <!-- SIGNUP -->
 
-        <div id="signupForm" style="display:none">
+        <div id="signupForm" style="display:none;">
 
-            <h2>Create account</h2>
+            <div class="auth-logo">
+                🤖 BADMOSH <span>AI</span>
+            </div>
+
+            <div class="auth-subtitle">
+                Create your account
+            </div>
 
             <input
                 id="signupEmail"
@@ -513,31 +639,67 @@ body {
             >
 
             <button
-                id="signupButton"
-                class="auth-button">
-                Create Account
+                class="auth-button login-button"
+                onclick="signUp()">
+                ✨ Create Account
             </button>
 
-            <div class="switch-auth">
+            <button
+                class="auth-button google-button"
+                onclick="signInWithGoogle()">
+                🔵 Continue with Google
+            </button>
+
+            <div class="auth-switch">
                 Already have an account?
-                <button id="showLoginButton">
-                    Login
+                <button onclick="showLogin()">
+                    Sign In
                 </button>
             </div>
 
         </div>
 
+
+        <!-- VERIFY EMAIL -->
+
+        <div id="verifyBox" class="verify-box">
+
+            <div class="auth-logo">
+                📧
+            </div>
+
+            <h2>Check your email</h2>
+
+            <p>
+                We sent you a verification link.
+                Open your email and click the link to verify your account.
+            </p>
+
+            <button
+                class="auth-button login-button"
+                onclick="showLogin()">
+                Back to Sign In
+            </button>
+
+        </div>
+
+
         <div id="authMessage" class="auth-message"></div>
 
     </div>
+
 </div>
 
 
-<!-- ================================================= -->
+<!-- ========================================================= -->
 <!-- MAIN APP -->
-<!-- ================================================= -->
+<!-- ========================================================= -->
 
-<div id="app" class="app" style="display:none">
+<div id="app">
+
+<div class="app">
+
+    <!-- SIDEBAR -->
 
     <aside class="sidebar">
 
@@ -545,7 +707,9 @@ body {
             🤖 BADMOSH <span>AI</span>
         </div>
 
-        <button id="newChatButton" class="new-chat">
+        <button
+            class="new-chat"
+            onclick="newChat()">
             ＋ New Chat
         </button>
 
@@ -553,23 +717,31 @@ body {
             Recent Chats
         </div>
 
-        <div id="history" class="history">
-            <div class="no-history">
-                Loading chats...
-            </div>
+        <div
+            class="history"
+            id="history">
+            No chats yet
         </div>
 
         <div class="sidebar-bottom">
 
-            <div class="user-card">
+            <div class="account">
 
-                <div>👤 Account</div>
+                <div
+                    class="account-name"
+                    id="accountEmail">
+                    Loading...
+                </div>
 
-                <div id="userEmail" class="user-email"></div>
+                <div class="account-label">
+                    Free Account
+                </div>
 
             </div>
 
-            <button id="logoutButton" class="logout">
+            <button
+                class="logout-button"
+                onclick="logout()">
                 🚪 Logout
             </button>
 
@@ -577,6 +749,8 @@ body {
 
     </aside>
 
+
+    <!-- MAIN -->
 
     <main class="main">
 
@@ -593,9 +767,15 @@ body {
         </header>
 
 
-        <section id="chat" class="chat">
+        <!-- CHAT -->
 
-            <div id="welcome" class="welcome">
+        <section
+            class="chat"
+            id="chat">
+
+            <div
+                class="welcome"
+                id="welcome">
 
                 <div class="ai-icon">
                     🤖
@@ -614,25 +794,25 @@ body {
 
                     <div
                         class="suggestion"
-                        data-question="How do I make a Minecraft server?">
+                        onclick="useSuggestion('How do I make a Minecraft server?')">
                         🎮 How do I make a Minecraft server?
                     </div>
 
                     <div
                         class="suggestion"
-                        data-question="Teach me HTML">
+                        onclick="useSuggestion('Teach me HTML')">
                         💻 Teach me HTML
                     </div>
 
                     <div
                         class="suggestion"
-                        data-question="Give me a coding project idea">
+                        onclick="useSuggestion('Give me a coding project idea')">
                         🚀 Give me a coding project idea
                     </div>
 
                     <div
                         class="suggestion"
-                        data-question="Explain artificial intelligence simply">
+                        onclick="useSuggestion('Explain artificial intelligence simply')">
                         🧠 Explain AI simply
                     </div>
 
@@ -643,6 +823,8 @@ body {
         </section>
 
 
+        <!-- INPUT -->
+
         <div class="input-area">
 
             <div class="input-box">
@@ -652,9 +834,13 @@ body {
                     type="text"
                     placeholder="Message Badmosh AI..."
                     autocomplete="off"
+                    onkeydown="handleEnter(event)"
                 >
 
-                <button id="sendButton" class="send">
+                <button
+                    id="sendButton"
+                    class="send"
+                    onclick="sendMessage()">
                     ➤
                 </button>
 
@@ -670,18 +856,28 @@ body {
 
 </div>
 
+</div>
+
 
 <script>
 
-/* ================================================= */
-/* SUPABASE */
-/* ================================================= */
+/* =========================================================
+   CONFIGURATION
+========================================================= */
 
 const SUPABASE_URL =
     "https://evrzjkylpontvngwoszb.supabase.co";
 
 const SUPABASE_PUBLISHABLE_KEY =
     "sb_publishable_wSigh2nJLbJRfmDZXTStdA_WETjMZnJ";
+
+const WORKER_URL =
+    "https://badmosh-ai.cchandasaini.workers.dev/";
+
+
+/* =========================================================
+   SUPABASE
+========================================================= */
 
 const supabaseClient =
     window.supabase.createClient(
@@ -690,373 +886,54 @@ const supabaseClient =
     );
 
 
-/* ================================================= */
-/* CLOUDFLARE WORKER */
-/* ================================================= */
-
-const WORKER_URL =
-    "https://badmosh-ai.cchandasaini.workers.dev/";
-
-
-/* ================================================= */
-/* ELEMENTS */
-/* ================================================= */
-
-const authScreen =
-    document.getElementById("authScreen");
-
-const app =
-    document.getElementById("app");
-
-const loginForm =
-    document.getElementById("loginForm");
-
-const signupForm =
-    document.getElementById("signupForm");
-
-const authMessage =
-    document.getElementById("authMessage");
-
-const loginButton =
-    document.getElementById("loginButton");
-
-const signupButton =
-    document.getElementById("signupButton");
-
-const logoutButton =
-    document.getElementById("logoutButton");
-
-const newChatButton =
-    document.getElementById("newChatButton");
-
-const sendButton =
-    document.getElementById("sendButton");
-
-const questionInput =
-    document.getElementById("question");
-
-const chat =
-    document.getElementById("chat");
-
-const historyElement =
-    document.getElementById("history");
-
-const userEmailElement =
-    document.getElementById("userEmail");
-
-
 let currentUser = null;
 
 
-/* ================================================= */
-/* AUTH MESSAGE */
-/* ================================================= */
+/* =========================================================
+   PAGE START
+========================================================= */
 
-function showAuthMessage(message) {
+document.addEventListener("DOMContentLoaded", async function() {
 
-    authMessage.textContent =
-        message;
-
-}
-
-
-/* ================================================= */
-/* LOGIN / SIGNUP SWITCH */
-/* ================================================= */
-
-document
-    .getElementById("showSignupButton")
-    .addEventListener("click", function() {
-
-        loginForm.style.display = "none";
-        signupForm.style.display = "block";
-
-        showAuthMessage("");
-
-    });
-
-
-document
-    .getElementById("showLoginButton")
-    .addEventListener("click", function() {
-
-        signupForm.style.display = "none";
-        loginForm.style.display = "block";
-
-        showAuthMessage("");
-
-    });
-
-
-/* ================================================= */
-/* SIGN UP */
-/* ================================================= */
-
-signupButton.addEventListener(
-    "click",
-    async function() {
-
-        const email =
-            document
-                .getElementById("signupEmail")
-                .value
-                .trim();
-
-        const password =
-            document
-                .getElementById("signupPassword")
-                .value;
-
-
-        if (!email || !password) {
-
-            showAuthMessage(
-                "Please enter your email and password."
-            );
-
-            return;
+    const {
+        data: {
+            session
         }
+    } = await supabaseClient.auth.getSession();
 
+    if (session && session.user) {
 
-        if (password.length < 6) {
+        currentUser = session.user;
 
-            showAuthMessage(
-                "Password must be at least 6 characters."
-            );
+        showApp();
 
-            return;
-        }
+    } else {
 
-
-        signupButton.disabled = true;
-
-        showAuthMessage(
-            "Creating your account..."
-        );
-
-
-        try {
-
-            const result =
-                await supabaseClient.auth.signUp({
-
-                    email: email,
-                    password: password
-
-                });
-
-
-            if (result.error) {
-
-                throw result.error;
-
-            }
-
-
-            if (result.data.session) {
-
-                showApp(
-                    result.data.session.user
-                );
-
-            } else {
-
-                showAuthMessage(
-                    "Account created! Check your email to verify your account."
-                );
-
-            }
-
-        } catch (error) {
-
-            showAuthMessage(
-                error.message
-            );
-
-        } finally {
-
-            signupButton.disabled = false;
-
-        }
-
-    }
-);
-
-
-/* ================================================= */
-/* LOGIN */
-/* ================================================= */
-
-loginButton.addEventListener(
-    "click",
-    async function() {
-
-        const email =
-            document
-                .getElementById("loginEmail")
-                .value
-                .trim();
-
-        const password =
-            document
-                .getElementById("loginPassword")
-                .value;
-
-
-        if (!email || !password) {
-
-            showAuthMessage(
-                "Please enter your email and password."
-            );
-
-            return;
-        }
-
-
-        loginButton.disabled = true;
-
-        showAuthMessage(
-            "Logging in..."
-        );
-
-
-        try {
-
-            const result =
-                await supabaseClient.auth.signInWithPassword({
-
-                    email: email,
-                    password: password
-
-                });
-
-
-            if (result.error) {
-
-                throw result.error;
-
-            }
-
-
-            showApp(
-                result.data.user
-            );
-
-
-        } catch (error) {
-
-            showAuthMessage(
-                error.message
-            );
-
-        } finally {
-
-            loginButton.disabled = false;
-
-        }
-
-    }
-);
-
-
-/* ================================================= */
-/* SHOW APP */
-/* ================================================= */
-
-async function showApp(user) {
-
-    currentUser = user;
-
-    authScreen.style.display =
-        "none";
-
-    app.style.display =
-        "flex";
-
-    userEmailElement.textContent =
-        user.email || "";
-
-    await loadCloudHistory();
-
-}
-
-
-/* ================================================= */
-/* LOGOUT */
-/* ================================================= */
-
-logoutButton.addEventListener(
-    "click",
-    async function() {
-
-        await supabaseClient.auth.signOut();
-
-        currentUser = null;
-
-        app.style.display =
-            "none";
-
-        authScreen.style.display =
-            "flex";
-
-        loginForm.style.display =
-            "block";
-
-        signupForm.style.display =
-            "none";
-
-        showAuthMessage("");
-
-    }
-);
-
-
-/* ================================================= */
-/* CHECK SESSION */
-/* ================================================= */
-
-async function checkUser() {
-
-    try {
-
-        const result =
-            await supabaseClient.auth.getSession();
-
-
-        if (
-            result.data &&
-            result.data.session
-        ) {
-
-            showApp(
-                result.data.session.user
-            );
-
-        }
-
-    } catch (error) {
-
-        console.error(
-            "Session error:",
-            error
-        );
+        showAuth();
 
     }
 
-}
+});
 
 
-/* ================================================= */
-/* AUTH STATE */
-/* ================================================= */
+/* =========================================================
+   AUTH STATE
+========================================================= */
 
 supabaseClient.auth.onAuthStateChange(
-    function(event, session) {
+    async function(event, session) {
 
-        if (session) {
+        if (session && session.user) {
 
-            currentUser =
-                session.user;
+            currentUser = session.user;
+
+            showApp();
+
+        } else {
+
+            currentUser = null;
+
+            showAuth();
 
         }
 
@@ -1064,29 +941,364 @@ supabaseClient.auth.onAuthStateChange(
 );
 
 
-/* ================================================= */
-/* SEND MESSAGE */
-/* ================================================= */
+/* =========================================================
+   SHOW LOGIN
+========================================================= */
+
+function showAuth() {
+
+    document.getElementById("authScreen").style.display = "flex";
+
+    document.getElementById("app").style.display = "none";
+
+}
+
+
+/* =========================================================
+   SHOW APP
+========================================================= */
+
+async function showApp() {
+
+    document.getElementById("authScreen").style.display = "none";
+
+    document.getElementById("app").style.display = "block";
+
+    if (currentUser) {
+
+        document.getElementById("accountEmail").textContent =
+            currentUser.email || "Google User";
+
+    }
+
+    await loadHistory();
+
+}
+
+
+/* =========================================================
+   LOGIN FORM
+========================================================= */
+
+function showLogin() {
+
+    document.getElementById("loginForm").style.display = "block";
+
+    document.getElementById("signupForm").style.display = "none";
+
+    document.getElementById("verifyBox").style.display = "none";
+
+    clearAuthMessage();
+
+}
+
+
+/* =========================================================
+   SIGNUP FORM
+========================================================= */
+
+function showSignup() {
+
+    document.getElementById("loginForm").style.display = "none";
+
+    document.getElementById("signupForm").style.display = "block";
+
+    document.getElementById("verifyBox").style.display = "none";
+
+    clearAuthMessage();
+
+}
+
+
+/* =========================================================
+   SIGN IN
+========================================================= */
+
+async function signIn() {
+
+    const email =
+        document.getElementById("email").value.trim();
+
+    const password =
+        document.getElementById("password").value;
+
+    if (!email || !password) {
+
+        showAuthMessage(
+            "Please enter your email and password.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    showAuthMessage(
+        "Signing in...",
+        "success"
+    );
+
+    const {
+        data,
+        error
+    } = await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+    });
+
+    if (error) {
+
+        showAuthMessage(
+            error.message,
+            "error"
+        );
+
+        return;
+
+    }
+
+    if (data.user && !data.user.email_confirmed_at) {
+
+        document.getElementById("loginForm").style.display = "none";
+
+        document.getElementById("signupForm").style.display = "none";
+
+        document.getElementById("verifyBox").style.display = "block";
+
+        showAuthMessage(
+            "Please verify your email first.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    clearAuthMessage();
+
+}
+
+
+/* =========================================================
+   SIGN UP
+========================================================= */
+
+async function signUp() {
+
+    const email =
+        document.getElementById("signupEmail").value.trim();
+
+    const password =
+        document.getElementById("signupPassword").value;
+
+    if (!email || !password) {
+
+        showAuthMessage(
+            "Please enter an email and password.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    if (password.length < 6) {
+
+        showAuthMessage(
+            "Password must be at least 6 characters.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    showAuthMessage(
+        "Creating your account...",
+        "success"
+    );
+
+    const {
+        data,
+        error
+    } = await supabaseClient.auth.signUp({
+
+        email: email,
+
+        password: password,
+
+        options: {
+
+            emailRedirectTo:
+                window.location.origin
+
+        }
+
+    });
+
+    if (error) {
+
+        showAuthMessage(
+            error.message,
+            "error"
+        );
+
+        return;
+
+    }
+
+    if (data.user && !data.session) {
+
+        document.getElementById("loginForm").style.display = "none";
+
+        document.getElementById("signupForm").style.display = "none";
+
+        document.getElementById("verifyBox").style.display = "block";
+
+        showAuthMessage(
+            "Account created! Check your email for the verification link.",
+            "success"
+        );
+
+    } else {
+
+        showAuthMessage(
+            "Account created successfully!",
+            "success"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   GOOGLE LOGIN
+========================================================= */
+
+async function signInWithGoogle() {
+
+    showAuthMessage(
+        "Opening Google sign-in...",
+        "success"
+    );
+
+    const {
+        error
+    } = await supabaseClient.auth.signInWithOAuth({
+
+        provider: "google",
+
+        options: {
+
+            redirectTo:
+                window.location.origin
+
+        }
+
+    });
+
+    if (error) {
+
+        showAuthMessage(
+            error.message,
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+async function logout() {
+
+    await supabaseClient.auth.signOut();
+
+    currentUser = null;
+
+    document.getElementById("chat").innerHTML = "";
+
+    showAuth();
+
+}
+
+
+/* =========================================================
+   AUTH MESSAGE
+========================================================= */
+
+function showAuthMessage(message, type) {
+
+    const box =
+        document.getElementById("authMessage");
+
+    box.textContent = message;
+
+    box.className =
+        "auth-message " + type;
+
+}
+
+
+function clearAuthMessage() {
+
+    const box =
+        document.getElementById("authMessage");
+
+    box.textContent = "";
+
+    box.className = "auth-message";
+
+}
+
+
+/* =========================================================
+   SEND MESSAGE
+========================================================= */
 
 async function sendMessage() {
 
-    const text =
-        questionInput.value.trim();
+    if (!currentUser) {
 
+        showAuth();
 
-    if (!text) {
         return;
+
     }
 
+    const input =
+        document.getElementById("question");
+
+    const sendButton =
+        document.getElementById("sendButton");
+
+    const chat =
+        document.getElementById("chat");
 
     const welcome =
         document.getElementById("welcome");
 
+    const question =
+        input.value.trim();
+
+    if (!question) return;
 
     if (welcome) {
+
         welcome.remove();
+
     }
 
+    input.value = "";
+
+    sendButton.disabled = true;
+
+
+    /* USER MESSAGE */
 
     const userMessage =
         document.createElement("div");
@@ -1096,12 +1308,12 @@ async function sendMessage() {
 
     userMessage.innerHTML =
         "<strong>You</strong><br>" +
-        escapeHTML(text);
+        escapeHTML(question);
 
-    chat.appendChild(
-        userMessage
-    );
+    chat.appendChild(userMessage);
 
+
+    /* AI MESSAGE */
 
     const aiMessage =
         document.createElement("div");
@@ -1113,17 +1325,7 @@ async function sendMessage() {
         "<strong>Badmosh AI</strong><br>" +
         "Thinking... 🤔";
 
-    chat.appendChild(
-        aiMessage
-    );
-
-
-    questionInput.value = "";
-
-    sendButton.disabled = true;
-
-    questionInput.disabled = true;
-
+    chat.appendChild(aiMessage);
 
     chat.scrollTop =
         chat.scrollHeight;
@@ -1131,39 +1333,62 @@ async function sendMessage() {
 
     try {
 
+        /* SEND TO CLOUDFLARE WORKER */
+
         const response =
-            await fetch(
-                WORKER_URL,
-                {
+            await fetch(WORKER_URL, {
 
-                    method:"POST",
+                method: "POST",
 
-                    headers:{
-                        "Content-Type":
-                            "application/json"
-                    },
+                headers: {
 
-                    body:JSON.stringify({
-                        question:text
-                    })
+                    "Content-Type":
+                        "application/json"
 
-                }
-            );
+                },
+
+                body: JSON.stringify({
+
+                    question: question
+
+                })
+
+            });
 
 
         const data =
             await response.json();
 
 
+        console.log(
+            "Worker response:",
+            data
+        );
+
+
         if (!response.ok) {
 
             throw new Error(
                 data.error ||
-                "Worker request failed."
+                "AI request failed."
             );
 
         }
 
+
+        /*
+         * YOUR WORKER RETURNS:
+         *
+         * {
+         *   choices: [
+         *     {
+         *       message: {
+         *         content: "..."
+         *       }
+         *     }
+         *   ]
+         * }
+         */
 
         let answer = "";
 
@@ -1171,80 +1396,86 @@ async function sendMessage() {
         if (
             data.choices &&
             data.choices[0] &&
-            data.choices[0].message
+            data.choices[0].message &&
+            data.choices[0].message.content
         ) {
 
             answer =
-                data
-                    .choices[0]
-                    .message
-                    .content || "";
+                data.choices[0].message.content;
 
         }
 
+
+        /* Other possible response formats */
 
         if (!answer && data.response) {
 
-            answer =
-                data.response;
+            answer = data.response;
 
         }
 
-
         if (!answer && data.answer) {
 
-            answer =
-                data.answer;
+            answer = data.answer;
+
+        }
+
+        if (!answer && data.content) {
+
+            answer = data.content;
 
         }
 
 
         if (!answer) {
 
-            answer =
-                "No response received from the AI.";
+            throw new Error(
+                "No AI response was found."
+            );
 
         }
 
 
+        /* DISPLAY ANSWER */
+
         aiMessage.innerHTML =
             "<strong>Badmosh AI</strong><br>" +
-            escapeHTML(answer);
+            formatAIText(answer);
 
 
-        /* SAVE TO SUPABASE */
+        /* SAVE CHAT TO SUPABASE */
 
-        await saveChatToCloud(
-            text,
+        await saveChat(
+            question,
             answer
         );
 
 
+        /* RELOAD SIDEBAR */
+
+        await loadHistory();
+
+
     } catch (error) {
 
         console.error(
-            "AI error:",
+            "AI Error:",
             error
         );
-
 
         aiMessage.innerHTML =
             "<strong>Badmosh AI</strong><br>" +
             "Sorry, something went wrong.<br><br>" +
-            escapeHTML(
-                error.message
-            );
+            "<small>" +
+            escapeHTML(error.message) +
+            "</small>";
 
     }
 
 
-    sendButton.disabled =
-        false;
+    sendButton.disabled = false;
 
-    questionInput.disabled =
-        false;
-
-    questionInput.focus();
+    input.focus();
 
     chat.scrollTop =
         chat.scrollHeight;
@@ -1252,190 +1483,36 @@ async function sendMessage() {
 }
 
 
-/* ================================================= */
-/* SEND BUTTON */
-/* ================================================= */
+/* =========================================================
+   SAVE CHAT
+========================================================= */
 
-sendButton.addEventListener(
-    "click",
-    sendMessage
-);
+async function saveChat(question, answer) {
 
+    if (!currentUser) return;
 
-/* ================================================= */
-/* ENTER KEY */
-/* ================================================= */
+    const {
+        error
+    } = await supabaseClient
+        .from("chats")
+        .insert({
 
-questionInput.addEventListener(
-    "keydown",
-    function(event) {
+            user_id:
+                currentUser.id,
 
-        if (
-            event.key === "Enter" &&
-            !event.shiftKey
-        ) {
+            question:
+                question,
 
-            event.preventDefault();
-
-            sendMessage();
-
-        }
-
-    }
-);
-
-
-/* ================================================= */
-/* SUGGESTIONS */
-/* ================================================= */
-
-function setupSuggestions() {
-
-    document
-        .querySelectorAll(".suggestion")
-        .forEach(function(element) {
-
-            element.addEventListener(
-                "click",
-                function() {
-
-                    questionInput.value =
-                        element.dataset.question;
-
-                    sendMessage();
-
-                }
-            );
+            answer:
+                answer
 
         });
 
-}
 
-
-setupSuggestions();
-
-
-/* ================================================= */
-/* NEW CHAT */
-/* ================================================= */
-
-newChatButton.addEventListener(
-    "click",
-    function() {
-
-        chat.innerHTML = `
-
-            <div id="welcome" class="welcome">
-
-                <div class="ai-icon">
-                    🤖
-                </div>
-
-                <h1>
-                    Meet <span>Badmosh AI</span>
-                </h1>
-
-                <p>
-                    Your AI assistant for technology,
-                    coding, Minecraft and everyday questions.
-                </p>
-
-                <div class="suggestions">
-
-                    <div
-                        class="suggestion"
-                        data-question="How do I make a Minecraft server?">
-                        🎮 How do I make a Minecraft server?
-                    </div>
-
-                    <div
-                        class="suggestion"
-                        data-question="Teach me HTML">
-                        💻 Teach me HTML
-                    </div>
-
-                    <div
-                        class="suggestion"
-                        data-question="Give me a coding project idea">
-                        🚀 Give me a coding project idea
-                    </div>
-
-                    <div
-                        class="suggestion"
-                        data-question="Explain artificial intelligence simply">
-                        🧠 Explain AI simply
-                    </div>
-
-                </div>
-
-            </div>
-
-        `;
-
-        setupSuggestions();
-
-    }
-);
-
-
-/* ================================================= */
-/* SAVE CHAT TO SUPABASE */
-/* ================================================= */
-
-async function saveChatToCloud(
-    question,
-    answer
-) {
-
-    if (!currentUser) {
-
-        console.warn(
-            "No logged-in user."
-        );
-
-        return;
-
-    }
-
-
-    try {
-
-        const result =
-            await supabaseClient
-                .from("chats")
-                .insert({
-
-                    user_id:
-                        currentUser.id,
-
-                    question:
-                        question,
-
-                    answer:
-                        answer
-
-                });
-
-
-        if (result.error) {
-
-            console.error(
-                "Chat save error:",
-                result.error
-            );
-
-            return;
-
-        }
-
-
-        await loadCloudHistory();
-
-
-    } catch (error) {
+    if (error) {
 
         console.error(
-            "Cloud save error:",
+            "Could not save chat:",
             error
         );
 
@@ -1444,213 +1521,349 @@ async function saveChatToCloud(
 }
 
 
-/* ================================================= */
-/* LOAD CHAT HISTORY */
-/* ================================================= */
+/* =========================================================
+   LOAD HISTORY
+========================================================= */
 
-async function loadCloudHistory() {
+async function loadHistory() {
 
-    if (!currentUser) {
-        return;
-    }
+    if (!currentUser) return;
 
 
-    historyElement.innerHTML =
-        '<div class="no-history">Loading chats...</div>';
-
-
-    try {
-
-        const result =
-            await supabaseClient
-                .from("chats")
-                .select(
-                    "id, question, answer, created_at"
-                )
-                .order(
-                    "created_at",
-                    {
-                        ascending:false
-                    }
-                )
-                .limit(30);
-
-
-        if (result.error) {
-
-            console.error(
-                "History error:",
-                result.error
-            );
-
-            historyElement.innerHTML =
-                '<div class="no-history">Could not load chats.</div>';
-
-            return;
-
-        }
-
-
-        const chats =
-            result.data || [];
-
-
-        if (!chats.length) {
-
-            historyElement.innerHTML =
-                '<div class="no-history">No chats yet</div>';
-
-            return;
-
-        }
-
-
-        historyElement.innerHTML =
-            "";
-
-
-        chats.forEach(
-            function(item) {
-
-                const div =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                div.className =
-                    "history-item";
-
-
-                div.textContent =
-                    item.question;
-
-
-                div.title =
-                    item.question;
-
-
-                div.addEventListener(
-                    "click",
-                    function() {
-
-                        openCloudChat(
-                            item
-                        );
-
-                    }
-                );
-
-
-                historyElement.appendChild(
-                    div
-                );
-
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("chats")
+        .select("*")
+        .eq(
+            "user_id",
+            currentUser.id
+        )
+        .order(
+            "created_at",
+            {
+                ascending: false
             }
-        );
+        )
+        .limit(30);
 
 
-    } catch (error) {
+    const history =
+        document.getElementById("history");
+
+
+    if (error) {
 
         console.error(
-            "History loading error:",
+            "History error:",
             error
         );
 
-        historyElement.innerHTML =
-            '<div class="no-history">Could not load chats.</div>';
+        history.innerHTML =
+            "<div style='color:#777;font-size:12px'>" +
+            "Could not load history" +
+            "</div>";
+
+        return;
 
     }
+
+
+    if (!data || data.length === 0) {
+
+        history.innerHTML =
+            "<div style='color:#777;font-size:12px'>" +
+            "No chats yet" +
+            "</div>";
+
+        return;
+
+    }
+
+
+    history.innerHTML = "";
+
+
+    data.forEach(function(chat) {
+
+        const item =
+            document.createElement("div");
+
+        item.className =
+            "history-item";
+
+        item.textContent =
+            chat.question;
+
+        item.title =
+            chat.question;
+
+        item.onclick =
+            function() {
+
+                openSavedChat(chat);
+
+            };
+
+        history.appendChild(item);
+
+    });
 
 }
 
 
-/* ================================================= */
-/* OPEN CLOUD CHAT */
-/* ================================================= */
+/* =========================================================
+   OPEN SAVED CHAT
+========================================================= */
 
-function openCloudChat(item) {
+function openSavedChat(chat) {
 
-    chat.innerHTML =
-        "";
+    const chatBox =
+        document.getElementById("chat");
+
+    const welcome =
+        document.getElementById("welcome");
+
+    if (welcome) {
+
+        welcome.remove();
+
+    }
 
 
     const userMessage =
-        document.createElement(
-            "div"
-        );
-
+        document.createElement("div");
 
     userMessage.className =
         "message user";
 
-
     userMessage.innerHTML =
         "<strong>You</strong><br>" +
-        escapeHTML(
-            item.question
-        );
+        escapeHTML(chat.question);
 
 
     const aiMessage =
-        document.createElement(
-            "div"
-        );
-
+        document.createElement("div");
 
     aiMessage.className =
         "message ai";
 
-
     aiMessage.innerHTML =
         "<strong>Badmosh AI</strong><br>" +
-        escapeHTML(
-            item.answer
-        );
+        formatAIText(chat.answer) +
+        "<div class='message-actions'>" +
+        "<button class='delete-chat' onclick='deleteChat(\"" +
+        chat.id +
+        "\")'>" +
+        "🗑 Delete this chat" +
+        "</button>" +
+        "</div>";
 
 
-    chat.appendChild(
-        userMessage
-    );
+    chatBox.appendChild(userMessage);
 
+    chatBox.appendChild(aiMessage);
 
-    chat.appendChild(
-        aiMessage
-    );
-
-
-    chat.scrollTop =
-        chat.scrollHeight;
+    chatBox.scrollTop =
+        chatBox.scrollHeight;
 
 }
 
 
-/* ================================================= */
-/* ESCAPE HTML */
-/* ================================================= */
+/* =========================================================
+   DELETE CHAT
+========================================================= */
+
+async function deleteChat(id) {
+
+    if (!currentUser) return;
+
+
+    const confirmed =
+        confirm(
+            "Delete this chat?"
+        );
+
+    if (!confirmed) return;
+
+
+    const {
+        error
+    } = await supabaseClient
+        .from("chats")
+        .delete()
+        .eq(
+            "id",
+            id
+        )
+        .eq(
+            "user_id",
+            currentUser.id
+        );
+
+
+    if (error) {
+
+        alert(
+            "Could not delete chat: " +
+            error.message
+        );
+
+        return;
+
+    }
+
+
+    await loadHistory();
+
+}
+
+
+/* =========================================================
+   NEW CHAT
+========================================================= */
+
+function newChat() {
+
+    const chat =
+        document.getElementById("chat");
+
+    chat.innerHTML = `
+
+        <div class="welcome" id="welcome">
+
+            <div class="ai-icon">
+                🤖
+            </div>
+
+            <h1>
+                Meet <span>Badmosh AI</span>
+            </h1>
+
+            <p>
+                Your AI assistant for technology,
+                coding, Minecraft and everyday questions.
+            </p>
+
+            <div class="suggestions">
+
+                <div
+                    class="suggestion"
+                    onclick="useSuggestion('How do I make a Minecraft server?')">
+                    🎮 How do I make a Minecraft server?
+                </div>
+
+                <div
+                    class="suggestion"
+                    onclick="useSuggestion('Teach me HTML')">
+                    💻 Teach me HTML
+                </div>
+
+                <div
+                    class="suggestion"
+                    onclick="useSuggestion('Give me a coding project idea')">
+                    🚀 Give me a coding project idea
+                </div>
+
+                <div
+                    class="suggestion"
+                    onclick="useSuggestion('Explain artificial intelligence simply')">
+                    🧠 Explain AI simply
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   SUGGESTION
+========================================================= */
+
+function useSuggestion(text) {
+
+    document.getElementById(
+        "question"
+    ).value = text;
+
+    sendMessage();
+
+}
+
+
+/* =========================================================
+   ENTER KEY
+========================================================= */
+
+function handleEnter(event) {
+
+    if (
+        event.key === "Enter" &&
+        !event.shiftKey
+    ) {
+
+        event.preventDefault();
+
+        sendMessage();
+
+    }
+
+}
+
+
+/* =========================================================
+   SAFE HTML
+========================================================= */
 
 function escapeHTML(text) {
 
     const div =
-        document.createElement(
-            "div"
-        );
-
+        document.createElement("div");
 
     div.textContent =
-        String(text);
-
+        text == null ? "" : String(text);
 
     return div.innerHTML;
 
 }
 
 
-/* ================================================= */
-/* START */
-/* ================================================= */
+/* =========================================================
+   FORMAT AI TEXT
+========================================================= */
 
-checkUser();
+function formatAIText(text) {
+
+    let safe =
+        escapeHTML(text);
+
+
+    /*
+     * Convert simple markdown formatting
+     */
+
+    safe =
+        safe.replace(
+            /\*\*(.*?)\*\*/g,
+            "<strong>$1</strong>"
+        );
+
+
+    safe =
+        safe.replace(
+            /\n/g,
+            "<br>"
+        );
+
+
+    return safe;
+
+}
 
 </script>
 
