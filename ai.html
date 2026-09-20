@@ -5,582 +5,425 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Badmosh AI</title>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
-:root {
-    --bg: #07050d;
-    --sidebar: #0d0915;
-    --panel: #110c1b;
-    --panel2: #171020;
-    --border: #292039;
-    --purple: #9b5cff;
-    --purple2: #7c3aed;
-    --text: #f5f3f7;
-    --muted: #a9a1b5;
-    --danger: #ef4444;
+:root{
+    --bg:#07050d;
+    --sidebar:#0d0915;
+    --panel:#110c1b;
+    --border:#292039;
+    --purple:#9b5cff;
+    --purple2:#7c3aed;
+    --text:#f5f3f7;
+    --muted:#a9a1b5;
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
 }
 
-body {
-    font-family: Arial, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    height: 100vh;
+body{
+    font-family:Arial, sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    height:100vh;
 }
 
-button,
-input {
-    font-family: inherit;
+button,input{
+    font:inherit;
 }
 
-/* ================= LOGIN ================= */
+/* AUTH */
 
-.auth-screen {
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+.auth-screen{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
     background:
-        radial-gradient(circle at top, #24103e 0%, transparent 40%),
-        var(--bg);
+        radial-gradient(circle at top,#24113d 0%,#07050d 45%);
 }
 
-.auth-card {
-    width: 100%;
-    max-width: 420px;
-    background: rgba(17,12,27,.95);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 35px;
-    box-shadow: 0 20px 80px rgba(0,0,0,.5);
+.auth-box{
+    width:100%;
+    max-width:420px;
+    background:#110c1b;
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:30px;
+    box-shadow:0 20px 70px rgba(0,0,0,.5);
 }
 
-.auth-logo {
-    text-align: center;
-    font-size: 28px;
-    font-weight: 800;
-    margin-bottom: 8px;
+.auth-logo{
+    text-align:center;
+    font-size:28px;
+    font-weight:800;
+    margin-bottom:8px;
 }
 
-.auth-logo span {
-    color: var(--purple);
+.auth-logo span{
+    color:var(--purple);
 }
 
-.auth-subtitle {
-    text-align: center;
-    color: var(--muted);
-    margin-bottom: 28px;
+.auth-subtitle{
+    text-align:center;
+    color:var(--muted);
+    margin-bottom:25px;
 }
 
-.auth-tabs {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 22px;
+.auth-box h2{
+    margin-bottom:18px;
 }
 
-.auth-tab {
-    flex: 1;
-    padding: 11px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    border-radius: 9px;
-    cursor: pointer;
+.auth-box input{
+    width:100%;
+    padding:14px;
+    margin-bottom:12px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:#09070e;
+    color:white;
+    outline:none;
 }
 
-.auth-tab.active {
-    background: var(--purple2);
-    color: white;
-    border-color: var(--purple2);
+.auth-box input:focus{
+    border-color:var(--purple);
 }
 
-.auth-form {
-    display: none;
+.auth-button{
+    width:100%;
+    padding:14px;
+    border:0;
+    border-radius:10px;
+    background:var(--purple2);
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
 }
 
-.auth-form.active {
-    display: block;
+.auth-button:hover{
+    background:var(--purple);
 }
 
-.form-group {
-    margin-bottom: 16px;
+.switch-auth{
+    text-align:center;
+    margin-top:18px;
+    color:var(--muted);
+    font-size:14px;
 }
 
-.form-group label {
-    display: block;
-    font-size: 13px;
-    margin-bottom: 7px;
-    color: var(--muted);
+.switch-auth button{
+    background:none;
+    border:0;
+    color:var(--purple);
+    cursor:pointer;
 }
 
-.form-group input {
-    width: 100%;
-    padding: 13px;
-    border-radius: 9px;
-    border: 1px solid var(--border);
-    background: var(--panel2);
-    color: white;
-    outline: none;
+.auth-message{
+    margin-top:15px;
+    text-align:center;
+    font-size:13px;
+    color:var(--muted);
 }
 
-.form-group input:focus {
-    border-color: var(--purple);
-}
-
-.auth-submit {
-    width: 100%;
-    padding: 13px;
-    border: none;
-    border-radius: 9px;
-    background: var(--purple2);
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.auth-submit:hover {
-    background: var(--purple);
-}
-
-.demo-note {
-    margin-top: 18px;
-    color: #71697c;
-    text-align: center;
-    font-size: 11px;
-    line-height: 1.5;
-}
-
-/* ================= APP ================= */
-
-.app {
-    display: none;
-    height: 100vh;
-}
-
-.app.logged-in {
-    display: flex;
-}
-
-/* ================= SIDEBAR ================= */
-
-.sidebar {
-    width: 270px;
-    background: var(--sidebar);
-    border-right: 1px solid var(--border);
-    padding: 18px;
-    display: flex;
-    flex-direction: column;
-}
-
-.logo {
-    font-size: 22px;
-    font-weight: 800;
-    margin-bottom: 25px;
-}
-
-.logo span {
-    color: var(--purple);
-}
-
-.new-chat {
-    width: 100%;
-    padding: 13px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    background: var(--panel2);
-    color: white;
-    cursor: pointer;
-}
-
-.new-chat:hover {
-    border-color: var(--purple);
-}
+/* APP */
 
-.sidebar-title {
-    margin-top: 28px;
-    margin-bottom: 10px;
-    color: var(--muted);
-    font-size: 12px;
-    text-transform: uppercase;
+.app{
+    display:flex;
+    height:100vh;
 }
 
-.history {
-    overflow-y: auto;
-    flex: 1;
-}
-
-.history-item {
-    padding: 10px;
-    margin-bottom: 5px;
-    border-radius: 8px;
-    cursor: pointer;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: 14px;
-}
-
-.history-item:hover {
-    background: var(--panel2);
-}
-
-.no-history {
-    color: var(--muted);
-    font-size: 13px;
-}
-
-.clear-history {
-    margin-top: 10px;
-    width: 100%;
-    padding: 9px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: transparent;
-    color: var(--muted);
-    cursor: pointer;
-}
-
-.clear-history:hover {
-    border-color: var(--danger);
-    color: white;
-}
-
-/* USER */
+/* SIDEBAR */
 
-.user-panel {
-    margin-top: 15px;
-    padding: 13px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    background: #120d1d;
+.sidebar{
+    width:260px;
+    background:var(--sidebar);
+    border-right:1px solid var(--border);
+    padding:18px;
+    display:flex;
+    flex-direction:column;
 }
 
-.user-name {
-    font-weight: bold;
-    margin-bottom: 4px;
+.logo{
+    font-size:22px;
+    font-weight:800;
+    margin-bottom:25px;
 }
 
-.user-email {
-    color: var(--muted);
-    font-size: 11px;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.logo span{
+    color:var(--purple);
 }
 
-.logout {
-    margin-top: 10px;
-    width: 100%;
-    padding: 9px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: transparent;
-    color: var(--muted);
-    cursor: pointer;
+.new-chat{
+    width:100%;
+    padding:13px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:#171020;
+    color:white;
+    cursor:pointer;
 }
 
-.logout:hover {
-    color: white;
-    border-color: var(--purple);
+.new-chat:hover{
+    border-color:var(--purple);
 }
 
-/* PLAN */
-
-.plan {
-    margin-top: 15px;
-    padding: 15px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    background: #120d1d;
-}
-
-.plan strong {
-    display: block;
-    margin-bottom: 5px;
+.sidebar-title{
+    margin-top:28px;
+    margin-bottom:10px;
+    color:var(--muted);
+    font-size:12px;
+    text-transform:uppercase;
 }
 
-.plan p {
-    color: var(--muted);
-    font-size: 12px;
+.history{
+    color:#d5cfdd;
+    font-size:14px;
 }
-
-.pro-button {
-    margin-top: 12px;
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 8px;
-    background: var(--purple2);
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-/* ================= MAIN ================= */
 
-.main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
+.history-item{
+    padding:9px;
+    border-radius:8px;
+    cursor:pointer;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
 }
 
-.topbar {
-    height: 65px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 25px;
+.history-item:hover{
+    background:#171020;
 }
 
-.model {
-    font-weight: 700;
+.sidebar-bottom{
+    margin-top:auto;
 }
 
-.status {
-    color: #8d8499;
-    font-size: 13px;
+.user-card{
+    padding:12px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:#120d1d;
+    margin-bottom:10px;
 }
 
-.status.online {
-    color: #8b5cf6;
+.user-email{
+    font-size:12px;
+    color:var(--muted);
+    overflow:hidden;
+    text-overflow:ellipsis;
 }
 
-/* ================= CHAT ================= */
-
-.chat {
-    flex: 1;
-    overflow-y: auto;
-    padding: 40px 20px 150px;
+.logout{
+    width:100%;
+    padding:10px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    background:#171020;
+    color:white;
+    cursor:pointer;
 }
 
-.welcome {
-    max-width: 750px;
-    margin: 70px auto;
-    text-align: center;
-}
+/* MAIN */
 
-.ai-icon {
-    width: 70px;
-    height: 70px;
-    margin: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 20px;
-    background: linear-gradient(135deg,#7c3aed,#a855f7);
-    font-size: 32px;
+.main{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    min-width:0;
 }
 
-.welcome h1 {
-    margin-top: 25px;
-    font-size: 42px;
+.topbar{
+    height:65px;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 25px;
 }
 
-.welcome h1 span {
-    color: var(--purple);
+.model{
+    font-weight:700;
 }
 
-.welcome p {
-    margin-top: 12px;
-    color: var(--muted);
+.status{
+    color:#72e08a;
+    font-size:13px;
 }
 
-.suggestions {
-    display: grid;
-    grid-template-columns: repeat(2,1fr);
-    gap: 12px;
-    margin: 35px auto;
-}
+/* CHAT */
 
-.suggestion {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    padding: 16px;
-    border-radius: 12px;
-    text-align: left;
-    color: #ddd7e4;
-    cursor: pointer;
+.chat{
+    flex:1;
+    overflow-y:auto;
+    padding:40px 20px 150px;
 }
 
-.suggestion:hover {
-    border-color: var(--purple);
+.welcome{
+    max-width:750px;
+    margin:80px auto;
+    text-align:center;
 }
 
-/* ================= MESSAGES ================= */
-
-.message {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 18px;
-    border-radius: 14px;
-    line-height: 1.6;
-    word-wrap: break-word;
+.ai-icon{
+    width:70px;
+    height:70px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:20px;
+    background:linear-gradient(135deg,#7c3aed,#a855f7);
+    font-size:32px;
 }
 
-.user-message {
-    background: var(--panel2);
+.welcome h1{
+    margin-top:25px;
+    font-size:42px;
 }
 
-.ai-message {
-    background: #0e0a15;
-    border: 1px solid var(--border);
+.welcome h1 span{
+    color:var(--purple);
 }
 
-.message strong {
-    color: var(--purple);
+.welcome p{
+    margin-top:12px;
+    color:var(--muted);
 }
 
-/* ================= INPUT ================= */
-
-.input-area {
-    position: fixed;
-    bottom: 0;
-    left: 270px;
-    right: 0;
-    padding: 20px;
-    background: linear-gradient(transparent,var(--bg) 35%);
+.suggestions{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+    max-width:700px;
+    margin:35px auto;
 }
 
-.input-box {
-    max-width: 800px;
-    margin: auto;
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    background: #120d1b;
-    border: 1px solid var(--border);
-    padding: 8px;
-    border-radius: 15px;
+.suggestion{
+    background:var(--panel);
+    border:1px solid var(--border);
+    padding:16px;
+    border-radius:12px;
+    text-align:left;
+    color:#ddd7e4;
+    cursor:pointer;
 }
 
-.input-box:focus-within {
-    border-color: var(--purple);
+.suggestion:hover{
+    border-color:var(--purple);
 }
 
-.input-box input {
-    flex: 1;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: white;
-    padding: 13px;
-    font-size: 15px;
-}
+/* MESSAGES */
 
-.send {
-    width: 45px;
-    height: 45px;
-    border: none;
-    border-radius: 11px;
-    background: var(--purple2);
-    color: white;
-    font-size: 18px;
-    cursor: pointer;
+.message{
+    max-width:800px;
+    margin:20px auto;
+    padding:18px;
+    border-radius:14px;
+    line-height:1.6;
+    white-space:pre-wrap;
+    word-wrap:break-word;
 }
 
-.send:hover {
-    background: var(--purple);
+.user{
+    background:#171020;
 }
 
-.send:disabled {
-    opacity: .5;
+.ai{
+    background:#0e0a15;
+    border:1px solid var(--border);
 }
 
-.disclaimer {
-    max-width: 800px;
-    margin: 8px auto 0;
-    text-align: center;
-    color: #71697c;
-    font-size: 11px;
+.message strong{
+    color:var(--purple);
 }
 
-/* ================= SETTINGS MODAL ================= */
+/* INPUT */
 
-.modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,.7);
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    z-index: 20;
+.input-area{
+    position:fixed;
+    bottom:0;
+    left:260px;
+    right:0;
+    padding:20px;
+    background:linear-gradient(transparent,var(--bg) 35%);
 }
 
-.modal.show {
-    display: flex;
+.input-box{
+    max-width:800px;
+    margin:auto;
+    display:flex;
+    gap:10px;
+    background:#120d1b;
+    border:1px solid var(--border);
+    padding:8px;
+    border-radius:15px;
 }
 
-.modal-card {
-    width: 100%;
-    max-width: 450px;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 25px;
+.input-box:focus-within{
+    border-color:var(--purple);
 }
 
-.modal-card h2 {
-    margin-bottom: 20px;
+.input-box input{
+    flex:1;
+    background:transparent;
+    border:0;
+    outline:0;
+    color:white;
+    padding:13px;
 }
 
-.setting-row {
-    padding: 14px 0;
-    border-bottom: 1px solid var(--border);
+.send{
+    width:45px;
+    height:45px;
+    border:0;
+    border-radius:11px;
+    background:var(--purple2);
+    color:white;
+    cursor:pointer;
 }
 
-.setting-row span {
-    color: var(--muted);
-    font-size: 13px;
+.send:hover{
+    background:var(--purple);
 }
 
-.close-modal {
-    margin-top: 20px;
-    width: 100%;
-    padding: 11px;
-    border: none;
-    border-radius: 8px;
-    background: var(--purple2);
-    color: white;
-    cursor: pointer;
+.disclaimer{
+    max-width:800px;
+    margin:8px auto 0;
+    text-align:center;
+    color:#71697c;
+    font-size:11px;
 }
 
-/* ================= MOBILE ================= */
+/* MOBILE */
 
-@media(max-width:700px) {
+@media(max-width:700px){
 
-    .sidebar {
-        display: none;
+    .sidebar{
+        display:none;
     }
 
-    .input-area {
-        left: 0;
+    .input-area{
+        left:0;
     }
 
-    .welcome {
-        margin: 45px auto;
+    .welcome{
+        margin:50px auto;
     }
 
-    .welcome h1 {
-        font-size: 32px;
+    .welcome h1{
+        font-size:32px;
     }
 
-    .suggestions {
-        grid-template-columns: 1fr;
+    .suggestions{
+        grid-template-columns:1fr;
     }
 
-    .topbar {
-        padding: 0 15px;
-    }
-
-    .message {
-        margin: 15px 0;
+    .topbar{
+        padding:0 15px;
     }
 }
 </style>
@@ -590,9 +433,9 @@ input {
 
 <!-- ================= AUTH SCREEN ================= -->
 
-<div class="auth-screen" id="authScreen">
+<div id="authScreen" class="auth-screen">
 
-    <div class="auth-card">
+    <div class="auth-box">
 
         <div class="auth-logo">
             🤖 BADMOSH <span>AI</span>
@@ -602,121 +445,78 @@ input {
             Your personal AI assistant
         </div>
 
-        <div class="auth-tabs">
-
-            <button
-                id="loginTab"
-                class="auth-tab active"
-                onclick="showLogin()">
-                Login
-            </button>
-
-            <button
-                id="signupTab"
-                class="auth-tab"
-                onclick="showSignup()">
-                Sign Up
-            </button>
-
-        </div>
-
-
         <!-- LOGIN -->
 
-        <form
-            id="loginForm"
-            class="auth-form active"
-            onsubmit="login(event)">
+        <div id="loginForm">
 
-            <div class="form-group">
-                <label>Email</label>
+            <h2>Welcome back</h2>
 
-                <input
-                    id="loginEmail"
-                    type="email"
-                    placeholder="you@example.com"
-                    required>
-            </div>
+            <input
+                id="loginEmail"
+                type="email"
+                placeholder="Email address"
+            >
 
-            <div class="form-group">
-                <label>Password</label>
-
-                <input
-                    id="loginPassword"
-                    type="password"
-                    placeholder="Password"
-                    required>
-            </div>
+            <input
+                id="loginPassword"
+                type="password"
+                placeholder="Password"
+            >
 
             <button
-                class="auth-submit"
-                type="submit">
+                class="auth-button"
+                onclick="login()">
                 Login
             </button>
 
-        </form>
+            <div class="switch-auth">
+                Don't have an account?
+                <button onclick="showSignup()">Sign up</button>
+            </div>
 
+        </div>
 
         <!-- SIGNUP -->
 
-        <form
-            id="signupForm"
-            class="auth-form"
-            onsubmit="signup(event)">
+        <div id="signupForm" style="display:none">
 
-            <div class="form-group">
-                <label>Name</label>
+            <h2>Create account</h2>
 
-                <input
-                    id="signupName"
-                    type="text"
-                    placeholder="Your name"
-                    required>
-            </div>
+            <input
+                id="signupEmail"
+                type="email"
+                placeholder="Email address"
+            >
 
-            <div class="form-group">
-                <label>Email</label>
-
-                <input
-                    id="signupEmail"
-                    type="email"
-                    placeholder="you@example.com"
-                    required>
-            </div>
-
-            <div class="form-group">
-                <label>Password</label>
-
-                <input
-                    id="signupPassword"
-                    type="password"
-                    placeholder="Create a password"
-                    minlength="6"
-                    required>
-            </div>
+            <input
+                id="signupPassword"
+                type="password"
+                placeholder="Password"
+            >
 
             <button
-                class="auth-submit"
-                type="submit">
+                class="auth-button"
+                onclick="signup()">
                 Create Account
             </button>
 
-        </form>
+            <div class="switch-auth">
+                Already have an account?
+                <button onclick="showLogin()">Login</button>
+            </div>
 
-        <div class="demo-note">
-            Demo authentication only. Do not use a real password here.
-            Real secure accounts will require a proper authentication backend.
         </div>
 
+        <div id="authMessage" class="auth-message"></div>
+
     </div>
+
 </div>
 
 
 <!-- ================= MAIN APP ================= -->
 
-<div class="app" id="app">
-
-    <!-- SIDEBAR -->
+<div id="app" class="app" style="display:none">
 
     <aside class="sidebar">
 
@@ -730,7 +530,6 @@ input {
             ＋ New Chat
         </button>
 
-
         <div class="sidebar-title">
             Recent Chats
         </div>
@@ -738,60 +537,29 @@ input {
         <div
             class="history"
             id="history">
+            No chats yet
         </div>
 
-        <button
-            class="clear-history"
-            onclick="clearHistory()">
-            🗑 Clear History
-        </button>
+        <div class="sidebar-bottom">
 
-
-        <div class="user-panel">
-
-            <div
-                class="user-name"
-                id="userName">
-                User
-            </div>
-
-            <div
-                class="user-email"
-                id="userEmail">
-                user@example.com
+            <div class="user-card">
+                <div>👤 Account</div>
+                <div
+                    id="userEmail"
+                    class="user-email">
+                </div>
             </div>
 
             <button
                 class="logout"
                 onclick="logout()">
-                Logout
-            </button>
-
-        </div>
-
-
-        <div class="plan">
-
-            <strong>
-                🆓 Free Plan
-            </strong>
-
-            <p>
-                AI access enabled
-            </p>
-
-            <button
-                class="pro-button"
-                onclick="showPro()">
-                ⭐ Upgrade to Pro
+                🚪 Logout
             </button>
 
         </div>
 
     </aside>
 
-
-    <!-- MAIN -->
 
     <main class="main">
 
@@ -801,15 +569,12 @@ input {
                 Badmosh AI
             </div>
 
-            <div
-                class="status online">
+            <div class="status">
                 ● Online
             </div>
 
         </header>
 
-
-        <!-- CHAT -->
 
         <section
             class="chat"
@@ -831,7 +596,6 @@ input {
                     Your AI assistant for technology,
                     coding, Minecraft and everyday questions.
                 </p>
-
 
                 <div class="suggestions">
 
@@ -866,8 +630,6 @@ input {
         </section>
 
 
-        <!-- INPUT -->
-
         <div class="input-area">
 
             <div class="input-box">
@@ -876,12 +638,12 @@ input {
                     id="question"
                     type="text"
                     placeholder="Message Badmosh AI..."
-                    autocomplete="off">
+                    onkeydown="handleEnter(event)"
+                >
 
                 <button
-                    id="sendButton"
                     class="send"
-                    type="button">
+                    onclick="sendMessage()">
                     ➤
                 </button>
 
@@ -898,112 +660,32 @@ input {
 </div>
 
 
-<!-- ================= SETTINGS MODAL ================= -->
-
-<div
-    class="modal"
-    id="settingsModal">
-
-    <div class="modal-card">
-
-        <h2>
-            ⚙️ Settings
-        </h2>
-
-        <div class="setting-row">
-            <strong>Account</strong><br>
-            <span id="settingsEmail">
-                Not logged in
-            </span>
-        </div>
-
-        <div class="setting-row">
-            <strong>Plan</strong><br>
-            <span>
-                Free Plan
-            </span>
-        </div>
-
-        <div class="setting-row">
-            <strong>AI Model</strong><br>
-            <span>
-                Cloudflare Workers AI
-            </span>
-        </div>
-
-        <button
-            class="close-modal"
-            onclick="closeSettings()">
-            Close
-        </button>
-
-    </div>
-</div>
-
-
 <script>
 
-/* ==================================================
-   CLOUDFLARE WORKER
-================================================== */
+/* ================= SUPABASE ================= */
+
+const SUPABASE_URL =
+    "https://evrzjkylpontvngwoszb.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_wSigh2nJLbJRfmDZXTStdA_WETjMZnJ";
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
+
+
+/* ================= WORKER ================= */
 
 const WORKER_URL =
     "https://badmosh-ai.cchandasaini.workers.dev/";
 
 
-/* ==================================================
-   ELEMENTS
-================================================== */
+/* ================= AUTH ================= */
 
-const authScreen =
-    document.getElementById("authScreen");
-
-const app =
-    document.getElementById("app");
-
-const input =
-    document.getElementById("question");
-
-const sendButton =
-    document.getElementById("sendButton");
-
-const chat =
-    document.getElementById("chat");
-
-const historyBox =
-    document.getElementById("history");
-
-
-/* ==================================================
-   LOCAL ACCOUNT
-================================================== */
-
-function getAccount() {
-
-    try {
-
-        return JSON.parse(
-            localStorage.getItem("badmoshAccount") || "null"
-        );
-
-    } catch {
-
-        return null;
-
-    }
-}
-
-
-/* ==================================================
-   SIGNUP
-================================================== */
-
-function signup(event) {
-
-    event.preventDefault();
-
-    const name =
-        document.getElementById("signupName").value.trim();
+async function signup(){
 
     const email =
         document.getElementById("signupEmail").value.trim();
@@ -1011,42 +693,54 @@ function signup(event) {
     const password =
         document.getElementById("signupPassword").value;
 
-    if (!name || !email || !password) {
+    if(!email || !password){
+
+        showAuthMessage(
+            "Please enter your email and password."
+        );
+
         return;
     }
 
-    /*
-      Demo only.
-      Password is stored locally only.
-      Do NOT use this for real production accounts.
-    */
+    if(password.length < 6){
 
-    localStorage.setItem(
-        "badmoshAccount",
-        JSON.stringify({
-            name: name,
-            email: email,
-            password: password
-        })
-    );
+        showAuthMessage(
+            "Password must be at least 6 characters."
+        );
 
-    localStorage.setItem(
-        "badmoshLoggedIn",
-        "true"
-    );
+        return;
+    }
 
-    startApp();
+    showAuthMessage("Creating your account...");
 
+    const {data,error} =
+        await supabaseClient.auth.signUp({
+            email:email,
+            password:password
+        });
+
+    if(error){
+
+        showAuthMessage(error.message);
+
+        return;
+    }
+
+    if(data.session){
+
+        showApp(data.session.user);
+
+    }else{
+
+        showAuthMessage(
+            "Account created! Check your email to confirm your account."
+        );
+
+    }
 }
 
 
-/* ==================================================
-   LOGIN
-================================================== */
-
-function login(event) {
-
-    event.preventDefault();
+async function login(){
 
     const email =
         document.getElementById("loginEmail").value.trim();
@@ -1054,472 +748,282 @@ function login(event) {
     const password =
         document.getElementById("loginPassword").value;
 
-    const account =
-        getAccount();
+    if(!email || !password){
 
-    if (!account) {
-
-        alert(
-            "No local account found. Please sign up first."
+        showAuthMessage(
+            "Please enter your email and password."
         );
 
         return;
     }
 
-    if (
-        email !== account.email ||
-        password !== account.password
-    ) {
+    showAuthMessage("Logging in...");
 
-        alert(
-            "Incorrect email or password."
-        );
+    const {data,error} =
+        await supabaseClient.auth.signInWithPassword({
+            email:email,
+            password:password
+        });
+
+    if(error){
+
+        showAuthMessage(error.message);
 
         return;
     }
 
-    localStorage.setItem(
-        "badmoshLoggedIn",
-        "true"
-    );
-
-    startApp();
-
+    showApp(data.user);
 }
 
 
-/* ==================================================
-   LOGIN / SIGNUP TABS
-================================================== */
+async function logout(){
 
-function showLogin() {
+    await supabaseClient.auth.signOut();
 
-    document
-        .getElementById("loginTab")
-        .classList.add("active");
+    document.getElementById("app").style.display = "none";
+    document.getElementById("authScreen").style.display = "flex";
 
-    document
-        .getElementById("signupTab")
-        .classList.remove("active");
-
-    document
-        .getElementById("loginForm")
-        .classList.add("active");
-
-    document
-        .getElementById("signupForm")
-        .classList.remove("active");
-
+    showLogin();
 }
 
 
-function showSignup() {
+function showSignup(){
 
-    document
-        .getElementById("signupTab")
-        .classList.add("active");
+    document.getElementById("loginForm").style.display = "none";
 
-    document
-        .getElementById("loginTab")
-        .classList.remove("active");
+    document.getElementById("signupForm").style.display = "block";
 
-    document
-        .getElementById("signupForm")
-        .classList.add("active");
-
-    document
-        .getElementById("loginForm")
-        .classList.remove("active");
-
+    document.getElementById("authMessage").textContent = "";
 }
 
 
-/* ==================================================
-   START APP
-================================================== */
+function showLogin(){
 
-function startApp() {
+    document.getElementById("signupForm").style.display = "none";
 
-    const account =
-        getAccount();
+    document.getElementById("loginForm").style.display = "block";
 
-    if (!account) {
-        return;
-    }
-
-    authScreen.style.display =
-        "none";
-
-    app.classList.add(
-        "logged-in"
-    );
-
-    document.getElementById("userName")
-        .textContent =
-        account.name;
-
-    document.getElementById("userEmail")
-        .textContent =
-        account.email;
-
-    document.getElementById("settingsEmail")
-        .textContent =
-        account.email;
-
-    displayHistory();
-
+    document.getElementById("authMessage").textContent = "";
 }
 
 
-/* ==================================================
-   LOGOUT
-================================================== */
+function showAuthMessage(message){
 
-function logout() {
-
-    localStorage.removeItem(
-        "badmoshLoggedIn"
-    );
-
-    app.classList.remove(
-        "logged-in"
-    );
-
-    authScreen.style.display =
-        "flex";
-
+    document.getElementById("authMessage").textContent = message;
 }
 
 
-/* ==================================================
-   CHAT HISTORY
-================================================== */
+/* ================= SHOW APP ================= */
 
-function historyKey() {
+function showApp(user){
 
-    const account =
-        getAccount();
+    document.getElementById("authScreen").style.display = "none";
 
-    if (!account) {
-        return "badmoshChats_guest";
-    }
+    document.getElementById("app").style.display = "flex";
 
-    return "badmoshChats_" +
-        account.email;
+    document.getElementById("userEmail").textContent =
+        user.email || "";
 
+    loadHistory();
 }
 
 
-function getHistory() {
+/* ================= CHECK LOGIN ================= */
 
-    try {
+async function checkUser(){
 
-        return JSON.parse(
-            localStorage.getItem(historyKey()) || "[]"
-        );
+    const {data} =
+        await supabaseClient.auth.getSession();
 
-    } catch {
+    if(data.session){
 
-        return [];
+        showApp(data.session.user);
+
+    }else{
+
+        document.getElementById("authScreen").style.display = "flex";
+
+        document.getElementById("app").style.display = "none";
 
     }
-
 }
 
 
-function saveChat(question, answer) {
+/* ================= CHAT ================= */
 
-    const chats =
-        getHistory();
+async function sendMessage(){
 
-    chats.push({
+    const input =
+        document.getElementById("question");
 
-        question: question,
-
-        answer: answer,
-
-        date: new Date().toISOString()
-
-    });
-
-    localStorage.setItem(
-        historyKey(),
-        JSON.stringify(chats)
-    );
-
-    displayHistory();
-
-}
-
-
-function displayHistory() {
-
-    const chats =
-        getHistory();
-
-    historyBox.innerHTML = "";
-
-    if (chats.length === 0) {
-
-        historyBox.innerHTML =
-            '<div class="no-history">No chats yet</div>';
-
-        return;
-
-    }
-
-    chats
-        .slice(-30)
-        .reverse()
-        .forEach(
-            (item, reverseIndex) => {
-
-                const realIndex =
-                    chats.length - 1 - reverseIndex;
-
-                const div =
-                    document.createElement("div");
-
-                div.className =
-                    "history-item";
-
-                div.textContent =
-                    item.question;
-
-                div.title =
-                    item.question;
-
-                div.onclick =
-                    function() {
-
-                        loadChat(realIndex);
-
-                    };
-
-                historyBox.appendChild(div);
-
-            }
-        );
-
-}
-
-
-function loadChat(index) {
-
-    const chats =
-        getHistory();
-
-    const selected =
-        chats[index];
-
-    if (!selected) {
-        return;
-    }
-
-    chat.innerHTML = "";
-
-    addMessage(
-        "user-message",
-        "You",
-        selected.question
-    );
-
-    addMessage(
-        "ai-message",
-        "Badmosh AI",
-        selected.answer
-    );
-
-}
-
-
-/* ==================================================
-   ADD MESSAGE
-================================================== */
-
-function addMessage(
-    className,
-    title,
-    text
-) {
-
-    const message =
-        document.createElement("div");
-
-    message.className =
-        "message " + className;
-
-    message.innerHTML =
-        "<strong>" +
-        escapeHTML(title) +
-        "</strong><br>" +
-        formatAnswer(text);
-
-    chat.appendChild(message);
-
-}
-
-
-/* ==================================================
-   SEND MESSAGE
-================================================== */
-
-async function sendMessage() {
-
-    const question =
-        input.value.trim();
-
-    if (!question) {
-        return;
-    }
+    const chat =
+        document.getElementById("chat");
 
     const welcome =
         document.getElementById("welcome");
 
-    if (welcome) {
+    const question =
+        input.value.trim();
+
+    if(!question) return;
+
+    if(welcome){
         welcome.remove();
     }
 
-    addMessage(
-        "user-message",
-        "You",
-        question
-    );
+    const userMessage =
+        document.createElement("div");
+
+    userMessage.className =
+        "message user";
+
+    userMessage.innerHTML =
+        "<strong>You</strong><br>" +
+        escapeHTML(question);
+
+    chat.appendChild(userMessage);
 
 
     const aiMessage =
         document.createElement("div");
 
     aiMessage.className =
-        "message ai-message";
+        "message ai";
 
     aiMessage.innerHTML =
         "<strong>Badmosh AI</strong><br>" +
         "Thinking... 🤔";
 
-    chat.appendChild(
-        aiMessage
-    );
+    chat.appendChild(aiMessage);
 
     input.value = "";
 
-    sendButton.disabled =
-        true;
-
-    chat.scrollTop =
-        chat.scrollHeight;
+    chat.scrollTop = chat.scrollHeight;
 
 
-    try {
+    try{
 
         const response =
-            await fetch(
-                WORKER_URL,
-                {
-                    method: "POST",
+            await fetch(WORKER_URL,{
 
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
+                method:"POST",
 
-                    body: JSON.stringify({
-                        question:
-                            question
-                    })
-                }
-            );
+                headers:{
+                    "Content-Type":"application/json"
+                },
+
+                body:JSON.stringify({
+                    question:question
+                })
+
+            });
 
 
         const data =
             await response.json();
 
 
-        if (!response.ok) {
+        if(!response.ok){
 
             throw new Error(
-                data.error ||
-                "AI request failed."
+                data.error || "AI request failed."
             );
 
         }
 
 
         /*
-          Your Cloudflare Worker currently returns:
-
-          {
-            "choices": [
-              {
-                "message": {
-                  "content": "AI ANSWER"
-                }
-              }
-            ]
-          }
+          Your Worker currently returns the
+          Cloudflare AI response directly.
         */
 
-        const answer =
+        let answer = "";
+
+
+        if(data.response){
+            answer = data.response;
+        }
+
+        else if(data.answer){
+            answer = data.answer;
+        }
+
+        else if(
             data.choices &&
             data.choices[0] &&
-            data.choices[0].message &&
-            data.choices[0].message.content;
+            data.choices[0].message
+        ){
+
+            answer =
+                data.choices[0].message.content || "";
+
+        }
 
 
-        if (!answer) {
+        if(!answer){
 
-            throw new Error(
-                "The AI returned an empty response."
-            );
+            answer =
+                "No response received from the AI.";
 
         }
 
 
         aiMessage.innerHTML =
             "<strong>Badmosh AI</strong><br>" +
-            formatAnswer(answer);
+            escapeHTML(answer);
 
 
-        /* SAVE */
+        saveChat(question,answer);
 
-        saveChat(
-            question,
-            answer
-        );
+    }
 
-
-    } catch (error) {
+    catch(error){
 
         console.error(error);
 
         aiMessage.innerHTML =
             "<strong>Badmosh AI</strong><br>" +
             "Sorry, something went wrong.<br><br>" +
-            "<small>" +
-            escapeHTML(
-                error.message
-            ) +
-            "</small>";
+            escapeHTML(error.message);
 
     }
 
 
-    sendButton.disabled =
-        false;
-
     chat.scrollTop =
         chat.scrollHeight;
-
 }
 
 
-/* ==================================================
-   NEW CHAT
-================================================== */
+/* ================= SUGGESTION ================= */
 
-function newChat() {
+function useSuggestion(text){
 
-    chat.innerHTML = `
+    document.getElementById("question").value =
+        text;
+
+    sendMessage();
+}
+
+
+/* ================= ENTER ================= */
+
+function handleEnter(event){
+
+    if(event.key === "Enter"){
+
+        event.preventDefault();
+
+        sendMessage();
+
+    }
+}
+
+
+/* ================= NEW CHAT ================= */
+
+function newChat(){
+
+    document.getElementById("chat").innerHTML = `
 
         <div class="welcome" id="welcome">
 
@@ -1538,96 +1042,175 @@ function newChat() {
 
             <div class="suggestions">
 
-                <div class="suggestion"
-                     onclick="useSuggestion('How do I make a Minecraft server?')">
+                <div
+                    class="suggestion"
+                    onclick="useSuggestion('How do I make a Minecraft server?')">
                     🎮 How do I make a Minecraft server?
                 </div>
 
-                <div class="suggestion"
-                     onclick="useSuggestion('Teach me HTML')">
+                <div
+                    class="suggestion"
+                    onclick="useSuggestion('Teach me HTML')">
                     💻 Teach me HTML
                 </div>
 
-                <div class="suggestion"
-                     onclick="useSuggestion('Give me a coding project idea')">
+                <div
+                    class="suggestion"
+                    onclick="useSuggestion('Give me a coding project idea')">
                     🚀 Give me a coding project idea
                 </div>
 
-                <div class="suggestion"
-                     onclick="useSuggestion('Explain artificial intelligence simply')">
+                <div
+                    class="suggestion"
+                    onclick="useSuggestion('Explain artificial intelligence simply')">
                     🧠 Explain AI simply
                 </div>
 
             </div>
 
         </div>
-
     `;
 
-    input.focus();
-
 }
 
 
-/* ==================================================
-   SUGGESTION
-================================================== */
+/* ================= LOCAL CHAT HISTORY ================= */
 
-function useSuggestion(text) {
+function saveChat(question,answer){
 
-    input.value =
-        text;
-
-    sendMessage();
-
-}
-
-
-/* ==================================================
-   CLEAR HISTORY
-================================================== */
-
-function clearHistory() {
-
-    const yes =
-        confirm(
-            "Delete all your saved chats?"
+    let history =
+        JSON.parse(
+            localStorage.getItem("badmosh_history") || "[]"
         );
 
-    if (!yes) {
+    history.unshift({
+        question:question,
+        answer:answer,
+        time:Date.now()
+    });
+
+    history =
+        history.slice(0,20);
+
+    localStorage.setItem(
+        "badmosh_history",
+        JSON.stringify(history)
+    );
+
+    loadHistory();
+}
+
+
+function loadHistory(){
+
+    const historyElement =
+        document.getElementById("history");
+
+    if(!historyElement) return;
+
+    const history =
+        JSON.parse(
+            localStorage.getItem("badmosh_history") || "[]"
+        );
+
+
+    if(history.length === 0){
+
+        historyElement.innerHTML =
+            "No chats yet";
+
         return;
     }
 
-    localStorage.removeItem(
-        historyKey()
-    );
 
-    displayHistory();
+    historyElement.innerHTML = "";
 
-    newChat();
+
+    history.forEach((item,index)=>{
+
+        const div =
+            document.createElement("div");
+
+        div.className =
+            "history-item";
+
+        div.textContent =
+            item.question;
+
+        div.onclick =
+            function(){
+
+                openHistory(index);
+
+            };
+
+        historyElement.appendChild(div);
+
+    });
 
 }
 
 
-/* ==================================================
-   PRO
-================================================== */
+function openHistory(index){
 
-function showPro() {
+    const history =
+        JSON.parse(
+            localStorage.getItem("badmosh_history") || "[]"
+        );
 
-    alert(
-        "⭐ Badmosh AI Pro\n\n" +
-        "Pro subscriptions are coming soon!"
-    );
+    const item =
+        history[index];
 
+    if(!item) return;
+
+
+    const chat =
+        document.getElementById("chat");
+
+    const welcome =
+        document.getElementById("welcome");
+
+    if(welcome){
+        welcome.remove();
+    }
+
+
+    const userMessage =
+        document.createElement("div");
+
+    userMessage.className =
+        "message user";
+
+    userMessage.innerHTML =
+        "<strong>You</strong><br>" +
+        escapeHTML(item.question);
+
+
+    const aiMessage =
+        document.createElement("div");
+
+    aiMessage.className =
+        "message ai";
+
+    aiMessage.innerHTML =
+        "<strong>Badmosh AI</strong><br>" +
+        escapeHTML(item.answer);
+
+
+    chat.innerHTML = "";
+
+    chat.appendChild(userMessage);
+
+    chat.appendChild(aiMessage);
+
+    chat.scrollTop =
+        chat.scrollHeight;
 }
 
 
-/* ==================================================
-   SECURITY HELPERS
-================================================== */
+/* ================= SECURITY ================= */
 
-function escapeHTML(text) {
+function escapeHTML(text){
 
     const div =
         document.createElement("div");
@@ -1636,41 +1219,17 @@ function escapeHTML(text) {
         String(text);
 
     return div.innerHTML;
-
 }
 
 
-function formatAnswer(text) {
+/* ================= START ================= */
 
-    return escapeHTML(
-        text
-    ).replace(
-        /\n/g,
-        "<br>"
-    );
+supabaseClient.auth.onAuthStateChange(
+    function(event,session){
 
-}
+        if(session){
 
-
-/* ==================================================
-   BUTTON + ENTER
-================================================== */
-
-sendButton.addEventListener(
-    "click",
-    sendMessage
-);
-
-
-input.addEventListener(
-    "keydown",
-    function(event) {
-
-        if (event.key === "Enter") {
-
-            event.preventDefault();
-
-            sendMessage();
+            showApp(session.user);
 
         }
 
@@ -1678,33 +1237,9 @@ input.addEventListener(
 );
 
 
-/* ==================================================
-   STARTUP
-================================================== */
-
-const loggedIn =
-    localStorage.getItem(
-        "badmoshLoggedIn"
-    );
-
-if (
-    loggedIn === "true" &&
-    getAccount()
-) {
-
-    startApp();
-
-} else {
-
-    authScreen.style.display =
-        "flex";
-
-}
+checkUser();
 
 </script>
 
 </body>
 </html>
-   
-
-   
