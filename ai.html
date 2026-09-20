@@ -348,7 +348,6 @@ body {
 
 </aside>
 
-
 <main class="main">
 
     <header class="topbar">
@@ -362,7 +361,6 @@ body {
         </div>
 
     </header>
-
 
     <section class="chat" id="chat">
 
@@ -409,7 +407,6 @@ body {
 
     </section>
 
-
     <div class="input-area">
 
         <div class="input-box">
@@ -418,12 +415,12 @@ body {
                 id="question"
                 type="text"
                 placeholder="Message Badmosh AI..."
-                onkeydown="handleEnter(event)"
             >
 
             <button
+                id="sendButton"
                 class="send"
-                onclick="sendMessage()">
+                type="button">
                 ➤
             </button>
 
@@ -439,18 +436,22 @@ body {
 
 </div>
 
-
 <script>
 
 const WORKER_URL =
     "https://badmosh-ai.cchandasaini.workers.dev/";
 
+const input =
+    document.getElementById("question");
+
+const sendButton =
+    document.getElementById("sendButton");
+
+const chat =
+    document.getElementById("chat");
+
 
 async function sendMessage() {
-
-    const input = document.getElementById("question");
-    const chat = document.getElementById("chat");
-    const welcome = document.getElementById("welcome");
 
     const question = input.value.trim();
 
@@ -458,14 +459,18 @@ async function sendMessage() {
         return;
     }
 
+    const welcome =
+        document.getElementById("welcome");
+
     if (welcome) {
         welcome.remove();
     }
 
+    const userMessage =
+        document.createElement("div");
 
-    const userMessage = document.createElement("div");
-
-    userMessage.className = "message user";
+    userMessage.className =
+        "message user";
 
     userMessage.innerHTML =
         "<strong>You</strong><br>" +
@@ -474,9 +479,11 @@ async function sendMessage() {
     chat.appendChild(userMessage);
 
 
-    const aiMessage = document.createElement("div");
+    const aiMessage =
+        document.createElement("div");
 
-    aiMessage.className = "message ai";
+    aiMessage.className =
+        "message ai";
 
     aiMessage.innerHTML =
         "<strong>Badmosh AI</strong><br>" +
@@ -484,44 +491,60 @@ async function sendMessage() {
 
     chat.appendChild(aiMessage);
 
-
     input.value = "";
 
-    chat.scrollTop = chat.scrollHeight;
+    sendButton.disabled = true;
+
+    chat.scrollTop =
+        chat.scrollHeight;
 
 
     try {
 
-        const response = await fetch(WORKER_URL, {
+        const response =
+            await fetch(WORKER_URL, {
 
-            method: "POST",
+                method: "POST",
 
-            headers: {
-                "Content-Type": "application/json"
-            },
+                headers: {
+                    "Content-Type": "application/json"
+                },
 
-            body: JSON.stringify({
-                question: question
-            })
+                body: JSON.stringify({
+                    question: question
+                })
 
-        });
+            });
 
 
-        const data = await response.json();
+        const data =
+            await response.json();
 
 
         if (!response.ok) {
 
             throw new Error(
-                data.error || "AI request failed."
+                data.error ||
+                "AI request failed."
             );
 
         }
 
 
         const answer =
-    data.choices?.[0]?.message?.content ||
-    "No response received.";
+            data.choices &&
+            data.choices[0] &&
+            data.choices[0].message &&
+            data.choices[0].message.content;
+
+
+        if (!answer) {
+
+            throw new Error(
+                "The AI returned an empty response."
+            );
+
+        }
 
 
         aiMessage.innerHTML =
@@ -535,20 +558,22 @@ async function sendMessage() {
 
         aiMessage.innerHTML =
             "<strong>Badmosh AI</strong><br>" +
-            "Sorry, I couldn't connect to the AI right now. Please try again.";
+            "Sorry, something went wrong.<br><br>" +
+            "<small>" +
+            escapeHTML(error.message) +
+            "</small>";
 
     }
 
 
-    chat.scrollTop = chat.scrollHeight;
+    sendButton.disabled = false;
 
+    chat.scrollTop =
+        chat.scrollHeight;
 }
 
 
 function useSuggestion(text) {
-
-    const input =
-        document.getElementById("question");
 
     input.value = text;
 
@@ -564,23 +589,10 @@ function newChat() {
 }
 
 
-function handleEnter(event) {
-
-    if (event.key === "Enter") {
-
-        event.preventDefault();
-
-        sendMessage();
-
-    }
-
-}
-
-
 function showPro() {
 
     alert(
-        "Badmosh AI Pro is coming soon! ⭐"
+        "Badmosh AI Pro is coming soon!"
     );
 
 }
@@ -591,7 +603,7 @@ function escapeHTML(text) {
     const div =
         document.createElement("div");
 
-    div.textContent = text;
+    div.textContent = String(text);
 
     return div.innerHTML;
 
@@ -600,12 +612,40 @@ function escapeHTML(text) {
 
 function formatAnswer(text) {
 
-    return escapeHTML(String(text))
+    return escapeHTML(text)
         .replace(/\n/g, "<br>");
 
 }
 
+
+/* Send button */
+
+sendButton.addEventListener(
+    "click",
+    sendMessage
+);
+
+
+/* Enter key */
+
+input.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (event.key === "Enter") {
+
+            event.preventDefault();
+
+            sendMessage();
+
+        }
+
+    }
+);
+
 </script>
 
 </body>
-  </html>
+</html>
+ 
+   
