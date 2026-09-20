@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Badmosh AI Test</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #090612;
+    color: white;
+    max-width: 700px;
+    margin: 60px auto;
+    padding: 20px;
+}
+
+h1 {
+    color: #a855f7;
+}
+
+input {
+    width: 70%;
+    padding: 14px;
+    border-radius: 8px;
+    border: 1px solid #555;
+    background: #171020;
+    color: white;
+}
+
+button {
+    padding: 14px 20px;
+    margin-left: 5px;
+    border: 0;
+    border-radius: 8px;
+    background: #7c3aed;
+    color: white;
+    cursor: pointer;
+}
+
+#result {
+    margin-top: 25px;
+    padding: 20px;
+    background: #171020;
+    border-radius: 10px;
+    white-space: pre-wrap;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🤖 Badmosh AI Test</h1>
+
+<p>Test your AI connection:</p>
+
+<input id="question" placeholder="Type your question">
+
+<button onclick="testAI()">Send</button>
+
+<div id="result">Waiting for your question...</div>
+
+
+<script>
+
+const WORKER_URL =
+"https://badmosh-ai.cchandasaini.workers.dev/";
+
+
+async function testAI() {
+
+    const question =
+        document.getElementById("question").value.trim();
+
+    const result =
+        document.getElementById("result");
+
+    if (!question) {
+        result.textContent = "Please type a question.";
+        return;
+    }
+
+    result.textContent = "Thinking... 🤔";
+
+    try {
+
+        const response = await fetch(WORKER_URL, {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                question: question
+            })
+
+        });
+
+        const text = await response.text();
+
+        result.textContent =
+            "HTTP Status: " +
+            response.status +
+            "\n\nWorker Response:\n" +
+            text;
+
+    } catch (error) {
+
+        result.textContent =
+            "Connection error:\n\n" +
+            error.message;
+
+    }
+}
+
+</script>
+
+</body>
+</html>
