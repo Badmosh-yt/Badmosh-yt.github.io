@@ -2,142 +2,37 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Badmosh AI</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
-:root{
-    --bg:#08060d;
-    --sidebar:#0d0914;
-    --panel:#12101a;
-    --panel2:#181421;
-    --border:#292333;
-    --purple:#9b5cff;
-    --purple2:#7c3aed;
-    --text:#f5f3f7;
-    --muted:#a9a2b3;
-    --green:#4ade80;
-    --red:#f87171;
-}
-
 *{
     box-sizing:border-box;
     margin:0;
     padding:0;
 }
 
-html,body{
-    width:100%;
-    height:100%;
+:root{
+    --bg:#08070b;
+    --sidebar:#0d0b12;
+    --panel:#121018;
+    --panel2:#18151f;
+    --border:#292431;
+    --purple:#9b5cff;
+    --purple2:#7c3aed;
+    --text:#f5f3f7;
+    --muted:#aaa5b3;
+    --danger:#f87171;
+    --green:#4ade80;
 }
 
 body{
-    font-family:Arial,sans-serif;
+    font-family:Arial,Helvetica,sans-serif;
     background:var(--bg);
     color:var(--text);
+    height:100vh;
     overflow:hidden;
-}
-
-/* AUTH */
-
-.auth{
-    position:fixed;
-    inset:0;
-    z-index:9999;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:20px;
-    background:
-        radial-gradient(circle at top,#30134b,#08060d 65%);
-}
-
-.auth.hidden{
-    display:none;
-}
-
-.auth-card{
-    width:100%;
-    max-width:420px;
-    background:var(--panel);
-    border:1px solid var(--border);
-    border-radius:22px;
-    padding:30px;
-    box-shadow:0 20px 80px #0009;
-}
-
-.auth-logo{
-    text-align:center;
-    font-size:32px;
-    font-weight:900;
-    margin-bottom:8px;
-}
-
-.auth-logo span{
-    color:var(--purple);
-}
-
-.auth-sub{
-    text-align:center;
-    color:var(--muted);
-    margin-bottom:25px;
-}
-
-.auth-input{
-    width:100%;
-    padding:13px;
-    margin-bottom:10px;
-    background:#0a0710;
-    border:1px solid var(--border);
-    border-radius:9px;
-    color:white;
-    outline:none;
-}
-
-.auth-input:focus{
-    border-color:var(--purple);
-}
-
-.auth-btn{
-    width:100%;
-    padding:13px;
-    margin-top:7px;
-    border:none;
-    border-radius:9px;
-    background:var(--purple2);
-    color:white;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-.auth-btn:hover{
-    background:var(--purple);
-}
-
-.google-btn{
-    background:white;
-    color:#222;
-}
-
-.google-btn:hover{
-    background:#eee;
-}
-
-.auth-msg{
-    min-height:20px;
-    margin-top:14px;
-    text-align:center;
-    font-size:13px;
-}
-
-.error{
-    color:var(--red);
-}
-
-.success{
-    color:var(--green);
 }
 
 /* APP */
@@ -150,21 +45,24 @@ body{
 /* SIDEBAR */
 
 .sidebar{
-    width:280px;
-    flex-shrink:0;
+    width:270px;
     background:var(--sidebar);
     border-right:1px solid var(--border);
-    padding:15px;
     display:flex;
     flex-direction:column;
+    flex-shrink:0;
     transition:.25s;
 }
 
+.sidebar-header{
+    padding:18px;
+    border-bottom:1px solid var(--border);
+}
+
 .brand{
-    font-size:20px;
+    font-size:21px;
     font-weight:900;
-    padding:10px;
-    margin-bottom:10px;
+    margin-bottom:15px;
 }
 
 .brand span{
@@ -173,173 +71,154 @@ body{
 
 .new-chat{
     width:100%;
-    padding:13px;
-    border-radius:10px;
+    padding:12px;
     border:1px solid var(--border);
+    border-radius:10px;
     background:var(--panel2);
     color:white;
-    font-weight:bold;
     cursor:pointer;
+    font-weight:bold;
     text-align:left;
-    margin-bottom:12px;
 }
 
 .new-chat:hover{
     border-color:var(--purple);
+    background:#20182b;
 }
 
-/* MENU */
+/* NAV */
 
-.menu{
+.side-nav{
+    padding:12px;
+    overflow-y:auto;
+    flex:1;
+}
+
+.nav-button{
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:11px 12px;
+    margin-bottom:4px;
+    border:0;
+    border-radius:9px;
+    background:transparent;
+    color:#ddd8e2;
+    cursor:pointer;
+    text-align:left;
+    font-size:14px;
+}
+
+.nav-button:hover{
+    background:#1a1620;
+}
+
+.nav-button.active{
+    background:#21172f;
+    color:white;
+}
+
+.icon{
+    width:20px;
+    text-align:center;
+}
+
+.section-label{
+    color:#77717e;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    margin:18px 10px 8px;
+}
+
+/* HISTORY */
+
+.history-list{
     display:flex;
     flex-direction:column;
     gap:3px;
 }
 
-.menu-btn{
-    width:100%;
-    padding:10px;
-    border:none;
-    background:transparent;
-    color:var(--text);
-    border-radius:9px;
-    text-align:left;
-    cursor:pointer;
-}
-
-.menu-btn:hover,
-.menu-btn.active{
-    background:#21172e;
-    color:#d4b5ff;
-}
-
-/* HISTORY */
-
-.history-label{
-    color:var(--muted);
-    font-size:11px;
-    text-transform:uppercase;
-    margin:18px 10px 7px;
-}
-
-.history{
-    overflow-y:auto;
-    flex:1;
-}
-
-.chat-item{
+.history-item{
     display:flex;
     align-items:center;
-    gap:3px;
-    margin-bottom:3px;
-}
-
-.chat-open{
-    flex:1;
-    min-width:0;
-    padding:9px;
-    border:none;
-    background:transparent;
-    color:#ddd7e5;
-    text-align:left;
+    gap:5px;
     border-radius:8px;
+    padding:8px 7px 8px 10px;
     cursor:pointer;
-    white-space:nowrap;
+}
+
+.history-item:hover{
+    background:#19151e;
+}
+
+.history-item.active{
+    background:#21172f;
+}
+
+.history-title{
+    flex:1;
     overflow:hidden;
+    white-space:nowrap;
     text-overflow:ellipsis;
+    font-size:13px;
 }
 
-.chat-open:hover{
-    background:var(--panel2);
+.history-actions{
+    display:flex;
+    gap:2px;
 }
 
-.chat-action{
-    border:none;
+.history-action{
     background:transparent;
-    color:var(--muted);
+    border:0;
+    color:#817b88;
     cursor:pointer;
-    padding:5px;
+    padding:4px;
+    border-radius:5px;
 }
 
-.chat-action:hover{
+.history-action:hover{
+    background:#302838;
     color:white;
 }
 
-.empty-history{
-    color:#686171;
-    font-size:12px;
-    padding:10px;
+/* SIDEBAR BOTTOM */
+
+.sidebar-bottom{
+    padding:12px;
+    border-top:1px solid var(--border);
 }
 
-/* PLAN */
-
-.plan-box{
-    margin-top:10px;
-    padding:12px;
+.plan{
+    padding:13px;
+    background:var(--panel2);
     border:1px solid var(--border);
-    background:var(--panel);
     border-radius:12px;
 }
 
-.plan-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
-
-.plan-name{
+.plan-title{
     font-weight:bold;
+    font-size:14px;
 }
 
-.plan-badge{
-    font-size:11px;
-    padding:4px 7px;
-    border-radius:20px;
-    background:#28173d;
-    color:#caa8ff;
+.plan-text{
+    color:var(--muted);
+    font-size:12px;
+    margin-top:5px;
 }
 
 .upgrade{
+    margin-top:10px;
     width:100%;
-    margin-top:9px;
-    padding:8px;
-    border:none;
+    padding:9px;
+    border:0;
     border-radius:8px;
     background:var(--purple2);
     color:white;
+    font-weight:bold;
     cursor:pointer;
-}
-
-/* ACCOUNT */
-
-.account{
-    border-top:1px solid var(--border);
-    margin-top:10px;
-    padding-top:10px;
-}
-
-.account-email{
-    color:var(--muted);
-    font-size:12px;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-    margin-bottom:8px;
-}
-
-.logout{
-    width:100%;
-    padding:8px;
-    background:transparent;
-    border:1px solid var(--border);
-    border-radius:8px;
-    color:var(--muted);
-    cursor:pointer;
-}
-
-.logout:hover{
-    border-color:var(--red);
-    color:var(--red);
 }
 
 /* MAIN */
@@ -349,61 +228,87 @@ body{
     min-width:0;
     display:flex;
     flex-direction:column;
-    position:relative;
 }
 
+/* TOP BAR */
+
 .topbar{
-    height:60px;
-    flex-shrink:0;
+    height:62px;
     border-bottom:1px solid var(--border);
     display:flex;
     align-items:center;
     justify-content:space-between;
     padding:0 20px;
+    background:rgba(8,7,11,.9);
 }
 
-.mobile-menu{
+.top-left{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.menu-button{
     display:none;
+    border:0;
     background:transparent;
-    border:none;
     color:white;
     font-size:22px;
     cursor:pointer;
 }
 
-.top-title{
+.page-title{
     font-weight:bold;
 }
 
-.online{
+.status{
     color:var(--green);
     font-size:12px;
 }
 
+/* CONTENT */
+
+.content{
+    flex:1;
+    min-height:0;
+    overflow-y:auto;
+}
+
 /* CHAT */
+
+.chat-page{
+    height:100%;
+    display:flex;
+    flex-direction:column;
+}
 
 .chat{
     flex:1;
     overflow-y:auto;
-    padding:30px 20px 150px;
-}
-
-.chat-inner{
-    max-width:850px;
-    margin:auto;
+    padding:30px;
 }
 
 .welcome{
+    max-width:750px;
+    margin:70px auto 30px;
     text-align:center;
-    padding:90px 20px 40px;
 }
 
-.welcome-icon{
-    font-size:55px;
+.welcome-logo{
+    width:70px;
+    height:70px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:auto;
+    border-radius:20px;
+    background:linear-gradient(135deg,var(--purple2),var(--purple));
+    font-size:35px;
+    box-shadow:0 15px 50px #7c3aed44;
 }
 
 .welcome h1{
-    margin-top:12px;
+    margin-top:22px;
     font-size:42px;
 }
 
@@ -414,115 +319,229 @@ body{
 .welcome p{
     color:var(--muted);
     margin-top:12px;
+    line-height:1.6;
+}
+
+.messages{
+    max-width:850px;
+    margin:auto;
 }
 
 .message{
     display:flex;
-    margin-bottom:20px;
+    gap:12px;
+    margin:22px 0;
 }
 
 .message.user{
     justify-content:flex-end;
 }
 
-.message-content{
-    max-width:80%;
+.message-box{
+    max-width:75%;
     padding:14px 16px;
-    border-radius:14px;
+    border-radius:15px;
     line-height:1.6;
-    word-break:break-word;
+    white-space:pre-wrap;
+    overflow-wrap:anywhere;
 }
 
-.message.bot .message-content{
+.bot .message-box{
     background:var(--panel);
     border:1px solid var(--border);
 }
 
-.message.user .message-content{
+.user .message-box{
     background:var(--purple2);
+}
+
+.avatar{
+    width:34px;
+    height:34px;
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+    background:#241936;
 }
 
 /* COMPOSER */
 
 .composer-area{
-    position:absolute;
-    left:0;
-    right:0;
-    bottom:0;
-    padding:15px 20px 20px;
-    background:linear-gradient(
-        transparent,
-        var(--bg) 30%
-    );
+    padding:15px 25px 20px;
 }
 
 .composer{
     max-width:850px;
     margin:auto;
-    padding:10px;
     background:var(--panel);
     border:1px solid var(--border);
     border-radius:17px;
+    box-shadow:0 10px 40px #00000055;
 }
 
 .attachments{
     display:flex;
-    gap:7px;
-    margin-bottom:7px;
+    gap:8px;
     flex-wrap:wrap;
+    padding:8px 12px 0;
 }
 
-.attach{
-    padding:7px 10px;
-    background:var(--panel2);
+.attachment{
+    background:#211b29;
     border:1px solid var(--border);
     border-radius:8px;
-    color:var(--muted);
-    cursor:pointer;
+    padding:6px 9px;
     font-size:12px;
 }
 
-.attach:hover{
-    color:white;
-    border-color:var(--purple);
-}
-
-.file-input{
-    display:none;
-}
-
-.input-row{
+.composer-row{
     display:flex;
     gap:8px;
+    padding:10px;
 }
 
-.question{
+.composer input{
     flex:1;
     min-width:0;
-    padding:12px;
     background:transparent;
-    border:none;
-    outline:none;
+    border:0;
+    outline:0;
+    color:white;
+    font-size:15px;
+    padding:8px;
+}
+
+.composer button{
+    width:42px;
+    height:42px;
+    border:0;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+.attach{
+    background:#211c27;
     color:white;
 }
 
 .send{
-    width:45px;
-    height:45px;
-    border:none;
-    border-radius:11px;
     background:var(--purple2);
     color:white;
-    cursor:pointer;
-    font-size:17px;
-}
-
-.send:hover{
-    background:var(--purple);
+    font-size:18px;
 }
 
 .send:disabled{
-    opacity:.5;
+    opacity:.4;
+    cursor:not-allowed;
+}
+
+.disclaimer{
+    max-width:850px;
+    margin:8px auto 0;
+    text-align:center;
+    color:#66616c;
+    font-size:11px;
+}
+
+/* PAGES */
+
+.tool-page{
+    padding:35px;
+    max-width:1000px;
+    margin:auto;
+}
+
+.tool-page h1{
+    font-size:32px;
+}
+
+.tool-page-subtitle{
+    color:var(--muted);
+    margin-top:8px;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+    gap:15px;
+    margin-top:28px;
+}
+
+.card{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:15px;
+    padding:22px;
+}
+
+.card:hover{
+    border-color:#49355d;
+}
+
+.card-icon{
+    font-size:30px;
+    margin-bottom:14px;
+}
+
+.card h3{
+    margin-bottom:8px;
+}
+
+.card p{
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.5;
+}
+
+.card button{
+    margin-top:15px;
+    padding:9px 13px;
+    border:1px solid var(--border);
+    background:var(--panel2);
+    color:white;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+/* CODEX */
+
+.code-editor{
+    margin-top:25px;
+    background:#09080c;
+    border:1px solid var(--border);
+    border-radius:13px;
+    overflow:hidden;
+}
+
+.code-toolbar{
+    padding:10px 12px;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    justify-content:space-between;
+}
+
+.code-editor textarea{
+    width:100%;
+    min-height:330px;
+    resize:vertical;
+    background:#09080c;
+    color:#ddd;
+    border:0;
+    outline:0;
+    padding:18px;
+    font-family:Consolas,monospace;
+    font-size:13px;
+}
+
+.run-code{
+    background:var(--purple2);
+    color:white;
+    border:0;
+    border-radius:7px;
+    padding:8px 12px;
+    cursor:pointer;
 }
 
 /* MODAL */
@@ -530,11 +549,11 @@ body{
 .modal{
     position:fixed;
     inset:0;
-    background:#000a;
+    background:#00000099;
     display:none;
     align-items:center;
     justify-content:center;
-    z-index:5000;
+    z-index:1000;
     padding:20px;
 }
 
@@ -542,70 +561,74 @@ body{
     display:flex;
 }
 
-.modal-card{
+.modal-box{
     width:100%;
-    max-width:600px;
+    max-width:520px;
     background:var(--panel);
     border:1px solid var(--border);
     border-radius:18px;
     padding:25px;
 }
 
-.modal-card h2{
-    margin-bottom:8px;
-}
-
-.modal-card p{
-    color:var(--muted);
-    line-height:1.6;
+.modal-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
 
 .close{
-    width:100%;
-    margin-top:20px;
-    padding:11px;
     background:transparent;
-    border:1px solid var(--border);
-    border-radius:9px;
-    color:white;
+    border:0;
+    color:#aaa;
+    font-size:22px;
     cursor:pointer;
 }
 
-/* PLANS */
-
-.plans{
+.plan-grid{
     display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:12px;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
     margin-top:20px;
 }
 
-.plan{
+.plan-option{
     border:1px solid var(--border);
     background:var(--panel2);
     border-radius:12px;
-    padding:16px;
+    padding:15px;
+    cursor:pointer;
 }
 
-.plan h3{
-    margin-bottom:5px;
+.plan-option:hover{
+    border-color:var(--purple);
 }
 
-.plan-price{
-    color:#cba9ff;
-    font-size:22px;
-    font-weight:bold;
+.plan-option strong{
+    display:block;
+    margin-bottom:7px;
 }
 
-.plan ul{
-    list-style:none;
-    margin-top:12px;
-}
-
-.plan li{
+.plan-option span{
     color:var(--muted);
-    padding:4px 0;
-    font-size:13px;
+    font-size:12px;
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    background:#211b29;
+    border:1px solid var(--border);
+    padding:12px 16px;
+    border-radius:10px;
+    display:none;
+    z-index:2000;
+}
+
+.toast.show{
+    display:block;
 }
 
 /* MOBILE */
@@ -614,33 +637,45 @@ body{
 
     .sidebar{
         position:fixed;
-        left:-290px;
+        left:-280px;
         top:0;
         bottom:0;
-        z-index:3000;
+        z-index:900;
     }
 
     .sidebar.open{
         left:0;
     }
 
-    .mobile-menu{
+    .menu-button{
         display:block;
     }
 
-    .message-content{
-        max-width:90%;
-    }
-
     .welcome{
-        padding-top:60px;
+        margin-top:45px;
     }
 
     .welcome h1{
-        font-size:30px;
+        font-size:32px;
     }
 
-    .plans{
+    .chat{
+        padding:20px 14px;
+    }
+
+    .message-box{
+        max-width:85%;
+    }
+
+    .composer-area{
+        padding:10px;
+    }
+
+    .tool-page{
+        padding:25px 16px;
+    }
+
+    .plan-grid{
         grid-template-columns:1fr;
     }
 }
@@ -649,722 +684,899 @@ body{
 
 <body>
 
-<!-- AUTH -->
-
-<div id="authScreen" class="auth">
-
-    <div class="auth-card">
-
-        <div class="auth-logo">
-            BADMOSH <span>AI</span>
-        </div>
-
-        <div class="auth-sub">
-            Your AI workspace
-        </div>
-
-        <input
-            id="email"
-            class="auth-input"
-            type="email"
-            placeholder="Email address"
-        >
-
-        <input
-            id="password"
-            class="auth-input"
-            type="password"
-            placeholder="Password"
-        >
-
-        <button
-            class="auth-btn"
-            onclick="signIn()">
-            Sign In
-        </button>
-
-        <button
-            class="auth-btn"
-            onclick="signUp()">
-            Create Account
-        </button>
-
-        <button
-            class="auth-btn google-btn"
-            onclick="googleSignIn()">
-            🔵 Continue with Google
-        </button>
-
-        <div id="authMessage" class="auth-msg"></div>
-
-    </div>
-
-</div>
-
-
-<!-- APP -->
-
 <div class="app">
 
-    <!-- SIDEBAR -->
+<!-- SIDEBAR -->
 
-    <aside id="sidebar" class="sidebar">
+<aside class="sidebar" id="sidebar">
+
+    <div class="sidebar-header">
 
         <div class="brand">
             🤖 BADMOSH <span>AI</span>
         </div>
 
-        <button
-            class="new-chat"
-            onclick="newChat()">
-            ✏️ New chat
+        <button class="new-chat" onclick="newChat()">
+            ＋ New chat
+        </button>
+
+    </div>
+
+
+    <div class="side-nav">
+
+        <button class="nav-button active" data-page="chat" onclick="openPage('chat',this)">
+            <span class="icon">💬</span>
+            <span>Chat</span>
+        </button>
+
+        <button class="nav-button" data-page="images" onclick="openPage('images',this)">
+            <span class="icon">🖼️</span>
+            <span>Images</span>
+        </button>
+
+        <button class="nav-button" data-page="library" onclick="openPage('library',this)">
+            <span class="icon">📚</span>
+            <span>Library</span>
+        </button>
+
+        <button class="nav-button" data-page="projects" onclick="openPage('projects',this)">
+            <span class="icon">📂</span>
+            <span>Projects</span>
+        </button>
+
+        <button class="nav-button" data-page="codex" onclick="openPage('codex',this)">
+            <span class="icon">💻</span>
+            <span>Codex</span>
+        </button>
+
+        <button class="nav-button" data-page="plugins" onclick="openPage('plugins',this)">
+            <span class="icon">🧩</span>
+            <span>Plugins</span>
         </button>
 
 
-        <div class="menu">
-
-            <button
-                class="menu-btn active"
-                onclick="feature('Images')">
-                🖼️ Images
-            </button>
-
-            <button
-                class="menu-btn"
-                onclick="feature('Library')">
-                📚 Library
-            </button>
-
-            <button
-                class="menu-btn"
-                onclick="feature('Scheduled')">
-                ⏰ Scheduled
-            </button>
-
-            <button
-                class="menu-btn"
-                onclick="feature('Plugins')">
-                🔌 Plugins
-            </button>
-
-            <button
-                class="menu-btn"
-                onclick="feature('Projects')">
-                📁 Projects
-            </button>
-
-            <button
-                class="menu-btn"
-                onclick="feature('Codex')">
-                💻 Codex
-            </button>
-
-            <button
-                class="menu-btn"
-                onclick="feature('More')">
-                ••• More
-            </button>
-
+        <div class="section-label">
+            History
         </div>
 
+        <div class="history-list" id="historyList"></div>
 
-        <div class="history-label">
-            📌 Pinned
-        </div>
+        <button class="nav-button" onclick="clearHistory()">
+            <span class="icon">🗑️</span>
+            <span>Clear history</span>
+        </button>
 
-        <div
-            id="pinnedHistory"
-            class="history">
-        </div>
-
-
-        <div class="history-label">
-            🕘 History
-        </div>
-
-        <div
-            id="history"
-            class="history">
-        </div>
+    </div>
 
 
-        <!-- PLAN -->
+    <div class="sidebar-bottom">
 
-        <div class="plan-box">
+        <div class="plan">
 
-            <div class="plan-row">
-
-                <span class="plan-name">
-                    Free
-                </span>
-
-                <span class="plan-badge">
-                    CURRENT
-                </span>
-
+            <div class="plan-title" id="currentPlan">
+                Free plan
             </div>
 
-            <button
-                class="upgrade"
-                onclick="showPlans()">
+            <div class="plan-text">
+                Basic Badmosh AI access
+            </div>
+
+            <button class="upgrade" onclick="showPlans()">
                 View plans
             </button>
 
         </div>
 
+    </div>
 
-        <!-- ACCOUNT -->
-
-        <div class="account">
-
-            <div
-                id="accountEmail"
-                class="account-email">
-                Not signed in
-            </div>
-
-            <button
-                class="logout"
-                onclick="signOut()">
-                Sign Out
-            </button>
-
-        </div>
-
-    </aside>
+</aside>
 
 
-    <!-- MAIN -->
+<!-- MAIN -->
 
-    <main class="main">
+<main class="main">
 
-        <header class="topbar">
+    <header class="topbar">
 
-            <button
-                class="mobile-menu"
-                onclick="toggleSidebar()">
+        <div class="top-left">
+
+            <button class="menu-button" onclick="toggleSidebar()">
                 ☰
             </button>
 
-            <div
-                id="topTitle"
-                class="top-title">
+            <div class="page-title" id="pageTitle">
                 Badmosh AI
             </div>
 
-            <div class="online">
-                ● Online
-            </div>
-
-        </header>
-
-
-        <div
-            id="chat"
-            class="chat">
-
-            <div class="chat-inner">
-
-                <div
-                    id="welcome"
-                    class="welcome">
-
-                    <div class="welcome-icon">
-                        🤖
-                    </div>
-
-                    <h1>
-                        Welcome to BADMOSH
-                        <span>AI</span>
-                    </h1>
-
-                    <p>
-                        Ask questions, write code,
-                        learn and create.
-                    </p>
-
-                </div>
-
-                <div id="messages"></div>
-
-            </div>
-
         </div>
 
-
-        <!-- COMPOSER -->
-
-        <div class="composer-area">
-
-            <div class="composer">
-
-                <div class="attachments">
-
-                    <label class="attach">
-
-                        📎 File
-
-                        <input
-                            id="fileInput"
-                            class="file-input"
-                            type="file"
-                            multiple
-                            onchange="filesSelected()">
-
-                    </label>
-
-
-                    <label class="attach">
-
-                        🖼️ Image
-
-                        <input
-                            id="imageInput"
-                            class="file-input"
-                            type="file"
-                            accept="image/*"
-                            multiple
-                            onchange="imagesSelected()">
-
-                    </label>
-
-
-                    <button
-                        class="attach"
-                        onclick="feature('Image generation')">
-                        🎨 Create image
-                    </button>
-
-                </div>
-
-
-                <div class="input-row">
-
-                    <input
-                        id="question"
-                        class="question"
-                        type="text"
-                        placeholder="Message Badmosh AI..."
-                        autocomplete="off">
-
-                    <button
-                        id="send"
-                        class="send"
-                        onclick="sendMessage()">
-                        ➤
-                    </button>
-
-                </div>
-
-            </div>
-
+        <div class="status">
+            ● Online
         </div>
 
-    </main>
+    </header>
+
+
+    <div class="content" id="content"></div>
+
+</main>
 
 </div>
 
 
-<!-- MODAL -->
+<!-- PLAN MODAL -->
 
-<div
-    id="modal"
-    class="modal">
+<div class="modal" id="planModal">
 
-    <div class="modal-card">
+    <div class="modal-box">
 
-        <h2 id="modalTitle">
-            Badmosh AI
-        </h2>
+        <div class="modal-header">
 
-        <div id="modalContent"></div>
+            <h2>Badmosh AI Plans</h2>
 
-        <button
-            class="close"
-            onclick="closeModal()">
-            Close
-        </button>
+            <button class="close" onclick="closePlans()">×</button>
+
+        </div>
+
+        <div class="plan-grid">
+
+            <div class="plan-option" onclick="selectPlan('Free')">
+                <strong>Free</strong>
+                <span>Basic access</span>
+            </div>
+
+            <div class="plan-option" onclick="selectPlan('Starter')">
+                <strong>Starter</strong>
+                <span>More AI usage</span>
+            </div>
+
+            <div class="plan-option" onclick="selectPlan('Pro')">
+                <strong>Pro</strong>
+                <span>Advanced access</span>
+            </div>
+
+        </div>
 
     </div>
 
 </div>
 
 
+<!-- FILE INPUT -->
+
+<input
+    type="file"
+    id="fileInput"
+    multiple
+    hidden
+    accept="image/*,.pdf,.txt,.doc,.docx,.js,.html,.css,.json,.py"
+>
+
+
+<div class="toast" id="toast"></div>
+
+
 <script>
 
-/* =====================================================
-   SUPABASE
-===================================================== */
+/* =========================================================
+   CONFIG
+========================================================= */
 
-const SUPABASE_URL =
-    "https://evrzjkylpontvngwoszb.supabase.co";
+/*
+   Put your real Badmosh AI Worker URL here.
 
-const SUPABASE_PUBLISHABLE_KEY =
-    "sb_publishable_wSigh2nJLbJRfmDZXTStdA_WETjMZnJ";
-
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
-    );
-
-
-/* =====================================================
-   AI WORKER
-===================================================== */
+   Do NOT put secret API keys in this HTML file.
+*/
 
 const WORKER_URL =
     "https://badmosh-ai.cchandasaini.workers.dev/";
 
 
-/* =====================================================
+/* =========================================================
    STATE
-===================================================== */
+========================================================= */
 
-let currentUser = null;
-let currentChatId = null;
-let chats = [];
-
-
-/* =====================================================
-   ELEMENTS
-===================================================== */
-
-const authScreen =
-    document.getElementById("authScreen");
-
-const authMessage =
-    document.getElementById("authMessage");
-
-const question =
-    document.getElementById("question");
-
-const messages =
-    document.getElementById("messages");
-
-const welcome =
-    document.getElementById("welcome");
-
-const history =
-    document.getElementById("history");
-
-const pinnedHistory =
-    document.getElementById("pinnedHistory");
-
-const accountEmail =
-    document.getElementById("accountEmail");
-
-const sendButton =
-    document.getElementById("send");
-
-
-/* =====================================================
-   AUTH MESSAGE
-===================================================== */
-
-function authMsg(text,type=""){
-
-    authMessage.textContent = text;
-
-    authMessage.className =
-        "auth-msg " + type;
-}
-
-
-/* =====================================================
-   SIGN UP
-===================================================== */
-
-async function signUp(){
-
-    const email =
-        document.getElementById("email")
-        .value
-        .trim();
-
-    const password =
-        document.getElementById("password")
-        .value;
-
-    if(!email || !password){
-
-        authMsg(
-            "Enter your email and password.",
-            "error"
-        );
-
-        return;
-    }
-
-    if(password.length < 6){
-
-        authMsg(
-            "Password must be at least 6 characters.",
-            "error"
-        );
-
-        return;
-    }
-
-    authMsg(
-        "Creating account..."
-    );
-
-    const {
-        data,
-        error
-    } =
-    await supabaseClient.auth.signUp({
-
-        email,
-        password,
-
-        options:{
-            emailRedirectTo:
-                window.location.origin
-        }
-
-    });
-
-    if(error){
-
-        authMsg(
-            error.message,
-            "error"
-        );
-
-        return;
-    }
-
-    if(data.session){
-
-        showApp(data.user);
-
-    }else{
-
-        authMsg(
-            "Account created. Check your email to verify it.",
-            "success"
-        );
-
-    }
-}
-
-
-/* =====================================================
-   SIGN IN
-===================================================== */
-
-async function signIn(){
-
-    const email =
-        document.getElementById("email")
-        .value
-        .trim();
-
-    const password =
-        document.getElementById("password")
-        .value;
-
-    if(!email || !password){
-
-        authMsg(
-            "Enter your email and password.",
-            "error"
-        );
-
-        return;
-    }
-
-    authMsg(
-        "Signing in..."
-    );
-
-    const {
-        data,
-        error
-    } =
-    await supabaseClient.auth
-        .signInWithPassword({
-
-            email,
-            password
-
-        });
-
-    if(error){
-
-        authMsg(
-            error.message,
-            "error"
-        );
-
-        return;
-    }
-
-    showApp(data.user);
-}
-
-
-/* =====================================================
-   GOOGLE LOGIN
-===================================================== */
-
-async function googleSignIn(){
-
-    authMsg(
-        "Opening Google..."
-    );
-
-    const {
-        error
-    } =
-    await supabaseClient.auth
-        .signInWithOAuth({
-
-            provider:"google",
-
-            options:{
-                redirectTo:
-                    window.location.origin
-            }
-
-        });
-
-    if(error){
-
-        authMsg(
-            error.message,
-            "error"
-        );
-
-    }
-}
-
-
-/* =====================================================
-   AUTH STATE
-===================================================== */
-
-supabaseClient.auth.onAuthStateChange(
-    function(event,session){
-
-        if(session && session.user){
-
-            showApp(
-                session.user
-            );
-
-        }else{
-
-            currentUser = null;
-
-            authScreen.classList.remove(
-                "hidden"
-            );
-
-        }
-
-    }
+let chats = JSON.parse(
+    localStorage.getItem("badmoshChats") || "[]"
 );
 
+let currentChatId = null;
 
-/* =====================================================
-   SHOW APP
-===================================================== */
+let attachedFiles = [];
 
-async function showApp(user){
 
-    if(!user) return;
+/* =========================================================
+   SAVE
+========================================================= */
 
-    currentUser =
-        user;
+function saveChats(){
 
-    authScreen.classList.add(
-        "hidden"
+    localStorage.setItem(
+        "badmoshChats",
+        JSON.stringify(chats)
     );
 
-    accountEmail.textContent =
-        user.email || "User";
-
-    await loadChats();
 }
 
 
-/* =====================================================
-   SIGN OUT
-===================================================== */
+/* =========================================================
+   ID
+========================================================= */
 
-async function signOut(){
+function makeId(){
 
-    await supabaseClient.auth.signOut();
-
-    currentUser = null;
-
-    currentChatId = null;
-
-    messages.innerHTML = "";
-
-    welcome.style.display =
-        "block";
+    return Date.now().toString() +
+        Math.random().toString(36).slice(2);
 
 }
 
 
-/* =====================================================
+/* =========================================================
+   INIT
+========================================================= */
+
+document.addEventListener("DOMContentLoaded",function(){
+
+    renderHistory();
+
+    newChat();
+
+});
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+function toggleSidebar(){
+
+    document
+        .getElementById("sidebar")
+        .classList.toggle("open");
+
+}
+
+
+/* =========================================================
+   PAGE NAVIGATION
+========================================================= */
+
+function openPage(page,button){
+
+    document
+        .querySelectorAll(".nav-button")
+        .forEach(function(item){
+
+            item.classList.remove("active");
+
+        });
+
+
+    if(button){
+        button.classList.add("active");
+    }
+
+
+    const titles = {
+
+        chat:"Badmosh AI",
+
+        images:"Images",
+
+        library:"Library",
+
+        projects:"Projects",
+
+        codex:"Codex",
+
+        plugins:"Plugins"
+
+    };
+
+
+    document.getElementById("pageTitle").textContent =
+        titles[page] || "Badmosh AI";
+
+
+    if(page === "chat"){
+        renderChat();
+    }
+
+    if(page === "images"){
+        renderImages();
+    }
+
+    if(page === "library"){
+        renderLibrary();
+    }
+
+    if(page === "projects"){
+        renderProjects();
+    }
+
+    if(page === "codex"){
+        renderCodex();
+    }
+
+    if(page === "plugins"){
+        renderPlugins();
+    }
+
+
+    if(window.innerWidth <= 800){
+
+        document
+            .getElementById("sidebar")
+            .classList.remove("open");
+
+    }
+
+}
+
+
+/* =========================================================
    NEW CHAT
-===================================================== */
+========================================================= */
 
 function newChat(){
 
-    currentChatId = null;
+    const chat = {
 
-    messages.innerHTML = "";
+        id:makeId(),
 
-    welcome.style.display =
-        "block";
+        title:"New chat",
 
-    question.value = "";
+        pinned:false,
 
-    document.getElementById(
-        "topTitle"
-    ).textContent =
-        "New chat";
+        createdAt:Date.now(),
 
-    question.focus();
+        messages:[]
 
-    closeMobileSidebar();
+    };
+
+
+    chats.unshift(chat);
+
+    currentChatId = chat.id;
+
+    saveChats();
+
+    renderHistory();
+
+    renderChat();
+
 }
 
 
-/* =====================================================
-   SEND AI MESSAGE
-===================================================== */
+/* =========================================================
+   CURRENT CHAT
+========================================================= */
 
-async function sendMessage(){
+function getCurrentChat(){
 
-    const text =
-        question.value.trim();
+    return chats.find(function(chat){
 
-    if(!text) return;
+        return chat.id === currentChatId;
 
-    addMessage(
-        "user",
-        text
+    });
+
+}
+
+
+/* =========================================================
+   RENDER HISTORY
+========================================================= */
+
+function renderHistory(){
+
+    const list =
+        document.getElementById("historyList");
+
+    list.innerHTML = "";
+
+
+    const sorted = [...chats].sort(function(a,b){
+
+        if(a.pinned !== b.pinned){
+
+            return a.pinned ? -1 : 1;
+
+        }
+
+        return b.createdAt - a.createdAt;
+
+    });
+
+
+    sorted.forEach(function(chat){
+
+        const item =
+            document.createElement("div");
+
+        item.className =
+            "history-item" +
+            (chat.id === currentChatId ? " active" : "");
+
+
+        const title =
+            document.createElement("div");
+
+        title.className =
+            "history-title";
+
+        title.textContent =
+            (chat.pinned ? "📌 " : "") +
+            chat.title;
+
+
+        title.onclick = function(){
+
+            currentChatId = chat.id;
+
+            renderHistory();
+
+            renderChat();
+
+        };
+
+
+        const actions =
+            document.createElement("div");
+
+        actions.className =
+            "history-actions";
+
+
+        const pin =
+            document.createElement("button");
+
+        pin.className =
+            "history-action";
+
+        pin.title =
+            chat.pinned
+                ? "Unpin"
+                : "Pin";
+
+        pin.textContent =
+            chat.pinned
+                ? "📌"
+                : "☆";
+
+
+        pin.onclick = function(event){
+
+            event.stopPropagation();
+
+            chat.pinned =
+                !chat.pinned;
+
+            saveChats();
+
+            renderHistory();
+
+        };
+
+
+        const del =
+            document.createElement("button");
+
+        del.className =
+            "history-action";
+
+        del.title =
+            "Delete";
+
+        del.textContent =
+            "×";
+
+
+        del.onclick = function(event){
+
+            event.stopPropagation();
+
+            deleteChat(chat.id);
+
+        };
+
+
+        actions.appendChild(pin);
+
+        actions.appendChild(del);
+
+        item.appendChild(title);
+
+        item.appendChild(actions);
+
+        list.appendChild(item);
+
+    });
+
+}
+
+
+/* =========================================================
+   DELETE CHAT
+========================================================= */
+
+function deleteChat(id){
+
+    chats =
+        chats.filter(function(chat){
+
+            return chat.id !== id;
+
+        });
+
+
+    if(chats.length === 0){
+
+        newChat();
+
+        return;
+
+    }
+
+
+    if(currentChatId === id){
+
+        currentChatId =
+            chats[0].id;
+
+    }
+
+
+    saveChats();
+
+    renderHistory();
+
+    renderChat();
+
+}
+
+
+/* =========================================================
+   CLEAR HISTORY
+========================================================= */
+
+function clearHistory(){
+
+    if(!confirm(
+        "Clear all Badmosh AI chat history?"
+    )){
+        return;
+    }
+
+
+    localStorage.removeItem(
+        "badmoshChats"
     );
 
-    question.value = "";
 
-    welcome.style.display =
-        "none";
+    chats = [];
 
-    sendButton.disabled = true;
+    newChat();
+
+    showToast(
+        "Chat history cleared"
+    );
+
+}
+
+
+/* =========================================================
+   RENDER CHAT
+========================================================= */
+
+function renderChat(){
+
+    const content =
+        document.getElementById("content");
+
+
+    content.innerHTML = `
+
+        <div class="chat-page">
+
+            <div class="chat" id="chatArea">
+
+                <div class="welcome" id="welcome">
+
+                    <div class="welcome-logo">
+                        🤖
+                    </div>
+
+                    <h1>
+                        Welcome to <span>Badmosh AI</span>
+                    </h1>
+
+                    <p>
+                        Ask questions, write code, learn,
+                        brainstorm ideas and more.
+                    </p>
+
+                </div>
+
+                <div class="messages" id="messages"></div>
+
+            </div>
+
+
+            <div class="composer-area">
+
+                <div class="composer">
+
+                    <div
+                        class="attachments"
+                        id="attachments">
+                    </div>
+
+                    <div class="composer-row">
+
+                        <button
+                            class="attach"
+                            onclick="chooseFile()"
+                            title="Upload files">
+
+                            📎
+
+                        </button>
+
+                        <input
+                            id="question"
+                            placeholder="Message Badmosh AI..."
+                            autocomplete="off"
+                        >
+
+                        <button
+                            class="send"
+                            id="sendButton"
+                            onclick="sendAI()">
+
+                            ➤
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div class="disclaimer">
+                    Badmosh AI can make mistakes. Check important information.
+                </div>
+
+            </div>
+
+        </div>
+    `;
+
+
+    const chat =
+        getCurrentChat();
+
+
+    if(chat && chat.messages.length){
+
+        document.getElementById(
+            "welcome"
+        ).style.display = "none";
+
+
+        chat.messages.forEach(function(message){
+
+            addMessageToScreen(
+                message.role,
+                message.content
+            );
+
+        });
+
+    }
+
+
+    const input =
+        document.getElementById("question");
+
+
+    input.addEventListener(
+        "keydown",
+        function(event){
+
+            if(event.key === "Enter"){
+
+                event.preventDefault();
+
+                sendAI();
+
+            }
+
+        }
+    );
+
+
+    renderAttachments();
+
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+function addMessageToScreen(role,content){
+
+    const messages =
+        document.getElementById("messages");
+
+
+    if(!messages){
+        return;
+    }
+
+
+    const wrapper =
+        document.createElement("div");
+
+    wrapper.className =
+        "message " +
+        (role === "user"
+            ? "user"
+            : "bot");
+
+
+    const avatar =
+        document.createElement("div");
+
+    avatar.className =
+        "avatar";
+
+    avatar.textContent =
+        role === "user"
+            ? "👤"
+            : "🤖";
+
+
+    const box =
+        document.createElement("div");
+
+    box.className =
+        "message-box";
+
+    box.textContent =
+        content;
+
+
+    if(role === "user"){
+
+        wrapper.appendChild(box);
+
+        wrapper.appendChild(avatar);
+
+    }else{
+
+        wrapper.appendChild(avatar);
+
+        wrapper.appendChild(box);
+
+    }
+
+
+    messages.appendChild(wrapper);
+
+
+    const area =
+        document.getElementById("chatArea");
+
+    if(area){
+
+        area.scrollTop =
+            area.scrollHeight;
+
+    }
+
+}
+
+
+/* =========================================================
+   SEND AI
+========================================================= */
+
+async function sendAI(){
+
+    const input =
+        document.getElementById("question");
+
+    const button =
+        document.getElementById("sendButton");
+
+
+    if(!input || !button){
+        return;
+    }
+
+
+    const question =
+        input.value.trim();
+
+
+    if(!question){
+        return;
+    }
+
+
+    const chat =
+        getCurrentChat();
+
+
+    if(!chat){
+        return;
+    }
+
+
+    input.value = "";
+
+    button.disabled = true;
+
+
+    document.getElementById(
+        "welcome"
+    ).style.display = "none";
+
+
+    chat.messages.push({
+
+        role:"user",
+
+        content:question
+
+    });
+
+
+    if(chat.title === "New chat"){
+
+        chat.title =
+            question.length > 35
+                ? question.slice(0,35) + "..."
+                : question;
+
+    }
+
+
+    addMessageToScreen(
+        "user",
+        question
+    );
+
+
+    saveChats();
+
+    renderHistory();
+
 
     const thinking =
-        addMessage(
-            "bot",
-            "Thinking... 🤔"
-        );
+        document.createElement("div");
+
+    thinking.className =
+        "message bot";
+
+    thinking.innerHTML = `
+
+        <div class="avatar">
+            🤖
+        </div>
+
+        <div class="message-box">
+            Thinking... 🤔
+        </div>
+
+    `;
+
+
+    document.getElementById(
+        "messages"
+    ).appendChild(thinking);
+
 
     try{
 
@@ -1381,14 +1593,18 @@ async function sendMessage(){
                     },
 
                     body:JSON.stringify({
-                        question:text
+
+                        question:question
+
                     })
 
                 }
             );
 
+
         const data =
             await response.json();
+
 
         if(!response.ok){
 
@@ -1399,7 +1615,9 @@ async function sendMessage(){
 
         }
 
+
         let answer = "";
+
 
         if(
             data.choices &&
@@ -1409,19 +1627,22 @@ async function sendMessage(){
 
             answer =
                 data.choices[0]
-                .message
-                .content || "";
+                    .message
+                    .content || "";
 
         }
 
-        if(!answer)
-            answer = data.response || "";
 
-        if(!answer)
-            answer = data.answer || "";
+        if(!answer){
 
-        if(!answer)
-            answer = data.content || "";
+            answer =
+                data.response ||
+                data.answer ||
+                data.content ||
+                "";
+
+        }
+
 
         if(!answer){
 
@@ -1431,834 +1652,626 @@ async function sendMessage(){
 
         }
 
-        thinking.innerHTML =
-            formatText(answer);
 
-        await saveChat(
-            text,
-            answer
-        );
+        thinking.remove();
 
-    }catch(error){
-
-        thinking.innerHTML =
-            "❌ " +
-            escapeHTML(
-                error.message
-            );
-
-    }
-
-    sendButton.disabled = false;
-
-    question.focus();
-
-    scrollChat();
-}
-
-
-/* =====================================================
-   ADD MESSAGE
-===================================================== */
-
-function addMessage(type,text){
-
-    const wrapper =
-        document.createElement("div");
-
-    wrapper.className =
-        "message " + type;
-
-    const content =
-        document.createElement("div");
-
-    content.className =
-        "message-content";
-
-    if(type === "user"){
-
-        content.textContent =
-            text;
-
-    }else{
-
-        content.innerHTML =
-            formatText(text);
-
-    }
-
-    wrapper.appendChild(content);
-
-    messages.appendChild(wrapper);
-
-    scrollChat();
-
-    return content;
-}
-
-
-/* =====================================================
-   SAVE CHAT
-===================================================== */
-
-async function saveChat(
-    userText,
-    aiText
-){
-
-    const key =
-        "badmosh_chats_" +
-        currentUser.id;
-
-    const saved =
-        JSON.parse(
-            localStorage.getItem(key)
-            || "[]"
-        );
-
-    if(!currentChatId){
-
-        currentChatId =
-            Date.now().toString();
-
-        saved.unshift({
-
-            id:currentChatId,
-
-            title:
-                userText.substring(
-                    0,
-                    45
-                ),
-
-            pinned:false,
-
-            messages:[]
-
-        });
-
-    }
-
-    const chat =
-        saved.find(
-            c =>
-                c.id === currentChatId
-        );
-
-    if(chat){
-
-        chat.messages.push({
-
-            role:"user",
-
-            content:userText
-
-        });
 
         chat.messages.push({
 
             role:"assistant",
 
-            content:aiText
+            content:answer
 
         });
 
-    }
 
-    localStorage.setItem(
-        key,
-        JSON.stringify(saved)
-    );
-
-    chats = saved;
-
-    renderHistory();
-}
-
-
-/* =====================================================
-   LOAD CHAT HISTORY
-===================================================== */
-
-async function loadChats(){
-
-    if(!currentUser)
-        return;
-
-    const key =
-        "badmosh_chats_" +
-        currentUser.id;
-
-    chats =
-        JSON.parse(
-            localStorage.getItem(key)
-            || "[]"
+        addMessageToScreen(
+            "assistant",
+            answer
         );
 
-    renderHistory();
-}
+
+        saveChats();
 
 
-/* =====================================================
-   RENDER HISTORY
-===================================================== */
+    }catch(error){
 
-function renderHistory(){
+        thinking.remove();
 
-    history.innerHTML = "";
 
-    pinnedHistory.innerHTML = "";
+        const errorText =
+            "Sorry, I couldn't connect to Badmosh AI right now.\n\n" +
+            error.message;
 
-    const pinned =
-        chats.filter(
-            c => c.pinned
+
+        chat.messages.push({
+
+            role:"assistant",
+
+            content:errorText
+
+        });
+
+
+        addMessageToScreen(
+            "assistant",
+            errorText
         );
 
-    if(!pinned.length){
 
-        pinnedHistory.innerHTML =
-            '<div class="empty-history">No pinned chats</div>';
+        saveChats();
 
     }
 
-    if(!chats.length){
 
-        history.innerHTML =
-            '<div class="empty-history">No chats yet</div>';
+    button.disabled = false;
 
-    }
+    input.focus();
 
-    pinned.forEach(
-        chat =>
-            pinnedHistory.appendChild(
-                createChatItem(chat)
-            )
-    );
-
-    chats.forEach(
-        chat =>
-            history.appendChild(
-                createChatItem(chat)
-            )
-    );
 }
 
 
-/* =====================================================
-   CHAT ITEM
-===================================================== */
+/* =========================================================
+   FILE UPLOAD
+========================================================= */
 
-function createChatItem(chat){
+function chooseFile(){
 
-    const wrapper =
-        document.createElement("div");
+    document
+        .getElementById("fileInput")
+        .click();
 
-    wrapper.className =
-        "chat-item";
-
-    const open =
-        document.createElement("button");
-
-    open.className =
-        "chat-open";
-
-    open.textContent =
-        (chat.pinned ? "📌 " : "") +
-        (chat.title || "New chat");
-
-    open.onclick =
-        function(){
-
-            openChat(
-                chat.id
-            );
-
-        };
-
-    const pin =
-        document.createElement("button");
-
-    pin.className =
-        "chat-action";
-
-    pin.textContent =
-        chat.pinned
-            ? "📌"
-            : "☆";
-
-    pin.title =
-        "Pin chat";
-
-    pin.onclick =
-        function(){
-
-            togglePin(
-                chat.id
-            );
-
-        };
-
-    const del =
-        document.createElement("button");
-
-    del.className =
-        "chat-action";
-
-    del.textContent =
-        "×";
-
-    del.title =
-        "Delete chat";
-
-    del.onclick =
-        function(){
-
-            deleteChat(
-                chat.id
-            );
-
-        };
-
-    wrapper.appendChild(open);
-    wrapper.appendChild(pin);
-    wrapper.appendChild(del);
-
-    return wrapper;
 }
 
 
-/* =====================================================
-   OPEN CHAT
-===================================================== */
+document
+    .getElementById("fileInput")
+    .addEventListener(
+        "change",
+        function(){
 
-function openChat(id){
+            attachedFiles =
+                Array.from(this.files);
 
-    const chat =
-        chats.find(
-            c => c.id === id
-        );
+            renderAttachments();
 
-    if(!chat) return;
-
-    currentChatId =
-        id;
-
-    messages.innerHTML =
-        "";
-
-    welcome.style.display =
-        "none";
-
-    document.getElementById(
-        "topTitle"
-    ).textContent =
-        chat.title || "Chat";
-
-    chat.messages.forEach(
-        message => {
-
-            addMessage(
-                message.role === "user"
-                    ? "user"
-                    : "bot",
-                message.content
+            showToast(
+                attachedFiles.length +
+                " file(s) selected"
             );
 
         }
     );
 
-    closeMobileSidebar();
-}
 
+function renderAttachments(){
 
-/* =====================================================
-   PIN
-===================================================== */
-
-function togglePin(id){
-
-    chats =
-        chats.map(
-            chat => {
-
-                if(chat.id === id){
-
-                    return {
-                        ...chat,
-                        pinned:
-                            !chat.pinned
-                    };
-
-                }
-
-                return chat;
-
-            }
+    const area =
+        document.getElementById(
+            "attachments"
         );
 
-    saveHistory();
 
-    renderHistory();
-}
-
-
-/* =====================================================
-   DELETE ONE CHAT
-===================================================== */
-
-function deleteChat(id){
-
-    if(
-        !confirm(
-            "Delete this chat?"
-        )
-    ){
-
+    if(!area){
         return;
-
     }
 
-    chats =
-        chats.filter(
-            chat =>
-                chat.id !== id
-        );
 
-    saveHistory();
+    area.innerHTML = "";
 
-    if(currentChatId === id){
 
-        newChat();
+    attachedFiles.forEach(function(file,index){
 
-    }
+        const item =
+            document.createElement("div");
 
-    renderHistory();
+        item.className =
+            "attachment";
+
+
+        item.innerHTML =
+            "📎 " +
+            escapeHTML(file.name) +
+            " ";
+
+
+        const remove =
+            document.createElement("button");
+
+        remove.textContent =
+            "×";
+
+        remove.style.cssText =
+            "background:none;border:0;color:#aaa;cursor:pointer";
+
+
+        remove.onclick = function(){
+
+            attachedFiles.splice(
+                index,
+                1
+            );
+
+            renderAttachments();
+
+        };
+
+
+        item.appendChild(remove);
+
+        area.appendChild(item);
+
+    });
+
 }
 
 
-/* =====================================================
-   CLEAR ALL HISTORY
-===================================================== */
+/* =========================================================
+   IMAGES
+========================================================= */
 
-function clearAllHistory(){
+function renderImages(){
 
-    if(!currentUser)
-        return;
+    document.getElementById("content").innerHTML = `
 
-    if(
-        !confirm(
-            "Delete ALL Badmosh AI chat history?"
-        )
-    ){
+        <div class="tool-page">
 
-        return;
+            <h1>🖼️ Images</h1>
 
-    }
+            <p class="tool-page-subtitle">
+                Create and manage images with Badmosh AI.
+            </p>
 
-    const key =
-        "badmosh_chats_" +
-        currentUser.id;
+            <div class="cards">
 
-    localStorage.removeItem(key);
+                <div class="card">
 
-    chats = [];
+                    <div class="card-icon">🎨</div>
 
-    currentChatId = null;
+                    <h3>Create image</h3>
 
-    messages.innerHTML = "";
+                    <p>
+                        Describe an image you want Badmosh AI
+                        to generate.
+                    </p>
 
-    welcome.style.display =
-        "block";
+                    <button onclick="imagePrompt()">
+                        Create image
+                    </button>
 
-    renderHistory();
-
-    document.getElementById(
-        "topTitle"
-    ).textContent =
-        "New chat";
-}
-
-
-/* =====================================================
-   SAVE HISTORY
-===================================================== */
-
-function saveHistory(){
-
-    if(!currentUser)
-        return;
-
-    localStorage.setItem(
-        "badmosh_chats_" +
-        currentUser.id,
-        JSON.stringify(chats)
-    );
-}
-
-
-/* =====================================================
-   FILE SELECTION
-===================================================== */
-
-function filesSelected(){
-
-    const files =
-        document.getElementById(
-            "fileInput"
-        ).files;
-
-    if(!files.length)
-        return;
-
-    const names =
-        Array.from(files)
-        .map(file => file.name)
-        .join(", ");
-
-    addMessage(
-        "user",
-        "📎 Selected file(s): " +
-        names
-    );
-}
-
-
-/* =====================================================
-   IMAGE SELECTION
-===================================================== */
-
-function imagesSelected(){
-
-    const files =
-        document.getElementById(
-            "imageInput"
-        ).files;
-
-    if(!files.length)
-        return;
-
-    const names =
-        Array.from(files)
-        .map(file => file.name)
-        .join(", ");
-
-    addMessage(
-        "user",
-        "🖼️ Selected image(s): " +
-        names
-    );
-}
-
-
-/* =====================================================
-   FEATURES
-===================================================== */
-
-function feature(name){
-
-    const descriptions = {
-
-        "Images":
-            "Your AI image workspace.",
-
-        "Library":
-            "Store and organize your files, images and saved AI content.",
-
-        "Scheduled":
-            "Create scheduled AI tasks.",
-
-        "Plugins":
-            "Manage Badmosh AI plugins.",
-
-        "Projects":
-            "Organize conversations and work into projects.",
-
-        "Codex":
-            "A dedicated coding workspace for programming.",
-
-        "More":
-            "More Badmosh AI tools.",
-
-        "Image generation":
-            "The image-generation interface is ready. Connect your image-generation API to generate real images."
-
-    };
-
-    document.getElementById(
-        "modalTitle"
-    ).textContent =
-        name;
-
-    document.getElementById(
-        "modalContent"
-    ).innerHTML =
-        "<p>" +
-        escapeHTML(
-            descriptions[name] ||
-            "Badmosh AI feature."
-        ) +
-        "</p>";
-
-    document.getElementById(
-        "modal"
-    ).classList.add(
-        "show"
-    );
-}
-
-
-/* =====================================================
-   PLANS
-===================================================== */
-
-function showPlans(){
-
-    document.getElementById(
-        "modalTitle"
-    ).textContent =
-        "Badmosh AI Plans";
-
-    document.getElementById(
-        "modalContent"
-    ).innerHTML = `
-
-        <p>
-            Choose a plan when billing is connected.
-        </p>
-
-        <div class="plans">
-
-            <div class="plan">
-
-                <h3>Free</h3>
-
-                <div class="plan-price">
-                    ₹0
                 </div>
 
-                <ul>
-                    <li>✓ Basic AI chats</li>
-                    <li>✓ Chat history</li>
-                    <li>✓ Basic uploads</li>
-                    <li>✓ New chats</li>
-                </ul>
+                <div class="card">
 
-            </div>
+                    <div class="card-icon">📤</div>
 
+                    <h3>Upload image</h3>
 
-            <div class="plan">
+                    <p>
+                        Upload an image for supported AI
+                        workflows.
+                    </p>
 
-                <h3>Starter</h3>
+                    <button onclick="chooseFile()">
+                        Upload
+                    </button>
 
-                <div class="plan-price">
-                    ₹99/month
                 </div>
-
-                <ul>
-                    <li>✓ More AI usage</li>
-                    <li>✓ More uploads</li>
-                    <li>✓ Longer conversations</li>
-                    <li>✓ More tools</li>
-                </ul>
-
-            </div>
-
-
-            <div class="plan">
-
-                <h3>Pro</h3>
-
-                <div class="plan-price">
-                    ₹299/month
-                </div>
-
-                <ul>
-                    <li>✓ Higher AI limits</li>
-                    <li>✓ Advanced tools</li>
-                    <li>✓ Image generation</li>
-                    <li>✓ Larger files</li>
-                </ul>
-
-            </div>
-
-
-            <div class="plan">
-
-                <h3>Business</h3>
-
-                <div class="plan-price">
-                    ₹799/month
-                </div>
-
-                <ul>
-                    <li>✓ Team workspace</li>
-                    <li>✓ Higher limits</li>
-                    <li>✓ Advanced projects</li>
-                    <li>✓ Priority features</li>
-                </ul>
 
             </div>
 
         </div>
     `;
 
-    document.getElementById(
-        "modal"
-    ).classList.add(
-        "show"
-    );
 }
 
 
-/* =====================================================
-   MODAL
-===================================================== */
+function imagePrompt(){
 
-function closeModal(){
+    const prompt =
+        window.prompt(
+            "Describe the image you want:"
+        );
 
-    document.getElementById(
-        "modal"
-    ).classList.remove(
-        "show"
+
+    if(!prompt){
+        return;
+    }
+
+
+    showToast(
+        "Image request created: " +
+        prompt
     );
+
 }
 
 
-/* =====================================================
-   MOBILE SIDEBAR
-===================================================== */
+/* =========================================================
+   LIBRARY
+========================================================= */
 
-function toggleSidebar(){
+function renderLibrary(){
 
-    document.getElementById(
-        "sidebar"
-    ).classList.toggle(
-        "open"
-    );
+    document.getElementById("content").innerHTML = `
+
+        <div class="tool-page">
+
+            <h1>📚 Library</h1>
+
+            <p class="tool-page-subtitle">
+                Your saved AI content and uploaded files.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="card-icon">💬</div>
+
+                    <h3>Chat history</h3>
+
+                    <p>
+                        Your conversations are stored locally
+                        in this browser.
+                    </p>
+
+                    <button onclick="openPage('chat')">
+                        Open chats
+                    </button>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="card-icon">📎</div>
+
+                    <h3>Uploads</h3>
+
+                    <p>
+                        Select images and supported files
+                        from your device.
+                    </p>
+
+                    <button onclick="chooseFile()">
+                        Upload
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+    `;
+
 }
 
-function closeMobileSidebar(){
 
-    document.getElementById(
-        "sidebar"
-    ).classList.remove(
-        "open"
-    );
+/* =========================================================
+   PROJECTS
+========================================================= */
+
+function renderProjects(){
+
+    document.getElementById("content").innerHTML = `
+
+        <div class="tool-page">
+
+            <h1>📂 Projects</h1>
+
+            <p class="tool-page-subtitle">
+                Organize your Badmosh AI work.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="card-icon">➕</div>
+
+                    <h3>New project</h3>
+
+                    <p>
+                        Start a new project for your work.
+                    </p>
+
+                    <button onclick="newProject()">
+                        Create project
+                    </button>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="card-icon">💻</div>
+
+                    <h3>Website project</h3>
+
+                    <p>
+                        Work on HTML, CSS and JavaScript.
+                    </p>
+
+                    <button onclick="showToast('Website project opened')">
+                        Open
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+    `;
+
 }
 
 
-/* =====================================================
-   FORMAT
-===================================================== */
+function newProject(){
+
+    const name =
+        prompt(
+            "Project name:"
+        );
+
+
+    if(name){
+
+        showToast(
+            "Project '" +
+            name +
+            "' created."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   CODEX
+========================================================= */
+
+function renderCodex(){
+
+    document.getElementById("content").innerHTML = `
+
+        <div class="tool-page">
+
+            <h1>💻 Codex</h1>
+
+            <p class="tool-page-subtitle">
+                Write and work with code using Badmosh AI.
+            </p>
+
+            <div class="code-editor">
+
+                <div class="code-toolbar">
+
+                    <span>
+                        Code editor
+                    </span>
+
+                    <button
+                        class="run-code"
+                        onclick="runCode()">
+
+                        Run
+
+                    </button>
+
+                </div>
+
+                <textarea id="codeInput"
+placeholder="// Write your code here
+
+console.log('Hello from Badmosh Codex');"></textarea>
+
+            </div>
+
+        </div>
+    `;
+
+}
+
+
+function runCode(){
+
+    const code =
+        document.getElementById(
+            "codeInput"
+        ).value;
+
+
+    if(!code.trim()){
+
+        showToast(
+            "Write some code first."
+        );
+
+        return;
+
+    }
+
+
+    /*
+       Safety:
+       This demo does NOT execute arbitrary
+       website code directly.
+
+       Connect a sandboxed backend later
+       for real code execution.
+    */
+
+    showToast(
+        "Code sent to Codex workspace."
+    );
+
+}
+
+
+/* =========================================================
+   PLUGINS
+========================================================= */
+
+function renderPlugins(){
+
+    document.getElementById("content").innerHTML = `
+
+        <div class="tool-page">
+
+            <h1>🧩 Plugins</h1>
+
+            <p class="tool-page-subtitle">
+                Tools that can extend Badmosh AI.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="card-icon">🌐</div>
+
+                    <h3>Web tools</h3>
+
+                    <p>
+                        Connect supported web services
+                        through your backend.
+                    </p>
+
+                    <button onclick="showToast('Web tools selected')">
+                        Configure
+                    </button>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="card-icon">💻</div>
+
+                    <h3>Developer tools</h3>
+
+                    <p>
+                        Coding and development utilities.
+                    </p>
+
+                    <button onclick="openPage('codex')">
+                        Open Codex
+                    </button>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="card-icon">📁</div>
+
+                    <h3>File tools</h3>
+
+                    <p>
+                        Upload supported files for your
+                        AI workflow.
+                    </p>
+
+                    <button onclick="chooseFile()">
+                        Upload file
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+    `;
+
+}
+
+
+/* =========================================================
+   PLANS
+========================================================= */
+
+function showPlans(){
+
+    document
+        .getElementById("planModal")
+        .classList.add("show");
+
+}
+
+
+function closePlans(){
+
+    document
+        .getElementById("planModal")
+        .classList.remove("show");
+
+}
+
+
+function selectPlan(plan){
+
+    document.getElementById(
+        "currentPlan"
+    ).textContent =
+        plan + " plan";
+
+
+    closePlans();
+
+
+    showToast(
+        plan +
+        " plan selected."
+    );
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(message){
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add("show");
+
+
+    setTimeout(function(){
+
+        toast.classList.remove(
+            "show"
+        );
+
+    },2500);
+
+}
+
+
+/* =========================================================
+   SECURITY
+========================================================= */
 
 function escapeHTML(text){
 
     const div =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     div.textContent =
-        String(text ?? "");
+        text == null
+            ? ""
+            : String(text);
 
     return div.innerHTML;
-}
-
-
-function formatText(text){
-
-    let safe =
-        escapeHTML(text);
-
-    safe =
-        safe.replace(
-            /\*\*(.*?)\*\*/g,
-            "<strong>$1</strong>"
-        );
-
-    safe =
-        safe.replace(
-            /\n/g,
-            "<br>"
-        );
-
-    return safe;
-}
-
-
-/* =====================================================
-   SCROLL
-===================================================== */
-
-function scrollChat(){
-
-    const chat =
-        document.getElementById(
-            "chat"
-        );
-
-    setTimeout(
-        () => {
-
-            chat.scrollTop =
-                chat.scrollHeight;
-
-        },
-        20
-    );
-}
-
-
-/* =====================================================
-   ENTER KEY
-===================================================== */
-
-question.addEventListener(
-    "keydown",
-    function(event){
-
-        if(
-            event.key === "Enter"
-        ){
-
-            event.preventDefault();
-
-            sendMessage();
-
-        }
-
-    }
-);
-
-
-/* =====================================================
-   INITIAL SESSION
-===================================================== */
-
-async function initialize(){
-
-    const {
-        data,
-        error
-    } =
-    await supabaseClient.auth
-        .getSession();
-
-    if(
-        !error &&
-        data.session &&
-        data.session.user
-    ){
-
-        showApp(
-            data.session.user
-        );
-
-    }
 
 }
-
-initialize();
 
 </script>
 
