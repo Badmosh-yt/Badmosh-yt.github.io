@@ -9,553 +9,558 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-:root {
-    --bg: #07050d;
-    --panel: #110c1b;
-    --panel2: #171020;
-    --border: #2b203d;
-    --purple: #9b5cff;
-    --purple2: #7c3aed;
-    --text: #f5f3f7;
-    --muted: #aaa2b5;
-    --green: #4ade80;
-    --red: #f87171;
+:root{
+    --bg:#08060d;
+    --sidebar:#0d0914;
+    --panel:#12101a;
+    --panel2:#181421;
+    --border:#292333;
+    --purple:#9b5cff;
+    --purple2:#7c3aed;
+    --text:#f5f3f7;
+    --muted:#a9a2b3;
+    --danger:#f87171;
+    --green:#4ade80;
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
 }
 
-html {
-    scroll-behavior: smooth;
+body{
+    font-family:Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    height:100vh;
+    overflow:hidden;
 }
 
-body {
-    font-family: Arial, sans-serif;
-    background:
-        radial-gradient(circle at top, #211039 0%, #07050d 55%);
-    color: var(--text);
-    min-height: 100vh;
+/* APP */
+
+.app{
+    display:flex;
+    height:100vh;
 }
 
-/* NAVBAR */
+/* SIDEBAR */
 
-nav {
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    padding: 16px 7%;
-
-    background: rgba(7,5,13,.92);
-    backdrop-filter: blur(12px);
-
-    border-bottom: 1px solid var(--border);
+.sidebar{
+    width:280px;
+    background:var(--sidebar);
+    border-right:1px solid var(--border);
+    display:flex;
+    flex-direction:column;
+    padding:15px;
+    transition:.25s;
 }
 
-.logo {
-    font-size: 23px;
-    font-weight: 900;
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px;
+    margin-bottom:15px;
+    font-size:19px;
+    font-weight:900;
 }
 
-.logo span {
-    color: var(--purple);
+.brand span{
+    color:var(--purple);
 }
 
-.nav-right {
-    display: flex;
-    align-items: center;
-    gap: 18px;
+.new-chat{
+    width:100%;
+    padding:13px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:var(--panel2);
+    color:white;
+    cursor:pointer;
+    text-align:left;
+    font-weight:bold;
+    margin-bottom:12px;
 }
 
-nav a {
-    color: var(--text);
-    text-decoration: none;
-    font-size: 14px;
+.new-chat:hover{
+    border-color:var(--purple);
+    background:#21172e;
 }
 
-nav a:hover {
-    color: var(--purple);
+/* MENU */
+
+.menu{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
 }
 
-/* AUTH BUTTON */
-
-.account-button {
-    border: 1px solid var(--border);
-    background: var(--panel2);
-    color: white;
-    padding: 9px 13px;
-    border-radius: 9px;
-    cursor: pointer;
+.menu-button{
+    width:100%;
+    border:none;
+    background:transparent;
+    color:var(--text);
+    padding:11px;
+    border-radius:9px;
+    cursor:pointer;
+    text-align:left;
+    font-size:14px;
 }
 
-.account-button:hover {
-    border-color: var(--purple);
+.menu-button:hover{
+    background:var(--panel2);
 }
 
-/* HERO */
-
-.hero {
-    min-height: 360px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    text-align: center;
-
-    padding: 70px 20px;
+.menu-button.active{
+    background:#21172e;
+    color:#cba9ff;
 }
 
-.hero-content {
-    max-width: 800px;
+/* HISTORY */
+
+.history-title{
+    margin-top:20px;
+    margin-bottom:8px;
+    padding:0 10px;
+    color:var(--muted);
+    font-size:12px;
+    text-transform:uppercase;
 }
 
-.badge {
-    display: inline-block;
-
-    padding: 8px 14px;
-
-    border: 1px solid var(--border);
-    background: rgba(17,12,27,.8);
-
-    border-radius: 50px;
-
-    color: var(--purple);
-
-    font-size: 13px;
-
-    margin-bottom: 20px;
+.history{
+    flex:1;
+    overflow-y:auto;
 }
 
-.hero h1 {
-    font-size: clamp(50px, 9vw, 90px);
-    font-weight: 900;
-    letter-spacing: -3px;
+.chat-item{
+    display:flex;
+    align-items:center;
+    gap:5px;
+    margin-bottom:3px;
 }
 
-.hero h1 span {
-    color: var(--purple);
+.chat-open{
+    flex:1;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    border:none;
+    background:transparent;
+    color:#ddd7e5;
+    padding:9px;
+    border-radius:8px;
+    text-align:left;
+    cursor:pointer;
 }
 
-.hero p {
-    max-width: 650px;
-    margin: 18px auto;
+.chat-open:hover{
+    background:var(--panel2);
+}
 
-    color: var(--muted);
+.chat-actions{
+    display:flex;
+}
 
-    font-size: 18px;
-    line-height: 1.6;
+.chat-actions button{
+    border:none;
+    background:transparent;
+    color:var(--muted);
+    cursor:pointer;
+    padding:5px;
+}
+
+.chat-actions button:hover{
+    color:white;
+}
+
+/* BOTTOM */
+
+.sidebar-bottom{
+    border-top:1px solid var(--border);
+    padding-top:10px;
+}
+
+.account{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px;
+    color:var(--muted);
+    font-size:13px;
+}
+
+.account strong{
+    color:white;
+}
+
+.logout{
+    width:100%;
+    border:1px solid var(--border);
+    background:transparent;
+    color:var(--muted);
+    padding:9px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.logout:hover{
+    color:var(--danger);
+    border-color:var(--danger);
 }
 
 /* MAIN */
 
-main {
-    max-width: 950px;
-    margin: auto;
-    padding: 30px 20px 80px;
+.main{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    min-width:0;
 }
 
-/* AUTH CARD */
+/* TOPBAR */
 
-.auth-card {
-    max-width: 450px;
-    margin: 0 auto 30px;
-
-    background: var(--panel);
-
-    border: 1px solid var(--border);
-
-    border-radius: 18px;
-
-    padding: 25px;
+.topbar{
+    height:60px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 20px;
+    border-bottom:1px solid var(--border);
 }
 
-.auth-card h2 {
-    margin-bottom: 8px;
+.top-title{
+    font-weight:bold;
 }
 
-.auth-card p {
-    color: var(--muted);
-    margin-bottom: 20px;
+.mobile-menu{
+    display:none;
+    border:none;
+    background:transparent;
+    color:white;
+    font-size:22px;
 }
 
-.auth-input {
-    width: 100%;
+/* CHAT */
 
-    padding: 13px;
-
-    margin-bottom: 10px;
-
-    border-radius: 9px;
-
-    border: 1px solid var(--border);
-
-    background: #0b0810;
-
-    color: white;
-
-    outline: none;
+.chat{
+    flex:1;
+    overflow-y:auto;
+    padding:30px 20px 130px;
 }
 
-.auth-input:focus {
-    border-color: var(--purple);
+.chat-inner{
+    max-width:850px;
+    margin:auto;
 }
 
-.auth-button {
-    width: 100%;
-
-    padding: 13px;
-
-    border: none;
-
-    border-radius: 9px;
-
-    background: var(--purple2);
-
-    color: white;
-
-    font-weight: bold;
-
-    cursor: pointer;
-
-    margin-top: 5px;
+.welcome{
+    text-align:center;
+    padding:90px 20px 40px;
 }
 
-.auth-button:hover {
-    background: var(--purple);
+.welcome-icon{
+    font-size:55px;
+    margin-bottom:15px;
 }
 
-.google-button {
-    background: white;
-    color: #222;
-    margin-top: 10px;
+.welcome h1{
+    font-size:42px;
 }
 
-.google-button:hover {
-    background: #eeeeee;
+.welcome h1 span{
+    color:var(--purple);
 }
 
-.auth-links {
-    display: flex;
-    gap: 10px;
-    margin-top: 12px;
+.welcome p{
+    color:var(--muted);
+    margin-top:12px;
 }
 
-.auth-links button {
-    flex: 1;
+/* MESSAGE */
 
-    background: transparent;
-
-    border: 1px solid var(--border);
-
-    color: var(--muted);
-
-    padding: 10px;
-
-    border-radius: 8px;
-
-    cursor: pointer;
+.message{
+    display:flex;
+    margin-bottom:22px;
 }
 
-.auth-links button:hover {
-    color: white;
-    border-color: var(--purple);
+.message.user{
+    justify-content:flex-end;
 }
 
-.auth-message {
-    margin-top: 15px;
-
-    font-size: 13px;
-
-    line-height: 1.5;
+.message-content{
+    max-width:78%;
+    padding:14px 16px;
+    border-radius:14px;
+    line-height:1.6;
+    word-break:break-word;
 }
 
-.success {
-    color: var(--green);
+.message.bot .message-content{
+    background:var(--panel);
+    border:1px solid var(--border);
 }
 
-.error {
-    color: var(--red);
+.message.user .message-content{
+    background:var(--purple2);
 }
 
-/* USER PANEL */
+/* COMPOSER */
 
-.user-panel {
-    display: none;
-
-    max-width: 850px;
-
-    margin: 0 auto 20px;
-
-    padding: 15px 18px;
-
-    background: var(--panel);
-
-    border: 1px solid var(--border);
-
-    border-radius: 12px;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    gap: 15px;
+.composer-area{
+    position:absolute;
+    bottom:0;
+    left:280px;
+    right:0;
+    padding:15px 20px 20px;
+    background:linear-gradient(
+        transparent,
+        var(--bg) 25%
+    );
 }
 
-.user-panel.show {
-    display: flex;
+.composer{
+    max-width:850px;
+    margin:auto;
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:17px;
+    padding:10px;
 }
 
-.user-info {
-    color: var(--muted);
-    font-size: 14px;
+.attachments{
+    display:flex;
+    gap:8px;
+    margin-bottom:8px;
 }
 
-.user-info strong {
-    color: white;
+.attach-button{
+    border:1px solid var(--border);
+    background:var(--panel2);
+    color:var(--muted);
+    border-radius:8px;
+    padding:7px 10px;
+    cursor:pointer;
 }
 
-.logout-button {
-    border: 1px solid var(--border);
-
-    background: transparent;
-
-    color: white;
-
-    padding: 8px 12px;
-
-    border-radius: 8px;
-
-    cursor: pointer;
+.attach-button:hover{
+    color:white;
+    border-color:var(--purple);
 }
 
-.logout-button:hover {
-    border-color: var(--red);
-    color: var(--red);
+.file-input{
+    display:none;
 }
 
-/* AI CARD */
-
-.ai-card {
-    background: var(--panel);
-
-    border: 1px solid var(--border);
-
-    border-radius: 18px;
-
-    overflow: hidden;
+.input-row{
+    display:flex;
+    gap:8px;
 }
 
-.ai-top {
-    padding: 16px 18px;
-
-    border-bottom: 1px solid var(--border);
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    gap: 15px;
+.input{
+    flex:1;
+    border:none;
+    outline:none;
+    background:transparent;
+    color:white;
+    font-size:15px;
+    padding:12px;
 }
 
-.ai-title {
-    font-weight: bold;
+.send{
+    width:45px;
+    height:45px;
+    border:none;
+    border-radius:11px;
+    background:var(--purple2);
+    color:white;
+    cursor:pointer;
+    font-size:18px;
 }
 
-.ai-online {
-    color: var(--green);
-    font-size: 13px;
+.send:hover{
+    background:var(--purple);
 }
 
-.ai-top-right {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+.send:disabled{
+    opacity:.5;
 }
 
-.clear-button {
-    background: transparent;
+/* AUTH */
 
-    color: var(--muted);
-
-    border: 1px solid var(--border);
-
-    border-radius: 8px;
-
-    padding: 7px 10px;
-
-    cursor: pointer;
-
-    font-size: 12px;
+.auth-screen{
+    position:fixed;
+    inset:0;
+    z-index:5000;
+    background:
+        radial-gradient(circle at top,#26113d,#08060d 60%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
 }
 
-.clear-button:hover {
-    color: white;
-    border-color: var(--purple);
+.auth-screen.hidden{
+    display:none;
 }
 
-.ai-chat {
-    height: 430px;
-
-    overflow-y: auto;
-
-    padding: 20px;
+.auth-card{
+    width:100%;
+    max-width:430px;
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:30px;
+    box-shadow:0 20px 80px #0008;
 }
 
-.ai-message {
-    max-width: 80%;
-
-    padding: 13px;
-
-    border-radius: 12px;
-
-    margin-bottom: 12px;
-
-    line-height: 1.5;
-
-    word-wrap: break-word;
+.auth-logo{
+    text-align:center;
+    font-size:30px;
+    font-weight:900;
+    margin-bottom:8px;
 }
 
-.ai-bot {
-    background: #0d0915;
-
-    border: 1px solid var(--border);
+.auth-logo span{
+    color:var(--purple);
 }
 
-.ai-user {
-    background: var(--purple2);
-
-    margin-left: auto;
+.auth-subtitle{
+    text-align:center;
+    color:var(--muted);
+    margin-bottom:25px;
 }
 
-.ai-input {
-    display: flex;
-
-    gap: 8px;
-
-    padding: 12px;
-
-    border-top: 1px solid var(--border);
+.auth-input{
+    width:100%;
+    padding:13px;
+    margin-bottom:10px;
+    background:#0a0710;
+    border:1px solid var(--border);
+    border-radius:9px;
+    color:white;
+    outline:none;
 }
 
-.ai-input input {
-    flex: 1;
-
-    min-width: 0;
-
-    background: #0b0810;
-
-    color: white;
-
-    border: 1px solid var(--border);
-
-    border-radius: 10px;
-
-    padding: 13px;
-
-    outline: none;
+.auth-input:focus{
+    border-color:var(--purple);
 }
 
-.ai-input input:focus {
-    border-color: var(--purple);
+.auth-button{
+    width:100%;
+    padding:13px;
+    border:none;
+    border-radius:9px;
+    background:var(--purple2);
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    margin-top:5px;
 }
 
-.ai-input button {
-    width: 50px;
-
-    border: none;
-
-    border-radius: 10px;
-
-    background: var(--purple2);
-
-    color: white;
-
-    cursor: pointer;
-
-    font-size: 18px;
+.auth-button:hover{
+    background:var(--purple);
 }
 
-.ai-input button:hover {
-    background: var(--purple);
+.google{
+    background:white;
+    color:#222;
 }
 
-.ai-input button:disabled {
-    opacity: .5;
-    cursor: not-allowed;
+.google:hover{
+    background:#eee;
 }
 
-/* FOOTER */
-
-footer {
-    text-align: center;
-
-    padding: 30px;
-
-    color: var(--muted);
-
-    border-top: 1px solid var(--border);
+.auth-message{
+    min-height:20px;
+    margin-top:15px;
+    font-size:13px;
+    text-align:center;
 }
 
-footer strong {
-    color: var(--purple);
+.error{
+    color:var(--danger);
+}
+
+.success{
+    color:var(--green);
+}
+
+/* MODAL */
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:#0009;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:4000;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-card{
+    width:90%;
+    max-width:500px;
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:25px;
+}
+
+.modal-card h2{
+    margin-bottom:10px;
+}
+
+.modal-card p{
+    color:var(--muted);
+    line-height:1.5;
+}
+
+.modal-close{
+    margin-top:20px;
+    width:100%;
+    padding:11px;
+    border:1px solid var(--border);
+    background:transparent;
+    color:white;
+    border-radius:8px;
+    cursor:pointer;
 }
 
 /* MOBILE */
 
-@media(max-width:700px) {
+@media(max-width:800px){
 
-    nav {
-        padding: 14px 18px;
+    .sidebar{
+        position:fixed;
+        left:-290px;
+        top:0;
+        bottom:0;
+        z-index:3000;
     }
 
-    nav a {
-        display: none;
+    .sidebar.open{
+        left:0;
     }
 
-    .hero {
-        min-height: 300px;
-        padding: 50px 20px;
+    .mobile-menu{
+        display:block;
     }
 
-    .hero h1 {
-        letter-spacing: -1px;
+    .composer-area{
+        left:0;
     }
 
-    main {
-        padding-left: 12px;
-        padding-right: 12px;
+    .message-content{
+        max-width:90%;
     }
 
-    .user-panel {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .logout-button {
-        width: 100%;
-    }
-
-    .ai-top {
-        align-items: flex-start;
-    }
-
-    .ai-top-right {
-        flex-direction: column;
-        align-items: flex-end;
-    }
-
-    .ai-message {
-        max-width: 90%;
+    .welcome h1{
+        font-size:32px;
     }
 }
 </style>
@@ -563,85 +568,27 @@ footer strong {
 
 <body>
 
-<!-- NAVBAR -->
-
-<nav>
-
-    <div class="logo">
-        BADMOSH <span>AI</span>
-    </div>
-
-    <div class="nav-right">
-
-        <a href="index.html">
-            📚 Books
-        </a>
-
-        <a href="server.html">
-            🎮 SMP
-        </a>
-
-        <button
-            id="accountButton"
-            class="account-button"
-            onclick="scrollToAuth()"
-        >
-            Sign In
-        </button>
-
-    </div>
-
-</nav>
-
-
-<!-- HERO -->
-
-<header class="hero">
-
-    <div class="hero-content">
-
-        <div class="badge">
-            🤖 BADMOSH AI
-        </div>
-
-        <h1>
-            BADMOSH <span>AI</span>
-        </h1>
-
-        <p>
-            Your AI assistant for Minecraft, coding,
-            technology and more.
-        </p>
-
-    </div>
-
-</header>
-
-
-<main>
-
 <!-- =========================
-     AUTH
+     AUTH SCREEN
 ========================= -->
 
-<section id="authSection">
+<div id="authScreen" class="auth-screen">
 
     <div class="auth-card">
 
-        <h2>
-            🔐 Account
-        </h2>
+        <div class="auth-logo">
+            BADMOSH <span>AI</span>
+        </div>
 
-        <p>
-            Sign in to use your Badmosh AI account.
-        </p>
+        <div class="auth-subtitle">
+            Sign in to continue
+        </div>
 
         <input
             id="email"
             class="auth-input"
             type="email"
             placeholder="Email address"
-            autocomplete="email"
         >
 
         <input
@@ -649,7 +596,6 @@ footer strong {
             class="auth-input"
             type="password"
             placeholder="Password"
-            autocomplete="current-password"
         >
 
         <button
@@ -667,19 +613,11 @@ footer strong {
         </button>
 
         <button
-            class="auth-button google-button"
-            onclick="signInWithGoogle()"
+            class="auth-button google"
+            onclick="googleSignIn()"
         >
             🔵 Continue with Google
         </button>
-
-        <div class="auth-links">
-
-            <button onclick="resetPassword()">
-                Forgot Password?
-            </button>
-
-        </div>
 
         <div
             id="authMessage"
@@ -688,130 +626,310 @@ footer strong {
 
     </div>
 
-</section>
-
-
-<!-- =========================
-     USER PANEL
-========================= -->
-
-<div
-    id="userPanel"
-    class="user-panel"
->
-
-    <div class="user-info">
-
-        Signed in as:
-        <strong id="userEmail">
-            —
-        </strong>
-
-    </div>
-
-    <button
-        class="logout-button"
-        onclick="signOut()"
-    >
-        Sign Out
-    </button>
-
 </div>
 
 
 <!-- =========================
-     AI
+     APP
 ========================= -->
 
-<section>
+<div class="app">
 
-    <div class="ai-card">
+<!-- SIDEBAR -->
 
-        <div class="ai-top">
+<aside
+    id="sidebar"
+    class="sidebar"
+>
 
-            <div class="ai-title">
-                🤖 Badmosh AI
+    <div class="brand">
+        🤖 BADMOSH <span>AI</span>
+    </div>
+
+    <button
+        class="new-chat"
+        onclick="newChat()"
+    >
+        ✏️ New chat
+    </button>
+
+
+    <div class="menu">
+
+        <button
+            class="menu-button active"
+            onclick="openFeature('Images')"
+        >
+            🖼️ Images
+        </button>
+
+        <button
+            class="menu-button"
+            onclick="openFeature('Library')"
+        >
+            📚 Library
+        </button>
+
+        <button
+            class="menu-button"
+            onclick="openFeature('Scheduled')"
+        >
+            ⏰ Scheduled
+        </button>
+
+        <button
+            class="menu-button"
+            onclick="openFeature('Plugins')"
+        >
+            🔌 Plugins
+        </button>
+
+        <button
+            class="menu-button"
+            onclick="openFeature('Projects')"
+        >
+            📁 Projects
+        </button>
+
+        <button
+            class="menu-button"
+            onclick="openFeature('Codex')"
+        >
+            💻 Codex
+        </button>
+
+        <button
+            class="menu-button"
+            onclick="openFeature('More')"
+        >
+            ••• More
+        </button>
+
+    </div>
+
+
+    <div class="history-title">
+        📌 Pinned
+    </div>
+
+    <div
+        id="pinnedHistory"
+        class="history"
+    ></div>
+
+
+    <div class="history-title">
+        🕘 History
+    </div>
+
+    <div
+        id="history"
+        class="history"
+    ></div>
+
+
+    <div class="sidebar-bottom">
+
+        <div class="account">
+
+            👤
+
+            <div>
+                <small>Signed in as</small>
+                <br>
+                <strong id="accountEmail">
+                    —
+                </strong>
             </div>
 
-            <div class="ai-top-right">
+        </div>
 
-                <div class="ai-online">
-                    ● Online
+        <button
+            class="logout"
+            onclick="signOut()"
+        >
+            Sign Out
+        </button>
+
+    </div>
+
+</aside>
+
+
+<!-- MAIN -->
+
+<main class="main">
+
+    <header class="topbar">
+
+        <button
+            class="mobile-menu"
+            onclick="toggleSidebar()"
+        >
+            ☰
+        </button>
+
+        <div
+            id="topTitle"
+            class="top-title"
+        >
+            Badmosh AI
+        </div>
+
+        <div>
+            <span style="color:#4ade80;font-size:13px;">
+                ● Online
+            </span>
+        </div>
+
+    </header>
+
+
+    <!-- CHAT -->
+
+    <div
+        id="chat"
+        class="chat"
+    >
+
+        <div class="chat-inner">
+
+            <div
+                id="welcome"
+                class="welcome"
+            >
+
+                <div class="welcome-icon">
+                    🤖
                 </div>
 
+                <h1>
+                    Welcome to BADMOSH <span>AI</span>
+                </h1>
+
+                <p>
+                    Ask questions, code, learn,
+                    create and explore.
+                </p>
+
+            </div>
+
+            <div id="messages"></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- COMPOSER -->
+
+    <div class="composer-area">
+
+        <div class="composer">
+
+            <div class="attachments">
+
+                <label class="attach-button">
+
+                    📎 File
+
+                    <input
+                        id="fileInput"
+                        class="file-input"
+                        type="file"
+                        multiple
+                        onchange="filesSelected()"
+                    >
+
+                </label>
+
+                <label class="attach-button">
+
+                    🖼️ Image
+
+                    <input
+                        id="imageInput"
+                        class="file-input"
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onchange="imagesSelected()"
+                    >
+
+                </label>
+
                 <button
-                    class="clear-button"
-                    onclick="clearChat()"
+                    class="attach-button"
+                    onclick="generateImage()"
                 >
-                    🗑️ Clear Chat
+                    🎨 Create image
+                </button>
+
+            </div>
+
+
+            <div class="input-row">
+
+                <input
+                    id="question"
+                    class="input"
+                    type="text"
+                    placeholder="Message Badmosh AI..."
+                    autocomplete="off"
+                >
+
+                <button
+                    id="send"
+                    class="send"
+                    onclick="sendMessage()"
+                >
+                    ➤
                 </button>
 
             </div>
 
         </div>
 
-
-        <div
-            id="aiChat"
-            class="ai-chat"
-        >
-        </div>
-
-
-        <div class="ai-input">
-
-            <input
-                id="aiQuestion"
-                type="text"
-                placeholder="Ask Badmosh AI..."
-                autocomplete="off"
-            >
-
-            <button
-                id="aiSend"
-                onclick="sendAI()"
-            >
-                ➤
-            </button>
-
-        </div>
-
     </div>
-
-</section>
 
 </main>
 
+</div>
 
-<!-- FOOTER -->
 
-<footer>
+<!-- FEATURE MODAL -->
 
-    <strong>BADMOSH AI</strong>
+<div
+    id="featureModal"
+    class="modal"
+>
 
-    <br><br>
+    <div class="modal-card">
 
-    <a href="index.html" style="color:#aaa2b5;">
-        📚 Badmosh Books
-    </a>
+        <h2 id="featureTitle">
+            Feature
+        </h2>
 
-    &nbsp; • &nbsp;
+        <p id="featureText">
+            This feature is ready for connection.
+        </p>
 
-    <a href="server.html" style="color:#aaa2b5;">
-        🎮 Badmosh SMP
-    </a>
+        <button
+            class="modal-close"
+            onclick="closeFeature()"
+        >
+            Close
+        </button>
 
-    <br><br>
+    </div>
 
-    © 2026 Badmosh
-
-</footer>
+</div>
 
 
 <script>
 
 /* =========================================================
-   SUPABASE CONFIG
+   SUPABASE
 ========================================================= */
 
 const SUPABASE_URL =
@@ -837,50 +955,61 @@ const WORKER_URL =
 
 
 /* =========================================================
-   CHAT STORAGE
+   STATE
 ========================================================= */
 
-const CHAT_STORAGE_KEY =
-    "badmosh_ai_chat_history";
+let currentUser = null;
+
+let currentChatId = null;
+
+let chats = [];
+
+let pinnedChats = [];
 
 
 /* =========================================================
    ELEMENTS
 ========================================================= */
 
+const authScreen =
+    document.getElementById("authScreen");
+
 const authMessage =
     document.getElementById("authMessage");
 
-const userPanel =
-    document.getElementById("userPanel");
+const question =
+    document.getElementById("question");
 
-const userEmail =
-    document.getElementById("userEmail");
+const messages =
+    document.getElementById("messages");
 
-const accountButton =
-    document.getElementById("accountButton");
+const welcome =
+    document.getElementById("welcome");
 
-const aiChat =
-    document.getElementById("aiChat");
+const history =
+    document.getElementById("history");
 
-const aiQuestion =
-    document.getElementById("aiQuestion");
+const pinnedHistory =
+    document.getElementById("pinnedHistory");
 
-const aiSend =
-    document.getElementById("aiSend");
+const accountEmail =
+    document.getElementById("accountEmail");
+
+const sendButton =
+    document.getElementById("send");
 
 
 /* =========================================================
-   MESSAGE
+   AUTH MESSAGE
 ========================================================= */
 
-function showAuthMessage(
-    message,
-    type = ""
-) {
+function authMsg(
+    text,
+    type=""
+){
 
     authMessage.textContent =
-        message;
+        text;
 
     authMessage.className =
         "auth-message " + type;
@@ -892,7 +1021,7 @@ function showAuthMessage(
    SIGN UP
 ========================================================= */
 
-async function signUp() {
+async function signUp(){
 
     const email =
         document.getElementById("email")
@@ -903,32 +1032,30 @@ async function signUp() {
             .value;
 
 
-    if (!email || !password) {
+    if(!email || !password){
 
-        showAuthMessage(
+        authMsg(
             "Enter your email and password.",
             "error"
         );
 
         return;
-
     }
 
 
-    if (password.length < 6) {
+    if(password.length < 6){
 
-        showAuthMessage(
-            "Password must be at least 6 characters.",
+        authMsg(
+            "Password must contain at least 6 characters.",
             "error"
         );
 
         return;
-
     }
 
 
-    showAuthMessage(
-        "Creating your account..."
+    authMsg(
+        "Creating account..."
     );
 
 
@@ -938,53 +1065,39 @@ async function signUp() {
     } =
         await supabaseClient.auth.signUp({
 
-            email: email,
+            email,
+            password,
 
-            password: password,
-
-            options: {
-
+            options:{
                 emailRedirectTo:
-                    window.location.origin +
-                    window.location.pathname
-
+                    window.location.href
             }
 
         });
 
 
-    if (error) {
+    if(error){
 
-        console.error(error);
-
-        showAuthMessage(
+        authMsg(
             error.message,
             "error"
         );
 
         return;
-
     }
 
 
-    /*
-       Supabase may require email confirmation.
-    */
+    if(!data.session){
 
-    if (
-        data.user &&
-        !data.session
-    ) {
-
-        showAuthMessage(
-            "Account created! Check your email to verify your account.",
+        authMsg(
+            "Account created. Check your email to verify it.",
             "success"
         );
 
-    } else {
+    }else{
 
-        showAuthMessage(
-            "Account created successfully!",
+        authMsg(
+            "Account created!",
             "success"
         );
 
@@ -997,7 +1110,7 @@ async function signUp() {
    SIGN IN
 ========================================================= */
 
-async function signIn() {
+async function signIn(){
 
     const email =
         document.getElementById("email")
@@ -1008,19 +1121,18 @@ async function signIn() {
             .value;
 
 
-    if (!email || !password) {
+    if(!email || !password){
 
-        showAuthMessage(
+        authMsg(
             "Enter your email and password.",
             "error"
         );
 
         return;
-
     }
 
 
-    showAuthMessage(
+    authMsg(
         "Signing in..."
     );
 
@@ -1031,143 +1143,68 @@ async function signIn() {
     } =
         await supabaseClient.auth.signInWithPassword({
 
-            email: email,
-
-            password: password
+            email,
+            password
 
         });
 
 
-    if (error) {
+    if(error){
 
-        console.error(error);
-
-        showAuthMessage(
+        authMsg(
             error.message,
             "error"
         );
 
         return;
-
     }
 
 
-    showAuthMessage(
-        "Signed in successfully!",
-        "success"
-    );
+    if(data.user){
 
+        showApp(
+            data.user
+        );
 
-    updateUserUI(
-        data.session
-            ? data.session.user
-            : null
-    );
+    }
 
 }
 
 
 /* =========================================================
-   GOOGLE SIGN IN
+   GOOGLE
 ========================================================= */
 
-async function signInWithGoogle() {
+async function googleSignIn(){
 
-    showAuthMessage(
-        "Opening Google sign-in..."
+    authMsg(
+        "Opening Google..."
     );
 
 
     const {
-        data,
         error
     } =
         await supabaseClient.auth.signInWithOAuth({
 
-            provider: "google",
+            provider:"google",
 
-            options: {
-
+            options:{
                 redirectTo:
                     window.location.href
-
             }
 
         });
 
 
-    if (error) {
+    if(error){
 
-        console.error(error);
-
-        showAuthMessage(
+        authMsg(
             error.message,
             "error"
         );
 
     }
-
-}
-
-
-/* =========================================================
-   PASSWORD RESET
-========================================================= */
-
-async function resetPassword() {
-
-    const email =
-        document.getElementById("email")
-            .value.trim();
-
-
-    if (!email) {
-
-        showAuthMessage(
-            "Enter your email address first.",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    showAuthMessage(
-        "Sending password reset email..."
-    );
-
-
-    const {
-        error
-    } =
-        await supabaseClient.auth.resetPasswordForEmail(
-            email,
-            {
-                redirectTo:
-                    window.location.href
-            }
-        );
-
-
-    if (error) {
-
-        console.error(error);
-
-        showAuthMessage(
-            error.message,
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    showAuthMessage(
-        "Password reset email sent. Check your inbox.",
-        "success"
-    );
 
 }
 
@@ -1176,70 +1213,17 @@ async function resetPassword() {
    SIGN OUT
 ========================================================= */
 
-async function signOut() {
+async function signOut(){
 
-    const {
-        error
-    } =
-        await supabaseClient.auth.signOut();
+    await supabaseClient.auth.signOut();
 
+    currentUser = null;
 
-    if (error) {
+    currentChatId = null;
 
-        console.error(error);
-
-        showAuthMessage(
-            error.message,
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    updateUserUI(null);
-
-
-    showAuthMessage(
-        "You have been signed out.",
-        "success"
+    authScreen.classList.remove(
+        "hidden"
     );
-
-}
-
-
-/* =========================================================
-   USER UI
-========================================================= */
-
-function updateUserUI(user) {
-
-    if (user) {
-
-        userPanel.classList.add(
-            "show"
-        );
-
-        userEmail.textContent =
-            user.email || "Google user";
-
-        accountButton.textContent =
-            "Account";
-
-    } else {
-
-        userPanel.classList.remove(
-            "show"
-        );
-
-        userEmail.textContent =
-            "—";
-
-        accountButton.textContent =
-            "Sign In";
-
-    }
 
 }
 
@@ -1249,344 +1233,148 @@ function updateUserUI(user) {
 ========================================================= */
 
 supabaseClient.auth.onAuthStateChange(
-    function(event, session) {
+    function(
+        event,
+        session
+    ){
 
-        console.log(
-            "Auth event:",
-            event
-        );
+        if(session && session.user){
 
+            showApp(
+                session.user
+            );
 
-        updateUserUI(
-            session
-                ? session.user
-                : null
-        );
+        }else{
+
+            currentUser = null;
+
+            authScreen.classList.remove(
+                "hidden"
+            );
+
+        }
 
     }
 );
 
 
 /* =========================================================
-   GET CURRENT SESSION
+   SHOW APP
 ========================================================= */
 
-async function checkSession() {
+async function showApp(user){
 
-    const {
-        data,
-        error
-    } =
-        await supabaseClient.auth.getSession();
+    currentUser =
+        user;
 
 
-    if (error) {
-
-        console.error(
-            "Session error:",
-            error
-        );
-
-        return;
-
-    }
+    accountEmail.textContent =
+        user.email || "User";
 
 
-    updateUserUI(
-        data.session
-            ? data.session.user
-            : null
+    authScreen.classList.add(
+        "hidden"
     );
 
-}
 
-
-/* =========================================================
-   SCROLL TO AUTH
-========================================================= */
-
-function scrollToAuth() {
-
-    document
-        .getElementById("authSection")
-        .scrollIntoView({
-            behavior: "smooth"
-        });
+    await loadChats();
 
 }
 
 
 /* =========================================================
-   WELCOME MESSAGE
+   NEW CHAT
 ========================================================= */
 
-function showWelcomeMessage() {
+function newChat(){
 
-    aiChat.innerHTML = `
-
-        <div class="ai-message ai-bot">
-
-            <strong>Badmosh AI</strong>
-
-            <br><br>
-
-            Hey! 👋 I'm Badmosh AI.
-
-            <br>
-
-            Ask me anything about Minecraft,
-            coding, technology or the Badmosh SMP.
-
-        </div>
-
-    `;
-
-}
+    currentChatId =
+        null;
 
 
-/* =========================================================
-   SAVE CHAT
-========================================================= */
-
-function saveChat() {
-
-    const messages = [];
-
-
-    aiChat
-        .querySelectorAll(".ai-message")
-        .forEach(function(message) {
-
-            messages.push({
-
-                type:
-                    message.classList.contains(
-                        "ai-user"
-                    )
-                        ? "user"
-                        : "bot",
-
-                html:
-                    message.innerHTML
-
-            });
-
-        });
-
-
-    try {
-
-        localStorage.setItem(
-            CHAT_STORAGE_KEY,
-            JSON.stringify(messages)
-        );
-
-    } catch (error) {
-
-        console.error(
-            "Could not save chat:",
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   LOAD CHAT
-========================================================= */
-
-function loadChat() {
-
-    let saved = null;
-
-
-    try {
-
-        saved =
-            JSON.parse(
-                localStorage.getItem(
-                    CHAT_STORAGE_KEY
-                )
-            );
-
-    } catch (error) {
-
-        saved = null;
-
-    }
-
-
-    if (
-        !Array.isArray(saved) ||
-        saved.length === 0
-    ) {
-
-        showWelcomeMessage();
-
-        return;
-
-    }
-
-
-    aiChat.innerHTML =
+    messages.innerHTML =
         "";
 
 
-    saved.forEach(function(message) {
-
-        const div =
-            document.createElement("div");
+    welcome.style.display =
+        "block";
 
 
-        div.className =
-            "ai-message " +
-            (
-                message.type === "user"
-                    ? "ai-user"
-                    : "ai-bot"
-            );
-
-
-        div.innerHTML =
-            message.html;
-
-
-        aiChat.appendChild(
-            div
-        );
-
-    });
-
-
-    aiChat.scrollTop =
-        aiChat.scrollHeight;
-
-}
-
-
-/* =========================================================
-   CLEAR CHAT
-========================================================= */
-
-function clearChat() {
-
-    const confirmed =
-        confirm(
-            "Clear your Badmosh AI chat history?"
-        );
-
-
-    if (!confirmed) {
-
-        return;
-
-    }
-
-
-    localStorage.removeItem(
-        CHAT_STORAGE_KEY
-    );
-
-
-    showWelcomeMessage();
-
-}
-
-
-/* =========================================================
-   SEND AI
-========================================================= */
-
-async function sendAI() {
-
-    const question =
-        aiQuestion.value.trim();
-
-
-    if (!question) {
-
-        return;
-
-    }
-
-
-    /* USER MESSAGE */
-
-    const userMessage =
-        document.createElement("div");
-
-
-    userMessage.className =
-        "ai-message ai-user";
-
-
-    userMessage.textContent =
-        question;
-
-
-    aiChat.appendChild(
-        userMessage
-    );
-
-
-    aiQuestion.value =
+    question.value =
         "";
 
 
-    aiSend.disabled =
+    document.getElementById(
+        "topTitle"
+    ).textContent =
+        "New chat";
+
+
+    question.focus();
+
+
+    closeMobileSidebar();
+
+}
+
+
+/* =========================================================
+   SEND MESSAGE
+========================================================= */
+
+async function sendMessage(){
+
+    const text =
+        question.value.trim();
+
+
+    if(!text){
+
+        return;
+    }
+
+
+    addMessage(
+        "user",
+        text
+    );
+
+
+    question.value =
+        "";
+
+
+    welcome.style.display =
+        "none";
+
+
+    sendButton.disabled =
         true;
 
 
-    saveChat();
-
-
-    /* THINKING */
-
     const thinking =
-        document.createElement("div");
+        addMessage(
+            "bot",
+            "Thinking... 🤔"
+        );
 
 
-    thinking.className =
-        "ai-message ai-bot";
-
-
-    thinking.innerHTML =
-        "<strong>Badmosh AI</strong><br>" +
-        "Thinking... 🤔";
-
-
-    aiChat.appendChild(
-        thinking
-    );
-
-
-    aiChat.scrollTop =
-        aiChat.scrollHeight;
-
-
-    try {
+    try{
 
         const response =
             await fetch(
                 WORKER_URL,
                 {
 
-                    method: "POST",
+                    method:"POST",
 
-                    headers: {
-
+                    headers:{
                         "Content-Type":
                             "application/json"
-
                     },
 
-                    body: JSON.stringify({
-
-                        question:
-                            question
-
+                    body:JSON.stringify({
+                        question:text
                     })
 
                 }
@@ -1596,27 +1384,21 @@ async function sendAI() {
         let data;
 
 
-        try {
+        try{
 
             data =
                 await response.json();
 
-        } catch (error) {
+        }catch{
 
             throw new Error(
-                "AI server returned an invalid response."
+                "Invalid AI response."
             );
 
         }
 
 
-        console.log(
-            "AI response:",
-            data
-        );
-
-
-        if (!response.ok) {
+        if(!response.ok){
 
             throw new Error(
                 data.error ||
@@ -1630,157 +1412,155 @@ async function sendAI() {
             "";
 
 
-        /* OpenAI-compatible format */
-
-        if (
+        if(
             data.choices &&
             data.choices[0] &&
-            data.choices[0].message &&
-            data.choices[0].message.content
-        ) {
+            data.choices[0].message
+        ){
 
             answer =
                 data.choices[0]
                     .message
-                    .content;
+                    .content ||
+                "";
 
         }
 
 
-        /* Backup formats */
-
-        if (
-            !answer &&
-            data.response
-        ) {
-
+        if(!answer)
             answer =
-                data.response;
+                data.response || "";
 
-        }
-
-
-        if (
-            !answer &&
-            data.answer
-        ) {
-
+        if(!answer)
             answer =
-                data.answer;
+                data.answer || "";
 
-        }
-
-
-        if (
-            !answer &&
-            data.content
-        ) {
-
+        if(!answer)
             answer =
-                data.content;
-
-        }
+                data.content || "";
 
 
-        if (!answer) {
+        if(!answer){
 
             throw new Error(
-                "No AI answer was received."
+                "No AI response received."
             );
 
         }
 
 
         thinking.innerHTML =
-            "<strong>Badmosh AI</strong><br>" +
-            formatAIText(answer);
+            formatText(
+                answer
+            );
 
 
-    } catch (error) {
-
-        console.error(
-            "Badmosh AI error:",
-            error
+        await saveCurrentChat(
+            text,
+            answer
         );
 
 
+    }catch(error){
+
         thinking.innerHTML =
-            "<strong>Badmosh AI</strong><br>" +
-            "Sorry, I couldn't connect right now." +
-            "<br><br><small>" +
+            "❌ " +
             escapeHTML(
                 error.message
-            ) +
-            "</small>";
+            );
 
     }
 
 
-    saveChat();
-
-
-    aiSend.disabled =
+    sendButton.disabled =
         false;
 
 
-    aiQuestion.focus();
+    question.focus();
 
 
-    aiChat.scrollTop =
-        aiChat.scrollHeight;
+    scrollChat();
 
 }
 
 
 /* =========================================================
-   ENTER KEY
+   ADD MESSAGE
 ========================================================= */
 
-aiQuestion.addEventListener(
-    "keydown",
-    function(event) {
+function addMessage(
+    type,
+    text
+){
 
-        if (
-            event.key === "Enter" &&
-            !event.shiftKey
-        ) {
+    const message =
+        document.createElement("div");
 
-            event.preventDefault();
 
-            sendAI();
+    message.className =
+        "message " +
+        type;
 
-        }
+
+    const content =
+        document.createElement("div");
+
+
+    content.className =
+        "message-content";
+
+
+    if(type === "user"){
+
+        content.textContent =
+            text;
+
+    }else{
+
+        content.innerHTML =
+            formatText(
+                text
+            );
 
     }
-);
+
+
+    message.appendChild(
+        content
+    );
+
+
+    messages.appendChild(
+        message
+    );
+
+
+    scrollChat();
+
+
+    return content;
+
+}
 
 
 /* =========================================================
-   ESCAPE HTML
+   FORMAT TEXT
 ========================================================= */
 
-function escapeHTML(text) {
+function escapeHTML(text){
 
     const div =
         document.createElement("div");
 
-
     div.textContent =
-        text == null
-            ? ""
-            : String(text);
-
+        String(text ?? "");
 
     return div.innerHTML;
 
 }
 
 
-/* =========================================================
-   FORMAT AI TEXT
-========================================================= */
-
-function formatAIText(text) {
+function formatText(text){
 
     let safe =
         escapeHTML(text);
@@ -1806,14 +1586,732 @@ function formatAIText(text) {
 
 
 /* =========================================================
-   START
+   SAVE CHAT
 ========================================================= */
 
-showWelcomeMessage();
+async function saveCurrentChat(
+    userText,
+    aiText
+){
 
-loadChat();
+    /*
+       This first version stores chats locally.
+       Supabase cloud chat storage can be connected
+       after the database table is prepared.
+    */
 
-checkSession();
+    const saved =
+        JSON.parse(
+            localStorage.getItem(
+                "badmosh_chats"
+            ) || "[]"
+        );
+
+
+    if(!currentChatId){
+
+        currentChatId =
+            Date.now().toString();
+
+
+        saved.unshift({
+
+            id:
+                currentChatId,
+
+            title:
+                userText.substring(
+                    0,
+                    45
+                ),
+
+            pinned:false,
+
+            messages:[]
+
+        });
+
+    }
+
+
+    const chat =
+        saved.find(
+            item =>
+                item.id ===
+                currentChatId
+        );
+
+
+    if(chat){
+
+        chat.messages.push({
+
+            role:"user",
+
+            content:userText
+
+        });
+
+
+        chat.messages.push({
+
+            role:"assistant",
+
+            content:aiText
+
+        });
+
+    }
+
+
+    localStorage.setItem(
+        "badmosh_chats",
+        JSON.stringify(saved)
+    );
+
+
+    await loadChats();
+
+}
+
+
+/* =========================================================
+   LOAD CHATS
+========================================================= */
+
+async function loadChats(){
+
+    const saved =
+        JSON.parse(
+            localStorage.getItem(
+                "badmosh_chats"
+            ) || "[]"
+        );
+
+
+    chats =
+        saved;
+
+
+    pinnedChats =
+        saved.filter(
+            chat =>
+                chat.pinned
+        );
+
+
+    renderHistory();
+
+}
+
+
+/* =========================================================
+   RENDER HISTORY
+========================================================= */
+
+function renderHistory(){
+
+    history.innerHTML =
+        "";
+
+    pinnedHistory.innerHTML =
+        "";
+
+
+    chats.forEach(
+        function(chat){
+
+            const item =
+                createChatItem(
+                    chat
+                );
+
+
+            history.appendChild(
+                item
+            );
+
+        }
+    );
+
+
+    pinnedChats.forEach(
+        function(chat){
+
+            const item =
+                createChatItem(
+                    chat,
+                    true
+                );
+
+
+            pinnedHistory.appendChild(
+                item
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   CHAT ITEM
+========================================================= */
+
+function createChatItem(
+    chat,
+    pinned=false
+){
+
+    const wrapper =
+        document.createElement("div");
+
+
+    wrapper.className =
+        "chat-item";
+
+
+    const open =
+        document.createElement("button");
+
+
+    open.className =
+        "chat-open";
+
+
+    open.textContent =
+        (pinned ? "📌 " : "") +
+        (chat.title || "New chat");
+
+
+    open.onclick =
+        function(){
+
+            openChat(
+                chat.id
+            );
+
+        };
+
+
+    const actions =
+        document.createElement("div");
+
+
+    actions.className =
+        "chat-actions";
+
+
+    const pin =
+        document.createElement("button");
+
+
+    pin.textContent =
+        chat.pinned
+            ? "📌"
+            : "☆";
+
+
+    pin.title =
+        "Pin / unpin";
+
+
+    pin.onclick =
+        function(){
+
+            togglePin(
+                chat.id
+            );
+
+        };
+
+
+    const del =
+        document.createElement("button");
+
+
+    del.textContent =
+        "×";
+
+
+    del.title =
+        "Delete chat";
+
+
+    del.onclick =
+        function(){
+
+            deleteChat(
+                chat.id
+            );
+
+        };
+
+
+    actions.appendChild(
+        pin
+    );
+
+    actions.appendChild(
+        del
+    );
+
+
+    wrapper.appendChild(
+        open
+    );
+
+    wrapper.appendChild(
+        actions
+    );
+
+
+    return wrapper;
+
+}
+
+
+/* =========================================================
+   OPEN CHAT
+========================================================= */
+
+function openChat(id){
+
+    const chat =
+        chats.find(
+            item =>
+                item.id === id
+        );
+
+
+    if(!chat){
+
+        return;
+
+    }
+
+
+    currentChatId =
+        id;
+
+
+    messages.innerHTML =
+        "";
+
+
+    welcome.style.display =
+        "none";
+
+
+    document.getElementById(
+        "topTitle"
+    ).textContent =
+        chat.title || "Chat";
+
+
+    chat.messages.forEach(
+        function(message){
+
+            addMessage(
+                message.role === "user"
+                    ? "user"
+                    : "bot",
+                message.content
+            );
+
+        }
+    );
+
+
+    closeMobileSidebar();
+
+}
+
+
+/* =========================================================
+   PIN CHAT
+========================================================= */
+
+function togglePin(id){
+
+    const saved =
+        JSON.parse(
+            localStorage.getItem(
+                "badmosh_chats"
+            ) || "[]"
+        );
+
+
+    const chat =
+        saved.find(
+            item =>
+                item.id === id
+        );
+
+
+    if(chat){
+
+        chat.pinned =
+            !chat.pinned;
+
+    }
+
+
+    localStorage.setItem(
+        "badmosh_chats",
+        JSON.stringify(saved)
+    );
+
+
+    loadChats();
+
+}
+
+
+/* =========================================================
+   DELETE CHAT
+========================================================= */
+
+function deleteChat(id){
+
+    if(
+        !confirm(
+            "Delete this chat?"
+        )
+    ){
+
+        return;
+
+    }
+
+
+    let saved =
+        JSON.parse(
+            localStorage.getItem(
+                "badmosh_chats"
+            ) || "[]"
+        );
+
+
+    saved =
+        saved.filter(
+            item =>
+                item.id !== id
+        );
+
+
+    localStorage.setItem(
+        "badmosh_chats",
+        JSON.stringify(saved)
+    );
+
+
+    if(currentChatId === id){
+
+        newChat();
+
+    }
+
+
+    loadChats();
+
+}
+
+
+/* =========================================================
+   CLEAR ALL
+========================================================= */
+
+function clearAllHistory(){
+
+    if(
+        !confirm(
+            "Delete all Badmosh AI chat history?"
+        )
+    ){
+
+        return;
+
+    }
+
+
+    localStorage.removeItem(
+        "badmosh_chats"
+    );
+
+
+    chats =
+        [];
+
+
+    pinnedChats =
+        [];
+
+
+    newChat();
+
+
+    renderHistory();
+
+}
+
+
+/* =========================================================
+   FILES
+========================================================= */
+
+function filesSelected(){
+
+    const files =
+        document.getElementById(
+            "fileInput"
+        ).files;
+
+
+    if(files.length){
+
+        let names =
+            Array.from(files)
+                .map(
+                    file =>
+                        file.name
+                )
+                .join(", ");
+
+
+        addMessage(
+            "user",
+            "📎 Attached file(s): " +
+            names
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   IMAGES
+========================================================= */
+
+function imagesSelected(){
+
+    const files =
+        document.getElementById(
+            "imageInput"
+        ).files;
+
+
+    if(files.length){
+
+        let names =
+            Array.from(files)
+                .map(
+                    file =>
+                        file.name
+                )
+                .join(", ");
+
+
+        addMessage(
+            "user",
+            "🖼️ Attached image(s): " +
+            names
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   IMAGE GENERATION
+========================================================= */
+
+function generateImage(){
+
+    openFeature(
+        "Image generation"
+    );
+
+}
+
+
+/* =========================================================
+   FEATURES
+========================================================= */
+
+function openFeature(name){
+
+    document.getElementById(
+        "featureTitle"
+    ).textContent =
+        name;
+
+
+    const text =
+        document.getElementById(
+            "featureText"
+        );
+
+
+    const descriptions = {
+
+        "Images":
+            "Your Badmosh AI image workspace will appear here.",
+
+        "Library":
+            "Your uploaded files, images and saved AI content will appear here.",
+
+        "Scheduled":
+            "Scheduled AI tasks will appear here once the scheduling backend is connected.",
+
+        "Plugins":
+            "Your Badmosh AI plugins will appear here.",
+
+        "Projects":
+            "Create and organize AI projects here.",
+
+        "Codex":
+            "Use Badmosh AI for coding and development tasks here.",
+
+        "More":
+            "More Badmosh AI tools will appear here.",
+
+        "Image generation":
+            "The image-generation interface is ready. The image-generation backend still needs to be connected."
+
+    };
+
+
+    text.textContent =
+        descriptions[name] ||
+        "This Badmosh AI feature is ready for connection.";
+
+
+    document.getElementById(
+        "featureModal"
+    ).classList.add(
+        "show"
+    );
+
+}
+
+
+function closeFeature(){
+
+    document.getElementById(
+        "featureModal"
+    ).classList.remove(
+        "show"
+    );
+
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+function toggleSidebar(){
+
+    document.getElementById(
+        "sidebar"
+    ).classList.toggle(
+        "open"
+    );
+
+}
+
+
+function closeMobileSidebar(){
+
+    document.getElementById(
+        "sidebar"
+    ).classList.remove(
+        "open"
+    );
+
+}
+
+
+/* =========================================================
+   SCROLL
+========================================================= */
+
+function scrollChat(){
+
+    const chat =
+        document.getElementById(
+            "chat"
+        );
+
+
+    setTimeout(
+        function(){
+
+            chat.scrollTop =
+                chat.scrollHeight;
+
+        },
+        10
+    );
+
+}
+
+
+/* =========================================================
+   ENTER
+========================================================= */
+
+question.addEventListener(
+    "keydown",
+    function(event){
+
+        if(
+            event.key === "Enter"
+        ){
+
+            event.preventDefault();
+
+            sendMessage();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   INITIAL SESSION
+========================================================= */
+
+async function initialize(){
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient.auth.getSession();
+
+
+    if(
+        !error &&
+        data.session &&
+        data.session.user
+    ){
+
+        showApp(
+            data.session.user
+        );
+
+    }
+
+}
+
+
+initialize();
 
 </script>
 
