@@ -1,1 +1,301 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
 
+body {
+    background: #08060d;
+    color: white;
+    min-height: 100vh;
+}
+
+/* HEADER */
+
+header {
+    height: 70px;
+    background: #110b1c;
+    border-bottom: 1px solid #6d25a8;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 25px;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: bold;
+    color: #c56cff;
+}
+
+.status {
+    font-size: 14px;
+}
+
+.dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background: #00ff66;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+/* MAIN */
+
+main {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 15px;
+    padding: 15px;
+}
+
+/* CARDS */
+
+.card {
+    background: #110d18;
+    border: 1px solid #3c1b52;
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 15px;
+    box-shadow: 0 0 15px rgba(130, 40, 190, 0.15);
+}
+
+.card h2 {
+    color: #c56cff;
+    font-size: 17px;
+    margin-bottom: 15px;
+}
+
+.card p {
+    margin: 12px 0;
+    color: #cfc5d8;
+}
+
+.green {
+    color: #00ff66;
+}
+
+/* MODE BUTTONS */
+
+.mode {
+    width: 100%;
+    padding: 12px;
+    margin: 5px 0;
+    border: 1px solid #52206d;
+    border-radius: 8px;
+    background: #181020;
+    color: white;
+    cursor: pointer;
+}
+
+.mode:hover,
+.mode.active {
+    background: #7026a5;
+}
+
+/* CONTROLS */
+
+.controls {
+    text-align: center;
+}
+
+.controls button {
+    width: 48px;
+    height: 42px;
+    margin: 3px;
+    border: 1px solid #65258b;
+    border-radius: 8px;
+    background: #17101e;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.controls button:hover {
+    background: #7026a5;
+}
+
+/* MAP */
+
+.map-section {
+    background: #0e0a13;
+    border: 1px solid #3c1b52;
+    border-radius: 12px;
+    overflow: hidden;
+    min-height: 500px;
+}
+
+.map-header {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 18px;
+    border-bottom: 1px solid #3c1b52;
+}
+
+.map-header h2 {
+    color: #c56cff;
+}
+
+.map-header button {
+    background: #7026a5;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+#map {
+    position: relative;
+    height: 440px;
+    background:
+        radial-gradient(circle, #251532 1px, transparent 1px);
+    background-size: 25px 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.map-message {
+    text-align: center;
+    color: #c56cff;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.map-message small {
+    font-size: 13px;
+    color: #91879a;
+}
+
+#droneMarker {
+    position: absolute;
+    display: none;
+    font-size: 30px;
+}
+
+/* AI PANEL */
+
+.ai-panel {
+    margin: 0 15px 15px;
+    background: #110d18;
+    border: 1px solid #3c1b52;
+    border-radius: 12px;
+    padding: 15px;
+}
+
+.ai-title {
+    color: #c56cff;
+    font-size: 19px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+#chat {
+    height: 130px;
+    background: #09070c;
+    border-radius: 8px;
+    padding: 12px;
+    overflow-y: auto;
+}
+
+.bot-message {
+    display: inline-block;
+    background: #251330;
+    padding: 10px;
+    border-radius: 8px;
+    color: #e8d9ef;
+}
+
+.chat-controls {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.chat-controls input {
+    flex: 1;
+    padding: 12px;
+    background: #09070c;
+    border: 1px solid #4a2260;
+    border-radius: 8px;
+    color: white;
+    outline: none;
+}
+
+.chat-controls button {
+    width: 45px;
+    border: none;
+    border-radius: 8px;
+    background: #7026a5;
+    color: white;
+    cursor: pointer;
+}
+
+/* MEDIA */
+
+.media-controls {
+    display: flex;
+    gap: 10px;
+    padding: 0 15px 20px;
+}
+
+.media-controls button {
+    flex: 1;
+    padding: 13px;
+    border: 1px solid #52206d;
+    border-radius: 8px;
+    background: #15101b;
+    color: white;
+    cursor: pointer;
+}
+
+.media-controls button:hover {
+    background: #7026a5;
+}
+
+.media-controls .emergency {
+    background: #8b1717;
+    border-color: #ff3333;
+}
+
+.media-controls .emergency:hover {
+    background: #b51d1d;
+}
+
+/* MOBILE */
+
+@media (max-width: 800px) {
+
+    main {
+        grid-template-columns: 1fr;
+    }
+
+    .map-section {
+        min-height: 400px;
+    }
+
+    #map {
+        height: 350px;
+    }
+
+    .media-controls {
+        flex-wrap: wrap;
+    }
+
+    .media-controls button {
+        min-width: 45%;
+    }
+
+    header {
+        padding: 0 12px;
+    }
+
+    .logo {
+        font-size: 19px;
+    }
+}
